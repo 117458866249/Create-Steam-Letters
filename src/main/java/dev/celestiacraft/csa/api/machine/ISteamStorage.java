@@ -1,7 +1,7 @@
 package dev.celestiacraft.csa.api.machine;
 
 import dev.celestiacraft.csa.api.machine.capability.SteamFluidHandler;
-import dev.celestiacraft.csa.config.CommonConfigs;
+import dev.celestiacraft.csa.config.common.SteamConfig;
 import dev.celestiacraft.csa.tags.CSAFluidTags;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
  *
  * <p>
  * 继承关系由机器决定: 实现类 {@code extends} 机械动力的对应 BE 类并实现本接口, 例如
- * {@code SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements ISteamBlockEntity}.
+ * {@code SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements ISteamBasinMachine}.
  *
  * <p>
  * 接口无法持有实例状态, 实现类需持有 {@link FluidStack} 字段并实现 {@link #getSteamStack()} 与
@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
  * {@code getCapability} / {@code write} / {@code read} 在父类中已是具体方法, 接口的默认实现会被忽略
  * , 流体能力与持久化由实现类接入.
  */
-public interface ISteamBlockEntity {
+public interface ISteamStorage {
 	/**
 	 * 当前蒸汽储量, 无蒸汽时返回 {@link FluidStack#EMPTY}.
 	 */
@@ -44,6 +44,34 @@ public interface ISteamBlockEntity {
 	int getSteamConsumption();
 
 	/**
+	 * 一次操作可处理的份数上限, 默认 1, 与机械动力原版相同.
+	 *
+	 * <p>
+	 * 返回 0 或负数表示停止工作, 可接入 {@link #hasEnoughSteam()} 等条件.
+	 */
+	default int getParallelCount() {
+		return 1;
+	}
+
+	/**
+	 * 当前可用的并行数, 蒸汽不足时为 0.
+	 */
+	default int getParallel() {
+		return hasEnoughSteam() ? getParallelCount() : 0;
+	}
+
+	/**
+	 * 本次操作实际处理的份数, {@code available} 为可用输入份数, 0 表示不处理.
+	 */
+	default int getBatchSize(int available) {
+		int parallel = getParallel();
+		if (parallel <= 0 || available <= 0) {
+			return 0;
+		}
+		return Math.min(parallel, available);
+	}
+
+	/**
 	 * 可接受的流体, 默认仅{@link CSAFluidTags#STEAM}和{@link CSAFluidTags#SUPERHEATED_STEAM}.
 	 */
 	default boolean isValidSteam(FluidStack stack) {
@@ -62,7 +90,7 @@ public interface ISteamBlockEntity {
 	 * 过热蒸汽的消耗倍数, 默认取自配置 {@code general.steam.superheated_steam_consumption_multiplier}.
 	 */
 	default double getSuperheatedSteamConsumptionMultiplier() {
-		return CommonConfigs.STEAM.SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER.get();
+		return SteamConfig.SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER.get();
 	}
 
 	/**

@@ -2,7 +2,7 @@ package dev.celestiacraft.csa.common.block.steam_hammer;
 
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
-import dev.celestiacraft.csa.api.machine.ISteamMachine;
+import dev.celestiacraft.csa.api.machine.ISteamPressMachine;
 import dev.celestiacraft.csa.config.common.SteamHammerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implements ISteamMachine {
+public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implements ISteamPressMachine {
 	private FluidStack steam = FluidStack.EMPTY;
 	private LazyOptional<IFluidHandler> steamCapability = LazyOptional.of(this::steamFluidHandler);
 
@@ -57,17 +57,17 @@ public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implement
 
 	@Override
 	public boolean canProcessInBulk() {
-		return ISteamMachine.super.canProcessInBulk();
+		return ISteamPressMachine.super.canProcessInBulk();
 	}
 
 	@Override
 	public boolean tryProcessOnBelt(TransportedItemStack input, List<ItemStack> outputList, boolean simulate) {
-		return ISteamMachine.super.tryProcessOnBelt(input, outputList, simulate);
+		return ISteamPressMachine.super.tryProcessOnBelt(input, outputList, simulate);
 	}
 
 	@Override
 	public boolean tryProcessInWorld(ItemEntity itemEntity, boolean simulate) {
-		return ISteamMachine.super.tryProcessInWorld(itemEntity, simulate);
+		return ISteamPressMachine.super.tryProcessInWorld(itemEntity, simulate);
 	}
 
 	@Override

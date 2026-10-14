@@ -1,7 +1,6 @@
 package dev.celestiacraft.csa.compat.jei;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.common.register.CsaBlocks;
 import mezz.jei.api.IModPlugin;
@@ -9,6 +8,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
@@ -21,10 +21,28 @@ public class CreateSteamAgesJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
 		IJeiHelpers helpers = registration.getJeiHelpers();
+		ItemStack hammer = CsaBlocks.STEAM_HAMMER.asStack();
+		ItemStack mixer = CsaBlocks.STEAM_MIXER.asStack();
 
-		helpers.getRecipeType(Create.asResource("pressing"), PressingRecipe.class)
+		addCatalyst("pressing", hammer, helpers, registration);
+		addCatalyst("packing", hammer, helpers, registration);
+		addCatalyst("automatic_packing", hammer, helpers, registration);
+
+		addCatalyst("mixing", mixer, helpers, registration);
+		addCatalyst("automatic_shapeless", mixer, helpers, registration);
+		addCatalyst("automatic_brewing", mixer, helpers, registration);
+	}
+
+	@SuppressWarnings("removal")
+	private void addCatalyst(
+			String recipeId,
+			ItemStack catalyst,
+			IJeiHelpers helpers,
+			IRecipeCatalystRegistration registration
+	) {
+		helpers.getRecipeType(Create.asResource(recipeId))
 				.ifPresent((type) -> {
-					registration.addRecipeCatalyst(CsaBlocks.STEAM_HAMMER.asStack(), type);
+					registration.addRecipeCatalyst(catalyst, type);
 				});
 	}
 }

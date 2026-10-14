@@ -3,7 +3,7 @@ package dev.celestiacraft.csa.event.item;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaTranKeys;
-import dev.celestiacraft.csa.api.lang.CsaLang;
+import dev.celestiacraft.csa.client.lang.CsaLang;
 import dev.celestiacraft.csa.common.register.CsaBlocks;
 import dev.celestiacraft.csa.config.common.SteamHammerConfig;
 import net.createmod.catnip.lang.FontHelper;

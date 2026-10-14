@@ -11,7 +11,7 @@ public class English {
 	}
 
 	private static void addOtherLang(RegistrateLangProvider provider) {
-		provider.add(CsaTranKeys.BASIC_TAB, CreateSteamAges.NAME + ": Basic");
+		provider.add(CsaTranKeys.BASIC_TAB, CreateSteamAges.NAME + " - Basic");
 	}
 
 	private static void addSteamHammerLang(RegistrateLangProvider provider) {

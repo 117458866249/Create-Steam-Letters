@@ -1,4 +1,4 @@
-package dev.celestiacraft.csa.api.lang;
+package dev.celestiacraft.csa.client.lang;
 
 import com.simibubi.create.foundation.utility.CreateLang;
 import dev.celestiacraft.csa.CreateSteamAges;

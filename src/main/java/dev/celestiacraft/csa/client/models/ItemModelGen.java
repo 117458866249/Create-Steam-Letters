@@ -1,4 +1,4 @@
-package dev.celestiacraft.csa.api.models;
+package dev.celestiacraft.csa.client.models;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;

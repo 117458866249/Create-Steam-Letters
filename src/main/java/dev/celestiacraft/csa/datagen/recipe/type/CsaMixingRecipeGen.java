@@ -9,20 +9,16 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.tags.FluidTags;
 
 public class CsaMixingRecipeGen extends MixingRecipeGen {
-	public final GeneratedRecipe
-			STEAM,
-			SUPERHEATED_STEAM;
-
 	public CsaMixingRecipeGen(PackOutput output) {
 		super(output, CreateSteamAges.MODID);
 
-		STEAM = create("steam", (builder) -> {
+		create("steam", (builder) -> {
 			return builder.require(FluidTags.WATER, 1000)
 					.output(CsaFluids.STEAM.get(), 1000)
 					.requiresHeat(HeatCondition.HEATED);
 		});
 
-		SUPERHEATED_STEAM = create("superheated_steam", (builder) -> {
+		create("superheated_steam", (builder) -> {
 			return builder.require(CSAFluidTags.STEAM, 1000)
 					.output(CsaFluids.SUPERHEATED_STEAM.get(), 1000)
 					.requiresHeat(HeatCondition.SUPERHEATED);

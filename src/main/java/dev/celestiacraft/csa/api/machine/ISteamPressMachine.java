@@ -16,25 +16,16 @@ import java.util.Optional;
 
 /**
  * <p>
- * 除{@link #getParallelCount()}与 {@link ISteamBlockEntity} 的状态存取外均有默认实现.
+ * 除 {@link ISteamStorage} 的状态存取与压床相关的访问器外均有默认实现.
  *
  * <p>
  * {@code MechanicalPressBlockEntity} 已具体实现 {@code canProcessInBulk} / {@code tryProcessOnBelt} /
  * {@code tryProcessInWorld} / {@code tryProcessInBasin} / {@code getKineticSpeed} / {@code getParticleAmount} /
  * {@code onPressingCompleted} / {@code getRecipe} / {@code getPressingBehaviour} / {@code onItemPressed}.
  * 父类具体方法优先于接口 default, 本接口的默认实现全被覆盖, 前三个需由实现类委托给
- * {@code ISteamMachine.super} 才能生效, 其余沿用机械动力的行为.
+ * {@code ISteamPressMachine.super} 才能生效, 其余沿用机械动力的行为.
  */
-public interface ISteamMachine extends PressingBehaviour.PressingBehaviourSpecifics, ISteamBlockEntity {
-	/**
-	 * 一次冲程可加工的输入份数, 即并行数量.
-	 *
-	 * <p>
-	 * 返回 1 时与机械动力原版相同. 返回 0 或负数表示停止工作, 可接入
-	 * {@link ISteamBlockEntity#hasEnoughSteam()} 等条件.
-	 */
-	int getParallelCount();
-
+public interface ISteamPressMachine extends PressingBehaviour.PressingBehaviourSpecifics, ISteamStorage {
 	Optional<PressingRecipe> getRecipe(ItemStack item);
 
 	PressingBehaviour getPressingBehaviour();
@@ -42,21 +33,6 @@ public interface ISteamMachine extends PressingBehaviour.PressingBehaviourSpecif
 	Level getLevel();
 
 	float getSpeed();
-
-	default int getParallel() {
-		return hasEnoughSteam() ? getParallelCount() : 0;
-	}
-
-	/**
-	 * 本次冲程实际加工的份数, {@code available} 为输入堆叠的数量, 0 表示不处理该输入.
-	 */
-	default int getBatchSize(int available) {
-		int parallel = getParallel();
-		if (parallel <= 0 || available <= 0) {
-			return 0;
-		}
-		return Math.min(parallel, available);
-	}
 
 	/**
 	 * 此方法返回值必须为{@code false}!

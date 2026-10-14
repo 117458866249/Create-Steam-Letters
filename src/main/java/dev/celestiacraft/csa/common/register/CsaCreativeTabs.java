@@ -25,7 +25,9 @@ public class CsaCreativeTabs {
 					.displayItems((parameters, output) -> {
 						output.accept(CsaFluids.STEAM.getBucket().get());
 						output.accept(CsaFluids.SUPERHEATED_STEAM.getBucket().get());
+						output.accept(CsaBlocks.BRONZE_BASIN.asItem());
 						output.accept(CsaBlocks.STEAM_HAMMER.asItem());
+						output.accept(CsaBlocks.STEAM_MIXER.asItem());
 					})
 					.build();
 		});

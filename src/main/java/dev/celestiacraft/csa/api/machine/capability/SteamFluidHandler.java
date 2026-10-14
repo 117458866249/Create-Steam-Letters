@@ -1,6 +1,6 @@
 package dev.celestiacraft.csa.api.machine.capability;
 
-import dev.celestiacraft.csa.api.machine.ISteamBlockEntity;
+import dev.celestiacraft.csa.api.machine.ISteamStorage;
 import lombok.AllArgsConstructor;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 public class SteamFluidHandler implements IFluidHandler {
-	private final ISteamBlockEntity entity;
+	private final ISteamStorage entity;
 
 	@Override
 	public int getTanks() {

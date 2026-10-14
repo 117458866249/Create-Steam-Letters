@@ -20,7 +20,8 @@ public class CsaFluids {
 						CsaApis.loadResource("fluid/steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
-						}, 0xFFFAFAFA))
+						}, 0xFFFAFAFA)
+				)
 				.properties((properties) -> {
 					properties.density(-10)
 							.viscosity(1)
@@ -49,7 +50,8 @@ public class CsaFluids {
 						CsaApis.loadResource("fluid/superheated_steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
-						}, 0xFFFAFAFA))
+						}, 0xFFFAFAFA)
+				)
 				.properties((properties) -> {
 					properties.density(-10)
 							.viscosity(1)
