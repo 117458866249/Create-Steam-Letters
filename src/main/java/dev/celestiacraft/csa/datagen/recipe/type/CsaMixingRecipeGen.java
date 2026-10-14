@@ -18,7 +18,8 @@ public class CsaMixingRecipeGen extends MixingRecipeGen {
 
 		STEAM = create("steam", (builder) -> {
 			return builder.require(FluidTags.WATER, 1000)
-					.output(CsaFluids.STEAM.get(), 1000);
+					.output(CsaFluids.STEAM.get(), 1000)
+					.requiresHeat(HeatCondition.HEATED);
 		});
 
 		SUPERHEATED_STEAM = create("superheated_steam", (builder) -> {
