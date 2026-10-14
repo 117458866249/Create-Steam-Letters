@@ -5,7 +5,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.create_steam_ages.api.CSAApis;
 import dev.celestiacraft.create_steam_ages.common.fluid.SteamFluid;
 import dev.celestiacraft.create_steam_ages.tags.CSAFluidTags;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -22,7 +21,6 @@ public class CSAFluids {
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
 						}, 0xFFFAFAFA))
-				.renderType(() -> RenderType.translucent())
 				.properties((properties) -> {
 					properties.density(-10)
 							.viscosity(1)
@@ -51,7 +49,6 @@ public class CSAFluids {
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
 						}, 0xFFFAFAFA))
-				.renderType(() -> RenderType.translucent())
 				.properties((properties) -> {
 					properties.density(-10)
 							.viscosity(1)

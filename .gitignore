@@ -7,3 +7,4 @@ build
 /run-data
 /src/generated/*
 /bin/
+/graphflow-out
