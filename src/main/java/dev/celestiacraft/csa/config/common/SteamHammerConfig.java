@@ -4,9 +4,6 @@ import dev.celestiacraft.csa.config.api.ConfigModule;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class SteamHammerConfig extends ConfigModule {
-	public static ForgeConfigSpec.DoubleValue
-			STEAM_HAMMER_STRESS;
-
 	public static ForgeConfigSpec.IntValue
 			STEAM_HAMMER_PARALLEL,
 			STEAM_CONSUMPTION,
@@ -32,10 +29,5 @@ public class SteamHammerConfig extends ConfigModule {
 				.comment(setType("int"))
 				.comment(setDefault(10000))
 				.defineInRange("steam_capacity", 10000, 1000, 1000000);
-
-		STEAM_HAMMER_STRESS = builder.comment("Steam Hammer Stress")
-				.comment(setType("double"))
-				.comment(setDefault(16.0))
-				.defineInRange("steam_hammer_stress", 16.0, 1, 64);
 	}
 }

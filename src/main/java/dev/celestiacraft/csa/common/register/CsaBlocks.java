@@ -8,7 +8,6 @@ import dev.celestiacraft.csa.api.CsaStress;
 import dev.celestiacraft.csa.api.item.SteamBlockItem;
 import dev.celestiacraft.csa.api.models.ItemModelGen;
 import dev.celestiacraft.csa.common.block.steam_hammer.SteamHammerBlock;
-import dev.celestiacraft.csa.config.common.SteamHammerConfig;
 import net.minecraft.tags.BlockTags;
 
 public class CsaBlocks {
@@ -20,7 +19,7 @@ public class CsaBlocks {
 				.model(ItemModelGen.withModel("block/steam_hammer/item"))
 				.build()
 				.initialProperties(SharedProperties::stone)
-				.transform(CsaStress.setImpact(SteamHammerConfig.STEAM_HAMMER_STRESS.get()))
+				.transform(CsaStress.setImpact(16))
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
