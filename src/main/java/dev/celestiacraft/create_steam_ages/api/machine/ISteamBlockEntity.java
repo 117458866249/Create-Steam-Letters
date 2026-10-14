@@ -1,0 +1,154 @@
+package dev.celestiacraft.create_steam_ages.api.machine;
+
+import dev.celestiacraft.create_steam_ages.api.machine.capability.SteamFluidHandler;
+import dev.celestiacraft.create_steam_ages.tags.CSAFluidTags;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
+/**
+ * 通用蒸汽机器接口: 储存, 填充, 抽取, 消耗.
+ *
+ * <p>
+ * 继承关系由机器决定: 实现类 {@code extends} 机械动力的对应 BE 类并实现本接口, 例如
+ * {@code SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements ISteamBlockEntity}.
+ *
+ * <p>
+ * 接口无法持有实例状态, 实现类需持有 {@link FluidStack} 字段并实现 {@link #getSteamStack()} 与
+ * {@link #setSteamStack(FluidStack)}.
+ *
+ * <p>
+ * {@code getCapability} / {@code write} / {@code read} 在父类中已是具体方法, 接口的默认实现会被忽略
+ * , 流体能力与持久化由实现类接入.
+ */
+public interface ISteamBlockEntity {
+	/**
+	 * 当前蒸汽储量, 无蒸汽时返回 {@link FluidStack#EMPTY}.
+	 */
+	FluidStack getSteamStack();
+
+	/**
+	 * 写入蒸汽储量, 实现类需同时调用 {@code setChanged()}.
+	 */
+	void setSteamStack(FluidStack stack);
+
+	/**
+	 * 蒸汽容量, 单位 mB.
+	 */
+	int getSteamCapacity();
+
+	/**
+	 * 每次加工的蒸汽消耗量, 单位 mB.
+	 */
+	int getSteamConsumption();
+
+	/**
+	 * 可接受的流体, 默认仅 {@link CSAFluidTags#STEAM}.
+	 */
+	default boolean isValidSteam(FluidStack stack) {
+		Fluid fluid = stack.getFluid();
+		return !stack.isEmpty() && fluid.is(CSAFluidTags.STEAM);
+	}
+
+	/**
+	 * 储量是否不少于 {@code amount}.
+	 */
+	default boolean hasSteam(int amount) {
+		FluidStack steam = getSteamStack();
+		return !steam.isEmpty() && steam.getAmount() >= amount;
+	}
+
+	/**
+	 * 储量是否足够一次加工.
+	 */
+	default boolean hasEnoughSteam() {
+		return hasSteam(getSteamConsumption());
+	}
+
+	/**
+	 * 当前储量可支撑的加工次数.
+	 */
+	default int getSteamOperations() {
+		FluidStack steam = getSteamStack();
+		int consumption = getSteamConsumption();
+		return steam.isEmpty() || consumption <= 0 ? 0 : steam.getAmount() / consumption;
+	}
+
+	/**
+	 * 扣除蒸汽内部存储的蒸汽
+	 *
+	 * @param amount 扣除的量
+	 */
+	default void consumeSteam(int amount) {
+		FluidStack steam = getSteamStack();
+		if (steam.isEmpty() || amount <= 0) {
+			return;
+		}
+		if (steam.getAmount() <= amount) {
+			setSteamStack(FluidStack.EMPTY);
+			return;
+		}
+		FluidStack left = steam.copy();
+		left.shrink(amount);
+		setSteamStack(left);
+	}
+
+	/**
+	 * 扣除蒸汽内部存储的蒸汽
+	 */
+	default boolean consumeSteam() {
+		if (!hasEnoughSteam()) {
+			return false;
+		}
+		consumeSteam(getSteamConsumption());
+		return true;
+	}
+
+	default int fillSteam(FluidStack stack, IFluidHandler.FluidAction action) {
+		if (!isValidSteam(stack)) {
+			return 0;
+		}
+
+		FluidStack steam = getSteamStack();
+		int accepted = Math.min(stack.getAmount(), Math.max(0, getSteamCapacity() - steam.getAmount()));
+		if (accepted <= 0) {
+			return 0;
+		}
+		if (action.simulate()) {
+			return accepted;
+		}
+
+		if (steam.isEmpty()) {
+			setSteamStack(new FluidStack(stack.getFluid(), accepted));
+		} else {
+			FluidStack merged = steam.copy();
+			merged.grow(accepted);
+			setSteamStack(merged);
+		}
+		return accepted;
+	}
+
+	/**
+	 * 抽取蒸汽.
+	 *
+	 * @return 实际抽出的蒸汽
+	 */
+	default FluidStack drainSteam(int maxDrain, IFluidHandler.FluidAction action) {
+		FluidStack steam = getSteamStack();
+
+		if (steam.isEmpty() || maxDrain <= 0) {
+			return FluidStack.EMPTY;
+		}
+
+		int drained = Math.min(maxDrain, steam.getAmount());
+		FluidStack result = new FluidStack(steam.getFluid(), drained);
+		if (!action.simulate()) {
+			consumeSteam(drained);
+		}
+		return result;
+	}
+
+	default IFluidHandler steamFluidHandler() {
+		return new SteamFluidHandler(this);
+	}
+}

@@ -1,13 +1,16 @@
 package dev.celestiacraft.create_steam_ages.boiler;
 
+import dev.celestiacraft.create_steam_ages.mixin.boiler.BoilerDataMixin;
+
 /**
- * Implemented by the BoilerData mixin so the steam fluid handler can push
- * steam input info back into the boiler without touching Create's classes.
+ * {@link BoilerDataMixin}与蒸汽流体处理器之间的桥接接口
+ * <p>
+ * 由{@link BoilerDataMixin}实现, 供蒸汽流体处理器将蒸汽输入信息回传给锅炉
  */
 public interface SteamBoilerData {
 	/**
-	 * @param level  9 for normal steam, 18 for high temperature steam
-	 * @param amount amount of steam fluid accepted this call (mB)
+	 * @param level  普通蒸汽为 9, 高温蒸汽为 18
+	 * @param amount 本次调用接受的蒸汽流体量(mB)
 	 */
 	void csa$notifySteamInput(int level, int amount);
 }

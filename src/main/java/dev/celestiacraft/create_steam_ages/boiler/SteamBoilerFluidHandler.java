@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * 锅炉输入处理器, 除了接受水(原版行为)外, 还接受 {@code forge:steam} / {@code forge:high_temperature_steam} 流体
  * <p>
- * 蒸汽的消耗方式与水完全相同：每个通过 {@link #fill} 接受的 mB 都会计入锅炉的采样供应量
+ * 蒸汽的消耗方式与水完全相同: 每个通过 {@link #fill} 接受的 mB 都会计入锅炉的采样供应量
  * <p>
  * 因此水供应所决定的等级上限(每级每 tick 为 {@code ceil(supply) / 10} mB)保持不变
  * <p>
@@ -29,23 +29,24 @@ public class SteamBoilerFluidHandler extends BoilerData.BoilerFluidHandler {
 	}
 
 	@Override
-	public int fill(FluidStack resource, FluidAction action) {
-		int filled = super.fill(resource, action);
+	public int fill(FluidStack stack, FluidAction action) {
+		int filled = super.fill(stack, action);
+
 		if (filled > 0 && action.execute()
-				&& isSteam(resource)
+				&& isSteam(stack)
 				&& owner instanceof SteamBoilerData steamBoiler)
-			steamBoiler.csa$notifySteamInput(steamHeatLevel(resource), filled);
+			steamBoiler.csa$notifySteamInput(steamHeatLevel(stack), filled);
 		return filled;
 	}
 
-	private static boolean isSteam(FluidStack stack) {
+	private boolean isSteam(FluidStack stack) {
 		Fluid fluid = stack.getFluid();
 
 		return fluid.is(CSAFluidTags.STEAM)
 				|| fluid.is(CSAFluidTags.HIGH_TEMPERATURE_STEAM);
 	}
 
-	private static int steamHeatLevel(FluidStack stack) {
+	private int steamHeatLevel(FluidStack stack) {
 		Fluid fluid = stack.getFluid();
 
 		return fluid.is(CSAFluidTags.HIGH_TEMPERATURE_STEAM) ? 18 : 9;

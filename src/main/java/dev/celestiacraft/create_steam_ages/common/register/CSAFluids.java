@@ -2,7 +2,7 @@ package dev.celestiacraft.create_steam_ages.common.register;
 
 import com.tterrag.registrate.util.entry.FluidEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import dev.celestiacraft.create_steam_ages.CreateSteamAges;
+import dev.celestiacraft.create_steam_ages.api.CSAApis;
 import dev.celestiacraft.create_steam_ages.common.fluid.SteamFluid;
 import dev.celestiacraft.create_steam_ages.tags.CSAFluidTags;
 import net.minecraft.client.renderer.RenderType;
@@ -15,10 +15,10 @@ public class CSAFluids {
 	public static final FluidEntry<ForgeFlowingFluid.Flowing> HIGH_TEMPERATURE_STEAM;
 
 	static {
-		STEAM = CreateSteamAges.REGISTRATE.fluid(
+		STEAM = CSAApis.REGISTRATE.fluid(
 						"steam",
-						CreateSteamAges.loadResource("fluid/steam_still"),
-						CreateSteamAges.loadResource("fluid/steam_flow"),
+						CSAApis.loadResource("fluid/steam_still"),
+						CSAApis.loadResource("fluid/steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
 						}, 0xFFFAFAFA))
@@ -44,10 +44,10 @@ public class CSAFluids {
 				.build()
 				.register();
 
-		HIGH_TEMPERATURE_STEAM = CreateSteamAges.REGISTRATE.fluid(
+		HIGH_TEMPERATURE_STEAM = CSAApis.REGISTRATE.fluid(
 						"high_temperature_steam",
-						CreateSteamAges.loadResource("fluid/high_temperature_steam_still"),
-						CreateSteamAges.loadResource("fluid/high_temperature_steam_flow"),
+						CSAApis.loadResource("fluid/high_temperature_steam_still"),
+						CSAApis.loadResource("fluid/high_temperature_steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
 						}, 0xFFFAFAFA))
@@ -74,6 +74,6 @@ public class CSAFluids {
 				.register();
 	}
 
-	public static void register() {
+	public static void init() {
 	}
 }

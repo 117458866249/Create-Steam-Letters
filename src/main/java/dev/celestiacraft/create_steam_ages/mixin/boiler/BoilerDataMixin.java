@@ -1,4 +1,4 @@
-package dev.celestiacraft.create_steam_ages.mixin;
+package dev.celestiacraft.create_steam_ages.mixin.boiler;
 
 import com.simibubi.create.content.fluids.tank.BoilerData;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
@@ -19,12 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * 因此无需额外提供水, </li>
  * <li>在持续输入蒸汽时, 锅炉的热量等级会被强制设为 9(普通蒸汽)或 18(高温蒸汽),
  * 而不是读取锅炉下方的热源, 因此无需烈焰人燃烧室 / 营火, </li>
- * <li>护目镜面板会在原版信息的基础上显示蒸汽输入速率。</li>
+ * <li>护目镜面板会在原版信息的基础上显示蒸汽输入速率. </li>
  * </ul>
  * <p>
  * 所有目标均为 Create 自身的成员, 这些成员在重新混淆(reobfuscation)后仍会保留其名称,
  * 因此必须使用 {@code remap = false}(Create 是第三方模组, 不属于 Minecraft / Forge
- * 映射表的一部分)。
+ * 映射表的一部分).
  */
 @Mixin(BoilerData.class)
 public class BoilerDataMixin implements SteamBoilerData {
@@ -72,11 +72,8 @@ public class BoilerDataMixin implements SteamBoilerData {
 	static int SAMPLE_RATE;
 
 	/**
-	 * 将锅炉流体处理器替换为一个同时接受蒸汽的处理器
-	 *
 	 * @author
 	 * @reason
-	 * @return
 	 */
 	@Overwrite(remap = false)
 	public BoilerData.BoilerFluidHandler createHandler() {
@@ -142,70 +139,63 @@ public class BoilerDataMixin implements SteamBoilerData {
 		csa$steamGathered = 0;
 	}
 
-//	/**
-//	 * 当蒸汽驱动锅炉时, 将蒸汽输入速率添加到护目镜面板中
-//	 * 布局与原版水输入速率保持一致
-//	 */
-//	@Inject(method = "addToGoggleTooltip", at = @At("RETURN"), remap = false)
-//	private void csa$addSteamTooltip(
-//			List<Component> tooltip,
-//			boolean isPlayerSneaking,
-//			int boilerSize,
-//			CallbackInfoReturnable<Boolean> returnable
-//	) {
-//		if (csa$steamHeatLevel <= 0) {
-//			return;
-//		}
-//
-//		// 蒸汽模式: 清掉原版锅炉信息, 只显示蒸汽相关数据
-//		tooltip.clear();
-//
-//		CreateLang.builder()
-//				.add(Component.translatable("create_steam_ages.boiler.steam_input_rate")
-//						.withStyle(ChatFormatting.GRAY))
-//				.forGoggles(tooltip);
-//		CreateLang.number(csa$steamSupply)
-//				.style(ChatFormatting.BLUE)
-//				.add(CreateLang.translate("generic.unit.millibuckets"))
-//				.add(CreateLang.text(" / ")
-//						.style(ChatFormatting.GRAY))
-//				.add(CreateLang.translate("boiler.per_tick",
-//								CreateLang.number(waterSupplyPerLevel)
-//										.add(CreateLang.translate("generic.unit.millibuckets")))
-//						.style(ChatFormatting.DARK_GRAY))
-//				.forGoggles(tooltip, 1);
-//
-//		int actualLevel = Math.min(csa$steamHeatLevel, Math.min(maxHeatForWater, maxHeatForSize));
-//		CreateLang.builder()
-//				.add(Component.translatable("create_steam_ages.boiler.steam_level")
-//						.withStyle(ChatFormatting.GRAY))
-//				.forGoggles(tooltip);
-//		CreateLang.number(actualLevel)
-//				.style(ChatFormatting.AQUA)
-//				.add(CreateLang.text(" / ")
-//						.style(ChatFormatting.GRAY))
-//				.add(CreateLang.number(18)
-//						.style(ChatFormatting.DARK_GRAY))
-//				.forGoggles(tooltip, 1);
-//	}
-//
-//	/**
-//	 * 将蒸汽信息同步到客户端, 供护目镜面板显示(护目镜面板在客户端渲染)
-//	 *
-//	 * @param returnable
-//	 */
-//	@Inject(method = "write", at = @At("RETURN"), remap = false)
-//	private void csa$writeSteam(CallbackInfoReturnable<CompoundTag> returnable) {
-//		CompoundTag nbt = returnable.getReturnValue();
-//		nbt.putInt("CSA_SteamHeat", csa$steamHeatLevel);
-//		nbt.putFloat("CSA_SteamSupply", csa$steamSupply);
-//	}
-//
-//	@Inject(method = "read", at = @At("RETURN"), remap = false)
-//	private void csa$readSteam(CompoundTag nbt, int boilerSize, CallbackInfo info) {
-//		csa$steamHeatLevel = nbt.getInt("CSA_SteamHeat");
-//		csa$steamSupply = nbt.getFloat("CSA_SteamSupply");
-//	}
+	/*
+	@Inject(method = "addToGoggleTooltip", at = @At("RETURN"), remap = false)
+	private void csa$addSteamTooltip(
+			List<Component> tooltip,
+			boolean isPlayerSneaking,
+			int boilerSize,
+			CallbackInfoReturnable<Boolean> returnable
+	) {
+		if (csa$steamHeatLevel <= 0) {
+			return;
+		}
+
+		// 蒸汽模式: 清掉原版锅炉信息, 只显示蒸汽相关数据
+		tooltip.clear();
+
+		CreateLang.builder()
+				.add(Component.translatable("create_steam_ages.boiler.steam_input_rate")
+						.withStyle(ChatFormatting.GRAY))
+				.forGoggles(tooltip);
+		CreateLang.number(csa$steamSupply)
+				.style(ChatFormatting.BLUE)
+				.add(CreateLang.translate("generic.unit.millibuckets"))
+				.add(CreateLang.text(" / ")
+						.style(ChatFormatting.GRAY))
+				.add(CreateLang.translate("boiler.per_tick",
+								CreateLang.number(waterSupplyPerLevel)
+										.add(CreateLang.translate("generic.unit.millibuckets")))
+						.style(ChatFormatting.DARK_GRAY))
+				.forGoggles(tooltip, 1);
+
+		int actualLevel = Math.min(csa$steamHeatLevel, Math.min(maxHeatForWater, maxHeatForSize));
+		CreateLang.builder()
+				.add(Component.translatable("create_steam_ages.boiler.steam_level")
+						.withStyle(ChatFormatting.GRAY))
+				.forGoggles(tooltip);
+		CreateLang.number(actualLevel)
+				.style(ChatFormatting.AQUA)
+				.add(CreateLang.text(" / ")
+						.style(ChatFormatting.GRAY))
+				.add(CreateLang.number(18)
+						.style(ChatFormatting.DARK_GRAY))
+				.forGoggles(tooltip, 1);
+	}
+
+	@Inject(method = "write", at = @At("RETURN"), remap = false)
+	private void csa$writeSteam(CallbackInfoReturnable<CompoundTag> returnable) {
+		CompoundTag nbt = returnable.getReturnValue();
+		nbt.putInt("CSA_SteamHeat", csa$steamHeatLevel);
+		nbt.putFloat("CSA_SteamSupply", csa$steamSupply);
+	}
+
+	@Inject(method = "read", at = @At("RETURN"), remap = false)
+	private void csa$readSteam(CompoundTag nbt, int boilerSize, CallbackInfo info) {
+		csa$steamHeatLevel = nbt.getInt("CSA_SteamHeat");
+		csa$steamSupply = nbt.getFloat("CSA_SteamSupply");
+	}
+	*/
 
 	@Override
 	public void csa$notifySteamInput(int level, int amount) {
