@@ -1,7 +1,7 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "dev.celestiacraft.create_steam_ages.mixin",
+	"package": "dev.celestiacraft.csa.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "create_steam_ages.refmap.json",
 	"mixins": [

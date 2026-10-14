@@ -1,5 +1,0 @@
-{
-	"parent": "forge:item/bucket_drip",
-	"fluid": "create_steam_ages:high_temperature_steam",
-	"loader": "forge:fluid_container"
-}
