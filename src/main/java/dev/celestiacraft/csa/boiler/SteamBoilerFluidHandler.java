@@ -2,7 +2,7 @@ package dev.celestiacraft.csa.boiler;
 
 import com.simibubi.create.content.fluids.tank.BoilerData;
 
-import dev.celestiacraft.csa.tags.CSAFluidTags;
+import dev.celestiacraft.csa.tags.CsaFluidTags;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -42,13 +42,13 @@ public class SteamBoilerFluidHandler extends BoilerData.BoilerFluidHandler {
 	private boolean isSteam(FluidStack stack) {
 		Fluid fluid = stack.getFluid();
 
-		return fluid.is(CSAFluidTags.STEAM)
-				|| fluid.is(CSAFluidTags.SUPERHEATED_STEAM);
+		return fluid.is(CsaFluidTags.STEAM)
+				|| fluid.is(CsaFluidTags.SUPERHEATED_STEAM);
 	}
 
 	private int steamHeatLevel(FluidStack stack) {
 		Fluid fluid = stack.getFluid();
 
-		return fluid.is(CSAFluidTags.SUPERHEATED_STEAM) ? 18 : 9;
+		return fluid.is(CsaFluidTags.SUPERHEATED_STEAM) ? 18 : 9;
 	}
 }

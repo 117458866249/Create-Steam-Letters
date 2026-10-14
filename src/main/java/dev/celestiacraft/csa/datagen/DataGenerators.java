@@ -4,7 +4,10 @@ import com.tterrag.registrate.providers.ProviderType;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.datagen.language.English;
+import dev.celestiacraft.csa.datagen.recipe.type.CsaItemApplicationRecipeGen;
 import dev.celestiacraft.csa.datagen.recipe.type.CsaMixingRecipeGen;
+import dev.celestiacraft.csa.datagen.recipe.type.CsaPressRecipeGen;
+import dev.celestiacraft.csa.datagen.tags.ItemTagsGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -32,6 +35,10 @@ public class DataGenerators {
 
 		if (server) {
 			generator.addProvider(server, new CsaMixingRecipeGen(output));
+			generator.addProvider(server, new CsaPressRecipeGen(output));
+			generator.addProvider(server, new CsaItemApplicationRecipeGen(output));
+
+			CsaApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
 		}
 	}
 }

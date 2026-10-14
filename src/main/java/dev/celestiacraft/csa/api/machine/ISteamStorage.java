@@ -2,7 +2,7 @@ package dev.celestiacraft.csa.api.machine;
 
 import dev.celestiacraft.csa.api.machine.capability.SteamFluidHandler;
 import dev.celestiacraft.csa.config.common.SteamConfig;
-import dev.celestiacraft.csa.tags.CSAFluidTags;
+import dev.celestiacraft.csa.tags.CsaFluidTags;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -72,18 +72,18 @@ public interface ISteamStorage {
 	}
 
 	/**
-	 * 可接受的流体, 默认仅{@link CSAFluidTags#STEAM}和{@link CSAFluidTags#SUPERHEATED_STEAM}.
+	 * 可接受的流体, 默认仅{@link CsaFluidTags#STEAM}和{@link CsaFluidTags#SUPERHEATED_STEAM}.
 	 */
 	default boolean isValidSteam(FluidStack stack) {
 		Fluid fluid = stack.getFluid();
-		return !stack.isEmpty() && (fluid.is(CSAFluidTags.STEAM) || fluid.is(CSAFluidTags.SUPERHEATED_STEAM));
+		return !stack.isEmpty() && (fluid.is(CsaFluidTags.STEAM) || fluid.is(CsaFluidTags.SUPERHEATED_STEAM));
 	}
 
 	/**
 	 * 是否为过热蒸汽.
 	 */
 	default boolean isSuperheatedSteam(FluidStack stack) {
-		return !stack.isEmpty() && stack.getFluid().is(CSAFluidTags.SUPERHEATED_STEAM);
+		return !stack.isEmpty() && stack.getFluid().is(CsaFluidTags.SUPERHEATED_STEAM);
 	}
 
 	/**

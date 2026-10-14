@@ -23,11 +23,14 @@ public class CsaCreativeTabs {
 					.icon(CsaBlocks.STEAM_HAMMER::asStack)
 					.title(Component.translatable(CsaTranKeys.BASIC_TAB))
 					.displayItems((parameters, output) -> {
-						output.accept(CsaFluids.STEAM.getBucket().get());
-						output.accept(CsaFluids.SUPERHEATED_STEAM.getBucket().get());
+						output.accept(CsaMaterials.BRONZE_INGOT.asItem());
+						output.accept(CsaMaterials.BRONZE_PLATE.asItem());
 						output.accept(CsaBlocks.BRONZE_BASIN.asItem());
 						output.accept(CsaBlocks.STEAM_HAMMER.asItem());
 						output.accept(CsaBlocks.STEAM_MIXER.asItem());
+						output.accept(CsaBlocks.BRONZE_CASING.asItem());
+						output.accept(CsaFluids.STEAM.getBucket().get());
+						output.accept(CsaFluids.SUPERHEATED_STEAM.getBucket().get());
 					})
 					.build();
 		});

@@ -5,7 +5,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 
-public class CSAFluidTags {
+public class CsaFluidTags {
 	public static TagKey<Fluid>
 			STEAM,
 			SUPERHEATED_STEAM;

@@ -3,25 +3,36 @@ package dev.celestiacraft.csa.datagen.recipe.type;
 import com.simibubi.create.api.data.recipe.MixingRecipeGen;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import dev.celestiacraft.csa.CreateSteamAges;
+import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.common.register.CsaFluids;
-import dev.celestiacraft.csa.tags.CSAFluidTags;
+import dev.celestiacraft.csa.common.register.CsaMaterials;
+import dev.celestiacraft.csa.tags.CsaFluidTags;
+import dev.celestiacraft.csa.tags.CsaItemTags;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.FluidTags;
+import net.minecraftforge.common.Tags;
 
 public class CsaMixingRecipeGen extends MixingRecipeGen {
 	public CsaMixingRecipeGen(PackOutput output) {
 		super(output, CreateSteamAges.MODID);
 
 		create("steam", (builder) -> {
-			return builder.require(FluidTags.WATER, 1000)
-					.output(CsaFluids.STEAM.get(), 1000)
+			return builder.output(CsaFluids.STEAM.get(), 1000)
+					.require(FluidTags.WATER, 1000)
 					.requiresHeat(HeatCondition.HEATED);
 		});
 
 		create("superheated_steam", (builder) -> {
-			return builder.require(CSAFluidTags.STEAM, 1000)
-					.output(CsaFluids.SUPERHEATED_STEAM.get(), 1000)
+			return builder.output(CsaFluids.SUPERHEATED_STEAM.get(), 1000)
+					.require(CsaFluidTags.STEAM, 1000)
 					.requiresHeat(HeatCondition.SUPERHEATED);
+		});
+
+		create("material/bronze/ingot", (builder) -> {
+			CsaApis.require(builder, Tags.Items.INGOTS_COPPER, 3);
+			return builder.output(CsaMaterials.BRONZE_INGOT, 4)
+					.require(CsaItemTags.ANDESITE_ALLOY_INGOT)
+					.requiresHeat(HeatCondition.HEATED);
 		});
 	}
 }

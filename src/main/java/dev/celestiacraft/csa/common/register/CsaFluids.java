@@ -4,7 +4,7 @@ import com.tterrag.registrate.util.entry.FluidEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.common.fluid.SteamFluid;
-import dev.celestiacraft.csa.tags.CSAFluidTags;
+import dev.celestiacraft.csa.tags.CsaFluidTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -34,7 +34,7 @@ public class CsaFluids {
 					properties.slopeFindDistance(3)
 							.explosionResistance(100.0F);
 				})
-				.tag(CSAFluidTags.STEAM)
+				.tag(CsaFluidTags.STEAM)
 				.source(ForgeFlowingFluid.Source::new)
 				.bucket()
 				.tag(ItemTags.create(ResourceLocation.parse("forge:buckets/steam")))
@@ -64,7 +64,7 @@ public class CsaFluids {
 					properties.slopeFindDistance(3)
 							.explosionResistance(100.0F);
 				})
-				.tag(CSAFluidTags.SUPERHEATED_STEAM)
+				.tag(CsaFluidTags.SUPERHEATED_STEAM)
 				.source(ForgeFlowingFluid.Source::new)
 				.bucket()
 				.model(NonNullBiConsumer.noop())

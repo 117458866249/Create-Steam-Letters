@@ -4,10 +4,7 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.api.CsaStress;
 import dev.celestiacraft.csa.client.block.CSABlockPartialModel;
-import dev.celestiacraft.csa.common.register.CsaBlockEntities;
-import dev.celestiacraft.csa.common.register.CsaBlocks;
-import dev.celestiacraft.csa.common.register.CsaCreativeTabs;
-import dev.celestiacraft.csa.common.register.CsaFluids;
+import dev.celestiacraft.csa.common.register.*;
 import dev.celestiacraft.csa.config.CommonConfigs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -33,6 +30,7 @@ public class CreateSteamAges {
 		IEventBus bus = context.getModEventBus();
 
 		CsaApis.REGISTRATE.registerEventListeners(bus);
+		CsaMaterials.init();
 		CsaBlocks.init();
 		CsaBlockEntities.init();
 		CsaFluids.init();
