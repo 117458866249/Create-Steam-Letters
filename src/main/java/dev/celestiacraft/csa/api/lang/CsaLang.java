@@ -2,6 +2,7 @@ package dev.celestiacraft.csa.api.lang;
 
 import com.simibubi.create.foundation.utility.CreateLang;
 import dev.celestiacraft.csa.CreateSteamAges;
+import dev.celestiacraft.csa.api.CsaTranKeys;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -32,17 +33,17 @@ public class CsaLang {
 	/**
 	 * 翻译指定的语言键并返回 {@link LangBuilder}, 支持动态参数。
 	 * <p>
-	 * 自动添加 {@code cmi.} 前缀到语言键。例如, 传入 {@code "tooltip.example"}
-	 * 会查找 {@code "cmi.tooltip.example"} 键。
+	 * 自动添加模组 id 前缀到语言键。例如, 传入 {@code "tooltip.example"}
+	 * 会查找 {@code "create_steam_ages.tooltip.example"} 键。
 	 *
-	 * @param langKey 语言键(不含 {@code cmi.} 前缀)
+	 * @param langKey 语言键(不含模组 id 前缀)
 	 * @param args    格式化参数, 用于替换翻译文本中的占位符(如 {@code %s})
 	 * @return 包含翻译结果的 LangBuilder, 可继续链式调用
 	 * @see #translateDirect(String, Object...) 直接获取 Component 而非 Builder
 	 */
 	public static LangBuilder translate(String langKey, Object... args) {
 		return lang().add(Component.translatable(
-				String.format("%s.%s", CreateSteamAges.MODID, langKey),
+				CsaTranKeys.langKey(langKey),
 				LangBuilder.resolveBuilders(args)
 		));
 	}
@@ -66,7 +67,7 @@ public class CsaLang {
 
 	public static MutableComponent translateDirect(String langKey, Object... args) {
 		return Component.translatable(
-				String.format("%s.%s", CreateSteamAges.MODID, langKey),
+				CsaTranKeys.langKey(langKey),
 				LangBuilder.resolveBuilders(args)
 		);
 	}

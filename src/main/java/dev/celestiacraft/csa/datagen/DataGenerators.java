@@ -4,6 +4,7 @@ import com.tterrag.registrate.providers.ProviderType;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.datagen.language.English;
+import dev.celestiacraft.csa.datagen.recipe.type.CsaMixingRecipeGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -25,6 +26,12 @@ public class DataGenerators {
 		boolean client = event.includeClient();
 		boolean server = event.includeServer();
 
-		CsaApis.REGISTRATE.addDataGenerator(ProviderType.LANG, English::addTranslations);
+		if (client) {
+			CsaApis.REGISTRATE.addDataGenerator(ProviderType.LANG, English::addTranslations);
+		}
+
+		if (server) {
+			generator.addProvider(server, new CsaMixingRecipeGen(output));
+		}
 	}
 }

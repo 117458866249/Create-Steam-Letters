@@ -4,8 +4,6 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaTranKeys;
 
-import javax.swing.*;
-
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
 		addOtherLang(provider);
@@ -18,19 +16,19 @@ public class English {
 
 	private static void addSteamHammerLang(RegistrateLangProvider provider) {
 		provider.add(
-				"tooltip.steam_hammer.summary",
+				CsaTranKeys.langKey(CsaTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY),
 				"Processes _whole stacks_ in a single working cycle, covering _Pressing_, _Compacting_ and _Automated Packing_ recipes"
 		);
 		provider.add(
-				"steam_hammer.condition1",
+				CsaTranKeys.langKey(CsaTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION),
 				"When working:"
 		);
 		provider.add(
-				"steam_hammer.behaviour1",
+				CsaTranKeys.langKey(CsaTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR1),
 				"Only functions when _%s mB_ of steam is in the device"
 		);
 		provider.add(
-				"steam_hammer.behaviour2",
+				CsaTranKeys.langKey(CsaTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2),
 				"Consumes _%s mB_ of steam per operation"
 		);
 	}

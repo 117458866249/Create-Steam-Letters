@@ -8,5 +8,9 @@
 	"item.create_steam_ages.steam_bucket": "蒸汽桶",
 	"item.create_steam_ages.superheated_steam_bucket": "过热蒸汽桶",
 	"block.create_steam_ages.superheated_steam": "过热蒸汽",
-	"block.create_steam_ages.steam": "蒸汽"
+	"block.create_steam_ages.steam": "蒸汽",
+	"create_steam_ages.tooltip.steam_hammer.summary": "单次工作便可处理 _整组_ 物品, 覆盖 _压印_, _压缩_ 与 _自动打包_ 配方",
+	"create_steam_ages.tooltip.steam_hammer.condition1": "工作时:",
+	"create_steam_ages.tooltip.steam_hammer.behaviour1": "仅当机器内有 _%s mB_ 蒸汽时才能工作",
+	"create_steam_ages.tooltip.steam_hammer.behaviour2": "每次工作消耗 _%s mB_ 蒸汽"
 }

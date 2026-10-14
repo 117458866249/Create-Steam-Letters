@@ -2,6 +2,7 @@ package dev.celestiacraft.csa.event.item;
 
 import com.simibubi.create.foundation.item.TooltipHelper;
 import dev.celestiacraft.csa.CreateSteamAges;
+import dev.celestiacraft.csa.api.CsaTranKeys;
 import dev.celestiacraft.csa.api.lang.CsaLang;
 import dev.celestiacraft.csa.common.register.CsaBlocks;
 import dev.celestiacraft.csa.config.common.SteamHammerConfig;
@@ -37,25 +38,25 @@ public class ItemTooltip {
 			tooltip.add(Component.empty());
 
 			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					CsaLang.translateDirect("tooltip.steam_hammer.summary").getString(),
+					CsaLang.translateDirect(CsaTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY).getString(),
 					FontHelper.Palette.STANDARD_CREATE
 			));
 
 			tooltip.add(Component.empty());
 
-			CsaLang.translate("tooltip.steam_hammer.condition1")
+			CsaLang.translate(CsaTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION)
 					.style(ChatFormatting.GRAY)
 					.addTo(tooltip);
 
 			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					CsaLang.translateDirect("tooltip.steam_hammer.behaviour1", steamCost).getString(),
+					CsaLang.translateDirect(CsaTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR1, steamCost).getString(),
 					FontHelper.Palette.STANDARD_CREATE.primary(),
 					FontHelper.Palette.STANDARD_CREATE.highlight(),
 					1
 			));
 
 			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					CsaLang.translateDirect("tooltip.steam_hammer.behaviour2", steamCost).getString(),
+					CsaLang.translateDirect(CsaTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2, steamCost).getString(),
 					FontHelper.Palette.STANDARD_CREATE.primary(),
 					FontHelper.Palette.STANDARD_CREATE.highlight(),
 					1
