@@ -3,6 +3,7 @@ package dev.celestiacraft.csa.event.item;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.lang.CsaLang;
+import dev.celestiacraft.csa.common.register.CsaBlocks;
 import dev.celestiacraft.csa.config.common.SteamHammerConfig;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
@@ -22,6 +23,9 @@ public class ItemTooltip {
 		List<Component> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 
+		if (stack.is(CsaBlocks.STEAM_HAMMER.asItem())) {
+			addSteamHammerTooltip(tooltip);
+		}
 	}
 
 	private static void addSteamHammerTooltip(List<Component> tooltip) {
