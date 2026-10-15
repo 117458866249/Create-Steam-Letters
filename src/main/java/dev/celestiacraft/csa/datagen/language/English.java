@@ -3,12 +3,15 @@ package dev.celestiacraft.csa.datagen.language;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaTranKeys;
+import dev.celestiacraft.csa.common.block.advanced_spout.AdvancedSpoutModeScrollValueBehaviour;
+import dev.celestiacraft.csa.common.block.advanced_spout.AdvancedSpoutScrollValueBehaviour;
 import dev.celestiacraft.csa.config.api.ConfigModule;
 
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
 		addOtherLang(provider);
 		addSteamHammerLang(provider);
+		addAdvancedSpoutLang(provider);
 		addConfigLang(provider);
 	}
 
@@ -33,6 +36,20 @@ public class English {
 				CsaTranKeys.langKey(CsaTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2),
 				"Consumes _%s mB_ of steam per operation"
 		);
+	}
+
+	private static void addAdvancedSpoutLang(RegistrateLangProvider provider) {
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE, "Mode");
+		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_FILLING_TIME, "Filling time");
+		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_PARALLEL, "Parallel");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_BOTH, "Speed+Parallel");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_SPEED, "Speed");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_PARALLEL, "Parallel");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_BOTH_SHORT, "Both");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_SPEED_SHORT, "Speed");
+		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_PARALLEL_SHORT, "Batch");
+		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_VALUE_SPEED, "%s ticks");
+		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_VALUE_PARALLEL, "x%s");
 	}
 
 	private static void addConfigLang(RegistrateLangProvider provider) {
@@ -61,7 +78,7 @@ public class English {
 		provider.add(ConfigModule.translationKey("bronze_basin", "slot_capacity"), "Fluid capacity of each bronze basin tank (mB)");
 
 		provider.add(ConfigModule.translationKey("advanced_spout"), "Advanced Spout");
-		provider.add(ConfigModule.translationKey("advanced_spout", "filling_time"), "Advanced Spout filling time in ticks");
 		provider.add(ConfigModule.translationKey("advanced_spout", "capacity"), "Fluid capacity in advanced spout (mB)");
+		provider.add(ConfigModule.translationKey("advanced_spout", "parallel"), "Default parallel of newly placed advanced spouts");
 	}
 }

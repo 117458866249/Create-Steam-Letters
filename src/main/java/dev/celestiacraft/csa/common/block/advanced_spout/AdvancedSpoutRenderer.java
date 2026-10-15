@@ -70,8 +70,10 @@ public class AdvancedSpoutRenderer extends SafeBlockEntityRenderer<AdvancedSpout
 
 		int processingTicks = entity.processingTicks;
 		float processingPT = processingTicks - partialTicks;
-		float processingProgress = 1 - (processingPT - 5) / 10;
-		processingProgress = Mth.clamp(processingProgress, 0, 1);
+		float cycle = Math.max(1, entity.getFillingTime());
+		float pour = entity.getPourTick();
+		float span = Mth.clamp(cycle - pour, 1, 10);
+		float processingProgress = Mth.clamp(1 - (processingPT - pour) / span, 0, 1);
 		float radius = 0;
 
 		if (!fluidStack.isEmpty() && processingTicks != -1) {
@@ -94,11 +96,12 @@ public class AdvancedSpoutRenderer extends SafeBlockEntityRenderer<AdvancedSpout
 		}
 
 		float squeeze = radius;
+		float midpoint = (cycle + pour) / 2.0f;
 		if (processingPT < 0) {
 			squeeze = 0;
 		} else if (processingPT < 2) {
 			squeeze = Mth.lerp(processingPT / 2.0f, 0, -1);
-		} else if (processingPT < 10) {
+		} else if (processingPT < midpoint) {
 			squeeze = -1;
 		}
 
