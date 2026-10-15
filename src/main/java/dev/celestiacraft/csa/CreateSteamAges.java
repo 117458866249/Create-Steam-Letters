@@ -53,6 +53,7 @@ public class CreateSteamAges {
 			Pair<CsaStress, ForgeConfigSpec> stressConfig = CsaStress.createConfig();
 			STRESS_VALUES = stressConfig.getLeft();
 			STRESS_VALUES_SPEC = stressConfig.getRight();
+
 			BlockStressValues.IMPACTS.registerProvider(STRESS_VALUES::getImpact);
 			BlockStressValues.CAPACITIES.registerProvider(STRESS_VALUES::getCapacity);
 		}

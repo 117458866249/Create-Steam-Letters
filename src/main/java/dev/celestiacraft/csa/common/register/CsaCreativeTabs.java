@@ -28,6 +28,7 @@ public class CsaCreativeTabs {
 						output.accept(CsaItems.STEAM_MECHANISM.asItem());
 						output.accept(CsaItems.INCOMPLETE_STEAM_MECHANISM.asItem());
 						output.accept(CsaBlocks.BRONZE_BASIN.asItem());
+						output.accept(CsaBlocks.ADVANCED_SPOUT.asItem());
 						output.accept(CsaBlocks.STEAM_HAMMER.asItem());
 						output.accept(CsaBlocks.STEAM_MIXER.asItem());
 						output.accept(CsaBlocks.BRONZE_CASING.asItem());

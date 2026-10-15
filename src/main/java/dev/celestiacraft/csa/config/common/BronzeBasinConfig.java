@@ -8,13 +8,12 @@ public class BronzeBasinConfig extends ConfigModule {
 	public static ForgeConfigSpec.IntValue SLOT_CAPACITY;
 
 	public BronzeBasinConfig(ForgeConfigSpec.Builder builder) {
-		super(builder, "bronze_basin", "Bronze Basin");
+		super(builder, "bronze_basin");
 	}
 
 	@Override
 	protected void addConfigs() {
-		SLOT_CAPACITY = builder.comment("Fluid capacity of each bronze basin tank (mB)")
-				.translation(key("slot_capacity"))
+		SLOT_CAPACITY = builder.translation(key("slot_capacity"))
 				.defineInRange("slot_capacity", 10 * FluidType.BUCKET_VOLUME, FluidType.BUCKET_VOLUME, 1000000);
 	}
 }

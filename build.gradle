@@ -113,6 +113,8 @@ dependencies {
 	implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
 	implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
+	// 柴油动力
+	implementation fg.deobf("curse.maven:create-diesel-generators-869316:7869519")
 	// Jade
 	implementation fg.deobf("curse.maven:jade-324717:6106101")
 	// Configured

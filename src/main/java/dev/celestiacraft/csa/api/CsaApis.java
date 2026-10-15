@@ -1,5 +1,7 @@
 package dev.celestiacraft.csa.api;
 
+import com.jesz.createdieselgenerators.CreateDieselGenerators;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
@@ -22,6 +24,14 @@ public class CsaApis {
 
 	public ResourceLocation loadResource(String path) {
 		return ResourceLocation.fromNamespaceAndPath(CreateSteamAges.MODID, path);
+	}
+
+	public ResourceLocation loadCreate(String path) {
+		return Create.asResource(path);
+	}
+
+	public ResourceLocation loadCDG(String path) {
+		return CreateDieselGenerators.rl(path);
 	}
 
 	public ResourceLocation laodForge(String path) {

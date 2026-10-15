@@ -8,13 +8,12 @@ public class SteamConfig extends ConfigModule {
 			SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER;
 
 	public SteamConfig(ForgeConfigSpec.Builder builder) {
-		super(builder, "steam", "Steam");
+		super(builder, "steam");
 	}
 
 	@Override
 	protected void addConfigs() {
-		SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER = builder.comment("Steam consumption multiplier when the machine runs on superheated steam")
-				.translation(key("superheated_steam_consumption_multiplier"))
+		SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER = builder.translation(key("superheated_steam_consumption_multiplier"))
 				.defineInRange("superheated_steam_consumption_multiplier", 0.25, 0.0, 1.0);
 	}
 }

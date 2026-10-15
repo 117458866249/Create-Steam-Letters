@@ -10,21 +10,18 @@ public class SteamMixerConfig extends ConfigModule {
 			STEAM_CAPACITY;
 
 	public SteamMixerConfig(ForgeConfigSpec.Builder builder) {
-		super(builder, "steam_mixer", "Steam Mixer");
+		super(builder, "steam_mixer");
 	}
 
 	@Override
 	protected void addConfigs() {
-		STEAM_MIXER_PARALLEL = builder.comment("Steam Mixer recipe parallel")
-				.translation(key("steam_mixer_parallel"))
+		STEAM_MIXER_PARALLEL = builder.translation(key("steam_mixer_parallel"))
 				.defineInRange("steam_mixer_parallel", 16, 1, 64);
 
-		STEAM_CONSUMPTION = builder.comment("Steam consumption per run of steam mixer (mB)")
-				.translation(key("steam_consumption"))
+		STEAM_CONSUMPTION = builder.translation(key("steam_consumption"))
 				.defineInRange("steam_consumption", 1000, 0, 1000000);
 
-		STEAM_CAPACITY = builder.comment("Steam capacity in steam mixer (mB)")
-				.translation(key("steam_capacity"))
+		STEAM_CAPACITY = builder.translation(key("steam_capacity"))
 				.defineInRange("steam_capacity", 10000, 1000, 1000000);
 	}
 }

@@ -90,7 +90,7 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 
 	private static void replaceGoggleTitle(List<Component> tooltip, int titleIndex) {
 		List<Component> title = new ArrayList<>();
-		CreateLang.translate("gui.goggles.bronze_basin_contents").forGoggles(title);
+		CreateLang.translate("gui.goggles.basin_contents").forGoggles(title);
 
 		if (!title.isEmpty()) {
 			tooltip.set(titleIndex, title.get(0));

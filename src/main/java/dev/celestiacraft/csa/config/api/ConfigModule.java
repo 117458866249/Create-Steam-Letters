@@ -7,12 +7,11 @@ public abstract class ConfigModule {
 	protected final ForgeConfigSpec.Builder builder;
 	protected final String path;
 
-	public ConfigModule(ForgeConfigSpec.Builder builder, String path, String comment) {
+	public ConfigModule(ForgeConfigSpec.Builder builder, String path) {
 		this.builder = builder;
 		this.path = path;
 
-		builder.comment(comment + " Settings")
-				.translation(translationKey(path))
+		builder.translation(translationKey(path))
 				.push(path);
 
 		addConfigs();

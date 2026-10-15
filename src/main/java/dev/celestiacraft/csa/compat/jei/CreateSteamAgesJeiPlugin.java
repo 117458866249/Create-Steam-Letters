@@ -1,6 +1,6 @@
 package dev.celestiacraft.csa.compat.jei;
 
-import com.simibubi.create.Create;
+import com.jesz.createdieselgenerators.CreateDieselGenerators;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.common.register.CsaBlocks;
 import mezz.jei.api.IModPlugin;
@@ -9,10 +9,14 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
 public class CreateSteamAgesJeiPlugin implements IModPlugin {
+	private IJeiHelpers helpers;
+	private IRecipeCatalystRegistration registration;
+
 	@Override
 	public @NotNull ResourceLocation getPluginUid() {
 		return CsaApis.loadResource("jei_plugin");
@@ -20,27 +24,31 @@ public class CreateSteamAgesJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
-		IJeiHelpers helpers = registration.getJeiHelpers();
+		helpers = registration.getJeiHelpers();
+		this.registration = registration;
+
 		ItemStack hammer = CsaBlocks.STEAM_HAMMER.asStack();
 		ItemStack mixer = CsaBlocks.STEAM_MIXER.asStack();
+		ItemStack spout = CsaBlocks.ADVANCED_SPOUT.asStack();
 
-		addCatalyst("pressing", hammer, helpers, registration);
-		addCatalyst("packing", hammer, helpers, registration);
-		addCatalyst("automatic_packing", hammer, helpers, registration);
+		addCatalyst(CsaApis.loadCreate("pressing"), hammer);
+		addCatalyst(CsaApis.loadCreate("packing"), hammer);
+		addCatalyst(CsaApis.loadCreate("automatic_packing"), hammer);
 
-		addCatalyst("mixing", mixer, helpers, registration);
-		addCatalyst("automatic_shapeless", mixer, helpers, registration);
-		addCatalyst("automatic_brewing", mixer, helpers, registration);
+		if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
+			addCatalyst(CsaApis.loadCDG("compression_molding"), hammer);
+		}
+
+		addCatalyst(CsaApis.loadCreate("mixing"), mixer);
+		addCatalyst(CsaApis.loadCreate("automatic_shapeless"), mixer);
+		addCatalyst(CsaApis.loadCreate("automatic_brewing"), mixer);
+
+		addCatalyst(CsaApis.loadCreate("spout_filling"), spout);
 	}
 
 	@SuppressWarnings("removal")
-	private void addCatalyst(
-			String recipeId,
-			ItemStack catalyst,
-			IJeiHelpers helpers,
-			IRecipeCatalystRegistration registration
-	) {
-		helpers.getRecipeType(Create.asResource(recipeId))
+	private void addCatalyst(ResourceLocation recipe, ItemStack catalyst) {
+		helpers.getRecipeType(recipe)
 				.ifPresent((type) -> {
 					registration.addRecipeCatalyst(catalyst, type);
 				});

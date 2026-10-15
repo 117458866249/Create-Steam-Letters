@@ -3,6 +3,7 @@ package dev.celestiacraft.csa.common.register;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.decoration.encasing.CasingBlock;
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -11,6 +12,7 @@ import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.api.CsaStress;
 import dev.celestiacraft.csa.api.item.SteamBlockItem;
 import dev.celestiacraft.csa.client.models.ItemModelGen;
+import dev.celestiacraft.csa.common.block.advanced_spout.AdvancedSpoutBlock;
 import dev.celestiacraft.csa.common.block.bronze_basin.BronzeBasinBlock;
 import dev.celestiacraft.csa.common.block.steam_hammer.SteamHammerBlock;
 import dev.celestiacraft.csa.common.block.steam_mixer.SteamMixerBlock;
@@ -20,6 +22,7 @@ import net.minecraftforge.common.Tags;
 
 public class CsaBlocks {
 	public static final BlockEntry<BronzeBasinBlock> BRONZE_BASIN;
+	public static final BlockEntry<AdvancedSpoutBlock> ADVANCED_SPOUT;
 	public static final BlockEntry<SteamHammerBlock> STEAM_HAMMER;
 	public static final BlockEntry<SteamMixerBlock> STEAM_MIXER;
 	public static final BlockEntry<CasingBlock> BRONZE_CASING;
@@ -36,6 +39,17 @@ public class CsaBlocks {
 				.blockstate(BronzeBasinBlock.genBlockState())
 				.onRegister(MovementBehaviour.movementBehaviour(new BasinMovementBehaviour()))
 				.lang("Bronze Basin")
+				.register();
+
+		ADVANCED_SPOUT = CsaApis.REGISTRATE.block("advanced_spout", AdvancedSpoutBlock::new)
+				.initialProperties(SharedProperties::copperMetal)
+				.item(AssemblyOperatorBlockItem::new)
+				.model(ItemModelGen.withModel("block/advanced_spout/item"))
+				.build()
+				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+				.tag(BlockTags.NEEDS_STONE_TOOL)
+				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
+				.blockstate(AdvancedSpoutBlock.genBlockState())
 				.register();
 
 		STEAM_HAMMER = CsaApis.REGISTRATE.block("steam_hammer", SteamHammerBlock::new)
