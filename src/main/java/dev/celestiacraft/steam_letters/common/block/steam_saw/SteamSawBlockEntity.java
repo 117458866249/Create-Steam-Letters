@@ -1,0 +1,151 @@
+package dev.celestiacraft.steam_letters.common.block.steam_saw;
+
+import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
+import dev.celestiacraft.steam_letters.api.machine.ISteamStorage;
+import dev.celestiacraft.steam_letters.config.common.SteamSawConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage {
+	private FluidStack steam = FluidStack.EMPTY;
+	private LazyOptional<IFluidHandler> steamCapability = LazyOptional.of(this::steamFluidHandler);
+
+	public SteamSawBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+		inventory = new SteamSawInventory(this);
+		inventory.remainingTime = -1;
+	}
+
+	@Override
+	public FluidStack getSteamStack() {
+		return steam;
+	}
+
+	@Override
+	public void setSteamStack(FluidStack stack) {
+		steam = stack.isEmpty() ? FluidStack.EMPTY : stack.copy();
+		setChanged();
+	}
+
+	@Override
+	public int getSteamCapacity() {
+		return SteamSawConfig.STEAM_CAPACITY.get();
+	}
+
+	@Override
+	public int getSteamConsumption() {
+		return SteamSawConfig.STEAM_CONSUMPTION.get();
+	}
+
+	@Override
+	public int getParallelCount() {
+		return SteamSawConfig.STEAM_SAW_PARALLEL.get();
+	}
+
+	/**
+	 * 无蒸汽时不开工; 蒸汽不足时 {@code tick()} 每刻都会重试调用本方法, 补满蒸汽后自动开始.
+	 * <p>
+	 * 开工后按 {@link #getProcessingTimeMultiplier()} 缩放切割耗时, 配置 0.25 即耗时只有原版机械锯的四分之一.
+	 *
+	 * @param stack
+	 */
+	@Override
+	public void start(@NotNull ItemStack stack) {
+		if (!hasEnoughSteam()) {
+			return;
+		}
+
+		super.start(stack);
+
+		if (inventory.remainingTime > 0) {
+			float multiplier = getProcessingTimeMultiplier();
+			inventory.remainingTime = Math.max(1, Math.round(inventory.remainingTime * multiplier));
+			inventory.recipeDuration = Math.max(1, Math.round(inventory.recipeDuration * multiplier));
+		}
+	}
+
+	/**
+	 * 父类 {@code applyRecipe()} 是私有方法, 无法覆写
+	 * <p>
+	 * 因此用 {@code appliedRecipe} 的 false 和 true 变化来捕捉 一次切割完成 的时机并扣减蒸汽.
+	 * <p>
+	 * 注意: 空手右键取出物品会清空库存并把 {@code appliedRecipe} 复位, 同一刻 {@code remainingTime} 被清成 0,
+	 * 于是下一游戏刻父类会空跑一次 {@code applyRecipe()} 又把它置为 true. 所以还要确认这一轮真的产出了东西,
+	 * 否则右键取出会白扣一次蒸汽.
+	 */
+	@Override
+	public void tick() {
+		boolean applied = inventory.appliedRecipe;
+		super.tick();
+
+		if (level.isClientSide || applied || !inventory.appliedRecipe) {
+			return;
+		}
+
+		if (producedOutput()) {
+			consumeSteam();
+		}
+	}
+
+	/**
+	 * 输出槽(1 号之后的槽位)里是否有产物, 用于区分 真的切了一刀 和 空跑了一次 {@code applyRecipe()}.
+	 */
+	private boolean producedOutput() {
+		for (int slot = 1; slot < inventory.getSlots(); slot++) {
+			if (!inventory.getStackInSlot(slot).isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
+		if (capability == ForgeCapabilities.FLUID_HANDLER) {
+			return steamCapability.cast();
+		}
+		return super.getCapability(capability, side);
+	}
+
+	@Override
+	public void invalidateCaps() {
+		super.invalidateCaps();
+		steamCapability.invalidate();
+	}
+
+	@Override
+	public void reviveCaps() {
+		super.reviveCaps();
+		steamCapability = LazyOptional.of(this::steamFluidHandler);
+	}
+
+	@Override
+	public void write(@NotNull CompoundTag tag, boolean clientPacket) {
+		super.write(tag, clientPacket);
+		tag.put("Steam", steam.writeToNBT(new CompoundTag()));
+	}
+
+	@Override
+	protected void read(@NotNull CompoundTag tag, boolean clientPacket) {
+		super.read(tag, clientPacket);
+		steam = FluidStack.loadFluidStackFromNBT(tag.getCompound("Steam"));
+	}
+
+	/**
+	 * 工作时间倍率: {@code processing_time_multiplier} 为 0.25 时, 耗时是原版机械锯的 0.25 倍(快 4 倍).
+	 */
+	private static float getProcessingTimeMultiplier() {
+		return SteamSawConfig.PROCESSING_TIME_MULTIPLIER.get().floatValue();
+	}
+}

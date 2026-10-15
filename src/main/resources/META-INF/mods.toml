@@ -5,7 +5,7 @@ logoFile = "logo.png"
 [[mods]]
 modId = "${mod_id}"
 version = "${mod_version}"
-displayName = "Create: \"Steam\" Ages"
+displayName = "Create: Letter's in Steam"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 [[dependencies."${mod_id}"]]

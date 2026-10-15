@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.celestiacraft.steam_letters.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "steam_letters.refmap.json",
+	"mixins": [
+		"boiler.BoilerDataMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
