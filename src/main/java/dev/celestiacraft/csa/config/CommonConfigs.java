@@ -13,6 +13,7 @@ public class CommonConfigs {
 	public static final AdvancedSpoutConfig ADVANCED_SPOUT;
 	public static final SteamHammerConfig STEAM_HAMMER;
 	public static final SteamMixerConfig STEAM_MIXER;
+	public static final SteamSawConfig STEAM_SAW;
 
 	static {
 		BUILDER.comment("All settings below will only take effect after restarting the server or client.")
@@ -23,6 +24,7 @@ public class CommonConfigs {
 		BRONZE_BASIN = new BronzeBasinConfig(BUILDER);
 		STEAM_HAMMER = new SteamHammerConfig(BUILDER);
 		STEAM_MIXER = new SteamMixerConfig(BUILDER);
+		STEAM_SAW = new SteamSawConfig(BUILDER);
 		ADVANCED_SPOUT = new AdvancedSpoutConfig(BUILDER);
 
 		SPEC = BUILDER.build();

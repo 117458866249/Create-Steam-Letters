@@ -3,6 +3,7 @@ package dev.celestiacraft.csa.common.register;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.decoration.encasing.CasingBlock;
+import com.simibubi.create.content.kinetics.saw.SawMovementBehaviour;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.BuilderTransformers;
@@ -16,8 +17,10 @@ import dev.celestiacraft.csa.common.block.advanced_spout.AdvancedSpoutBlock;
 import dev.celestiacraft.csa.common.block.bronze_basin.BronzeBasinBlock;
 import dev.celestiacraft.csa.common.block.steam_hammer.SteamHammerBlock;
 import dev.celestiacraft.csa.common.block.steam_mixer.SteamMixerBlock;
+import dev.celestiacraft.csa.common.block.steam_saw.SteamSawBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.Tags;
 
 public class CsaBlocks {
@@ -25,6 +28,7 @@ public class CsaBlocks {
 	public static final BlockEntry<AdvancedSpoutBlock> ADVANCED_SPOUT;
 	public static final BlockEntry<SteamHammerBlock> STEAM_HAMMER;
 	public static final BlockEntry<SteamMixerBlock> STEAM_MIXER;
+	public static final BlockEntry<SteamSawBlock> STEAM_SAW;
 	public static final BlockEntry<CasingBlock> BRONZE_CASING;
 
 	static {
@@ -76,6 +80,24 @@ public class CsaBlocks {
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
 				.blockstate(SteamMixerBlock.genBlockState())
 				.lang("Steam Mixer")
+				.register();
+
+		STEAM_SAW = CsaApis.REGISTRATE.block("steam_saw", SteamSawBlock::new)
+				.item(SteamBlockItem::new)
+				.model(ItemModelGen.withModel("block/mechanical_saw/item"))
+				.tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
+				.build()
+				.initialProperties(SharedProperties::stone)
+				.properties((properties) -> {
+					return properties.mapColor(MapColor.PODZOL);
+				})
+				.transform(CsaStress.setImpact(16))
+				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+				.tag(BlockTags.NEEDS_STONE_TOOL)
+				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
+				.blockstate(SteamSawBlock.genBlockState())
+				.onRegister(MovementBehaviour.movementBehaviour(new SawMovementBehaviour()))
+				.lang("Steam Saw")
 				.register();
 
 		BRONZE_CASING = CsaApis.REGISTRATE.block("bronze_casing", CasingBlock::new)

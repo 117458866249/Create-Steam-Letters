@@ -8,3 +8,4 @@ build
 /src/generated/*
 /bin/
 /graphflow-out
+/.unpack

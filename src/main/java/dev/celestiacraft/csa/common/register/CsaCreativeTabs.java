@@ -31,6 +31,7 @@ public class CsaCreativeTabs {
 						output.accept(CsaBlocks.ADVANCED_SPOUT.asItem());
 						output.accept(CsaBlocks.STEAM_HAMMER.asItem());
 						output.accept(CsaBlocks.STEAM_MIXER.asItem());
+						output.accept(CsaBlocks.STEAM_SAW.asItem());
 						output.accept(CsaBlocks.BRONZE_CASING.asItem());
 						output.accept(CsaFluids.STEAM.getBucket().get());
 						output.accept(CsaFluids.SUPERHEATED_STEAM.getBucket().get());

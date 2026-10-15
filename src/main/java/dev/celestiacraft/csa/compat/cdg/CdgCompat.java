@@ -11,19 +11,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod.EventBusSubscriber(modid = CreateSteamAges.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CdgCastingCompat {
+public class CdgCompat {
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
-			registerBehaviour();
+			if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
+				BlockSpoutingBehaviour.BY_BLOCK.register(CsaBlocks.BRONZE_BASIN.get(), new BasinSpoutCasting());
+			}
 		});
-	}
-
-	private static void registerBehaviour() {
-		if (!ModList.get().isLoaded(CreateDieselGenerators.ID)) {
-			return;
-		}
-
-		BlockSpoutingBehaviour.BY_BLOCK.register(CsaBlocks.BRONZE_BASIN.get(), new BasinSpoutCasting());
 	}
 }
