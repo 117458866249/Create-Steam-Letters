@@ -33,7 +33,7 @@ public class BronzeBasinRenderer extends BasinRenderer {
 			return 0;
 		}
 
-		float fluidLevel = Mth.clamp(totalUnits / BronzeBasinCapacity.RENDER_FULL_CAPACITY, 0, 1);
+		float fluidLevel = Mth.clamp(totalUnits / BronzeBasinCapacity.renderFullCapacity(), 0, 1);
 
 		fluidLevel = 1 - ((1 - fluidLevel) * (1 - fluidLevel));
 

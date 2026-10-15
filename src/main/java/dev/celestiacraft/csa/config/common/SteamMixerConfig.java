@@ -5,7 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 public class SteamMixerConfig extends ConfigModule {
 	public static ForgeConfigSpec.IntValue
-			STEAM_HAMMER_PARALLEL,
+			STEAM_MIXER_PARALLEL,
 			STEAM_CONSUMPTION,
 			STEAM_CAPACITY;
 
@@ -15,19 +15,16 @@ public class SteamMixerConfig extends ConfigModule {
 
 	@Override
 	protected void addConfigs() {
-		STEAM_HAMMER_PARALLEL = builder.comment("Steam Mixer recipe parallel")
-				.comment(setType("int"))
-				.comment(setDefault(16))
-				.defineInRange("steam_hammer_parallel", 16, 1, 64);
+		STEAM_MIXER_PARALLEL = builder.comment("Steam Mixer recipe parallel")
+				.translation(key("steam_mixer_parallel"))
+				.defineInRange("steam_mixer_parallel", 16, 1, 64);
 
-		STEAM_CONSUMPTION = builder.comment("Steam consumption per run of steam hammer (mB)")
-				.comment(setType("int"))
-				.comment(setDefault(1000))
+		STEAM_CONSUMPTION = builder.comment("Steam consumption per run of steam mixer (mB)")
+				.translation(key("steam_consumption"))
 				.defineInRange("steam_consumption", 1000, 0, 1000000);
 
-		STEAM_CAPACITY = builder.comment("Steam capacity in steam hammer (mB)")
-				.comment(setType("int"))
-				.comment(setDefault(10000))
+		STEAM_CAPACITY = builder.comment("Steam capacity in steam mixer (mB)")
+				.translation(key("steam_capacity"))
 				.defineInRange("steam_capacity", 10000, 1000, 1000000);
 	}
 }

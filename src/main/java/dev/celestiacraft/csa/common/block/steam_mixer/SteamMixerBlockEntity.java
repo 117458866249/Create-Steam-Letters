@@ -52,7 +52,7 @@ public class SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements
 
 	@Override
 	public int getParallelCount() {
-		return SteamMixerConfig.STEAM_HAMMER_PARALLEL.get();
+		return SteamMixerConfig.STEAM_MIXER_PARALLEL.get();
 	}
 
 	@Override

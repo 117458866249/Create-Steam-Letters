@@ -25,6 +25,8 @@ public class CsaCreativeTabs {
 					.displayItems((parameters, output) -> {
 						output.accept(CsaMaterials.BRONZE_INGOT.asItem());
 						output.accept(CsaMaterials.BRONZE_PLATE.asItem());
+						output.accept(CsaItems.STEAM_MECHANISM.asItem());
+						output.accept(CsaItems.INCOMPLETE_STEAM_MECHANISM.asItem());
 						output.accept(CsaBlocks.BRONZE_BASIN.asItem());
 						output.accept(CsaBlocks.STEAM_HAMMER.asItem());
 						output.accept(CsaBlocks.STEAM_MIXER.asItem());

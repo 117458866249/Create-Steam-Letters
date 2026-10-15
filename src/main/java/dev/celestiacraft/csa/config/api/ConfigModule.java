@@ -1,14 +1,18 @@
 package dev.celestiacraft.csa.config.api;
 
+import dev.celestiacraft.csa.CreateSteamAges;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public abstract class ConfigModule {
 	protected final ForgeConfigSpec.Builder builder;
+	protected final String path;
 
 	public ConfigModule(ForgeConfigSpec.Builder builder, String path, String comment) {
 		this.builder = builder;
+		this.path = path;
 
 		builder.comment(comment + " Settings")
+				.translation(translationKey(path))
 				.push(path);
 
 		addConfigs();
@@ -18,27 +22,15 @@ public abstract class ConfigModule {
 
 	protected abstract void addConfigs();
 
+	protected String key(String name) {
+		return translationKey(path, name);
+	}
+
+	public static String translationKey(String... path) {
+		return CreateSteamAges.MODID + ".config." + String.join(".", path);
+	}
+
 	public static boolean validateString(Object object) {
 		return object instanceof String;
-	}
-
-	public static String setType(String type) {
-		return "type: " + type;
-	}
-
-	public static String setDefault(String type) {
-		return "defalut: " + type;
-	}
-
-	public static String setDefault(int defalut) {
-		return "defalut: " + defalut;
-	}
-
-	public static String setDefault(double defalut) {
-		return "defalut: " + defalut;
-	}
-
-	public static String setDefault(boolean defalut) {
-		return "defalut: " + defalut;
 	}
 }

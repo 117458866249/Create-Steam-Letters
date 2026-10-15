@@ -1,9 +1,19 @@
 package dev.celestiacraft.csa.common.block.bronze_basin;
 
-import net.minecraftforge.fluids.FluidType;
+import dev.celestiacraft.csa.config.common.BronzeBasinConfig;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class BronzeBasinCapacity {
-	public static final int SLOT_CAPACITY = 10 * FluidType.BUCKET_VOLUME;
-	public static final int TOTAL_CAPACITY = 4 * SLOT_CAPACITY;
-	public static final int RENDER_FULL_CAPACITY = 2 * SLOT_CAPACITY;
+	public int slotCapacity() {
+		return BronzeBasinConfig.SLOT_CAPACITY.get();
+	}
+
+	public int totalCapacity() {
+		return 4 * slotCapacity();
+	}
+
+	public int renderFullCapacity() {
+		return 2 * slotCapacity();
+	}
 }

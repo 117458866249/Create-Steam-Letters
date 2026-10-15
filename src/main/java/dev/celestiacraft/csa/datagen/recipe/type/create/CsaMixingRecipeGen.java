@@ -1,4 +1,4 @@
-package dev.celestiacraft.csa.datagen.recipe.type;
+package dev.celestiacraft.csa.datagen.recipe.type.create;
 
 import com.simibubi.create.api.data.recipe.MixingRecipeGen;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
@@ -32,6 +32,13 @@ public class CsaMixingRecipeGen extends MixingRecipeGen {
 			CsaApis.require(builder, Tags.Items.INGOTS_COPPER, 3);
 			return builder.output(CsaMaterials.BRONZE_INGOT, 4)
 					.require(CsaItemTags.ANDESITE_ALLOY_INGOT)
+					.requiresHeat(HeatCondition.HEATED);
+		});
+
+		create("material/bronze/ingot_but_glass", (builder) -> {
+			CsaApis.require(builder, Tags.Items.INGOTS_COPPER, 3);
+			return builder.output(CsaMaterials.BRONZE_INGOT, 4)
+					.require(Tags.Items.GLASS)
 					.requiresHeat(HeatCondition.HEATED);
 		});
 	}

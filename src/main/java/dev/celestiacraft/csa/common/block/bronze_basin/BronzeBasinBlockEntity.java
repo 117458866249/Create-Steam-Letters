@@ -50,7 +50,7 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 				SmartFluidTankBehaviour.INPUT,
 				this,
 				2,
-				BronzeBasinCapacity.SLOT_CAPACITY,
+				BronzeBasinCapacity.slotCapacity(),
 				true
 		).whenFluidUpdates(this::notifyChangeOfContents);
 
@@ -58,7 +58,7 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 				SmartFluidTankBehaviour.OUTPUT,
 				this,
 				2,
-				BronzeBasinCapacity.SLOT_CAPACITY,
+				BronzeBasinCapacity.slotCapacity(),
 				true
 		).whenFluidUpdates(this::notifyChangeOfContents)
 				.forbidInsertion();
@@ -132,9 +132,9 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 
 	@Override
 	public float getTotalFluidUnits(float partialTicks) {
-		if (level != null && level.isClientSide)
+		if (level != null && level.isClientSide())
 			return shouldRenderCopperBasinMixedSurfaceParticles()
-					? BronzeBasinCapacity.RENDER_FULL_CAPACITY
+					? BronzeBasinCapacity.renderFullCapacity()
 					: 0;
 
 		return super.getTotalFluidUnits(partialTicks);
@@ -173,7 +173,7 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 				continue;
 			}
 
-			if (fluidStack.getAmount() != BronzeBasinCapacity.SLOT_CAPACITY) {
+			if (fluidStack.getAmount() != BronzeBasinCapacity.slotCapacity()) {
 				return false;
 			}
 

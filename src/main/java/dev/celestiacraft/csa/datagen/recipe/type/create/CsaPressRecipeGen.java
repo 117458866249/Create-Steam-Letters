@@ -1,4 +1,4 @@
-package dev.celestiacraft.csa.datagen.recipe.type;
+package dev.celestiacraft.csa.datagen.recipe.type.create;
 
 import com.simibubi.create.api.data.recipe.PressingRecipeGen;
 import dev.celestiacraft.csa.CreateSteamAges;

@@ -31,6 +31,7 @@ public class CreateSteamAges {
 
 		CsaApis.REGISTRATE.registerEventListeners(bus);
 		CsaMaterials.init();
+		CsaItems.init();
 		CsaBlocks.init();
 		CsaBlockEntities.init();
 		CsaFluids.init();

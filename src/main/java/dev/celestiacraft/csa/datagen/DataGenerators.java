@@ -4,9 +4,11 @@ import com.tterrag.registrate.providers.ProviderType;
 import dev.celestiacraft.csa.CreateSteamAges;
 import dev.celestiacraft.csa.api.CsaApis;
 import dev.celestiacraft.csa.datagen.language.English;
-import dev.celestiacraft.csa.datagen.recipe.type.CsaItemApplicationRecipeGen;
-import dev.celestiacraft.csa.datagen.recipe.type.CsaMixingRecipeGen;
-import dev.celestiacraft.csa.datagen.recipe.type.CsaPressRecipeGen;
+import dev.celestiacraft.csa.datagen.recipe.CsaRecipeProvider;
+import dev.celestiacraft.csa.datagen.recipe.type.create.CsaItemApplicationRecipeGen;
+import dev.celestiacraft.csa.datagen.recipe.type.create.CsaMixingRecipeGen;
+import dev.celestiacraft.csa.datagen.recipe.type.create.CsaPressRecipeGen;
+import dev.celestiacraft.csa.datagen.recipe.type.create.CsaSequencedAssemblyRecipeGen;
 import dev.celestiacraft.csa.datagen.tags.ItemTagsGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -34,9 +36,11 @@ public class DataGenerators {
 		}
 
 		if (server) {
+			generator.addProvider(server, new CsaRecipeProvider(output));
 			generator.addProvider(server, new CsaMixingRecipeGen(output));
 			generator.addProvider(server, new CsaPressRecipeGen(output));
 			generator.addProvider(server, new CsaItemApplicationRecipeGen(output));
+			generator.addProvider(server, new CsaSequencedAssemblyRecipeGen(output));
 
 			CsaApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
 		}
