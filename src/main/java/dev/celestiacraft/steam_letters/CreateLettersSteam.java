@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters;
 import com.simibubi.create.api.stress.BlockStressValues;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.celestiacraft.steam_letters.common.register.*;
 import dev.celestiacraft.steam_letters.config.CommonConfigs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,7 +39,7 @@ public class CreateLettersSteam {
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> {
 			return () -> {
-				SLBlockPartialModel.init();
+				SlBlockPartialModel.init();
 			};
 		});
 

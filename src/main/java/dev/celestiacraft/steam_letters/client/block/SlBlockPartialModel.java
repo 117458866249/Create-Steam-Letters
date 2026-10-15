@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.client.block;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 
-public class SLBlockPartialModel {
+public class SlBlockPartialModel {
 	public static final PartialModel
 			STEAM_HAMMER,
 			STEAM_MIXER_HEAD,

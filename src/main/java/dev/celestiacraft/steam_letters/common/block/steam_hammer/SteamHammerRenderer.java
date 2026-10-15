@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.steam_hammer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -37,7 +37,7 @@ public class SteamHammerRenderer extends KineticBlockEntityRenderer<SteamHammerB
 		stack.pushPose();
 		float renderedHeadOffset = pressingBehaviour.getRenderedHeadOffset(partialTicks) * pressingBehaviour.mode.headOffset;
 		SuperByteBuffer headRender = CachedBuffers.partialFacing(
-				SLBlockPartialModel.STEAM_HAMMER,
+				SlBlockPartialModel.STEAM_HAMMER,
 				blockState,
 				blockState.getValue(BlockStateProperties.HORIZONTAL_FACING)
 		);

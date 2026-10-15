@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.advanced_spout;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.platform.ForgeCatnipServices;
 import net.createmod.catnip.render.CachedBuffers;
@@ -16,9 +16,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class AdvancedSpoutRenderer extends SafeBlockEntityRenderer<AdvancedSpoutBlockEntity> {
 	public static final PartialModel[] BITS = {
-			SLBlockPartialModel.SPOUT_TOP,
-			SLBlockPartialModel.SPOUT_MIDDLE,
-			SLBlockPartialModel.SPOUT_BOTTOM
+			SlBlockPartialModel.SPOUT_TOP,
+			SlBlockPartialModel.SPOUT_MIDDLE,
+			SlBlockPartialModel.SPOUT_BOTTOM
 	};
 
 	public AdvancedSpoutRenderer(BlockEntityRendererProvider.Context context) {
@@ -78,7 +78,8 @@ public class AdvancedSpoutRenderer extends SafeBlockEntityRenderer<AdvancedSpout
 
 		if (!fluidStack.isEmpty() && processingTicks != -1) {
 			radius = (float) (StrictMath.pow(((2 * processingProgress) - 1), 2) - 1);
-			AABB bb = new AABB(0.5, 0.0, 0.5, 0.5, -1.2, 0.5).inflate(radius / 32.0f);
+			AABB bb = new AABB(0.5, 0.0, 0.5, 0.5, -1.2, 0.5)
+					.inflate(radius / 32.0f);
 			ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(
 					fluidStack,
 					(float) bb.minX,

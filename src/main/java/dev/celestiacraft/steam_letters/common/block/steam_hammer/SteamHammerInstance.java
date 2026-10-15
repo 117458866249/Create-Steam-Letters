@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.steam_hammer;
 import com.simibubi.create.content.kinetics.base.ShaftVisual;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
@@ -21,7 +21,7 @@ public class SteamHammerInstance extends ShaftVisual<SteamHammerBlockEntity> imp
 
 		pressHead = instancerProvider().instancer(
 				InstanceTypes.ORIENTED,
-				Models.partial(SLBlockPartialModel.STEAM_HAMMER)
+				Models.partial(SlBlockPartialModel.STEAM_HAMMER)
 		).createInstance();
 
 		Quaternionf rotateY = new Quaternionf().rotateY((float) Math.toRadians(

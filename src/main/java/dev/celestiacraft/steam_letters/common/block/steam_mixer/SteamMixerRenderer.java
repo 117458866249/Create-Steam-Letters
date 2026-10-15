@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
@@ -41,15 +41,15 @@ public class SteamMixerRenderer extends KineticBlockEntityRenderer<SteamMixerBlo
 		float renderedHeadOffset = entity.getRenderedHeadOffset(partialTicks);
 		float speed = entity.getRenderedHeadRotationSpeed(partialTicks);
 		float time = AnimationTickHolder.getRenderTime(entity.getLevel());
-		float angle = ((time * speed * 6 / 10f) % 360) / 180 * (float) Math.PI;
+		float angle = ((time * speed * 6 / 10.0f) % 360) / 180 * (float) Math.PI;
 
-		SuperByteBuffer poleRender = CachedBuffers.partial(SLBlockPartialModel.STEAM_MIXER_POLE, blockState);
+		SuperByteBuffer poleRender = CachedBuffers.partial(SlBlockPartialModel.STEAM_MIXER_POLE, blockState);
 		poleRender.translate(0, -renderedHeadOffset, 0)
 				.light(light)
 				.renderInto(stack, solidBuffer);
 
 		VertexConsumer cutoutBuffer = source.getBuffer(RenderType.cutoutMipped());
-		SuperByteBuffer headRender = CachedBuffers.partial(SLBlockPartialModel.STEAM_MIXER_HEAD, blockState);
+		SuperByteBuffer headRender = CachedBuffers.partial(SlBlockPartialModel.STEAM_MIXER_HEAD, blockState);
 		headRender.rotateCentered(angle, Direction.UP)
 				.translate(0, -renderedHeadOffset, 0)
 				.light(light)

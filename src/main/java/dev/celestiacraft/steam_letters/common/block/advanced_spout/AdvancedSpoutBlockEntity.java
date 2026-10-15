@@ -272,6 +272,14 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 		Vec3 vec = VecHelper.getCenterOf(worldPosition);
 		vec = vec.subtract(0, 8 / 16.0f, 0);
 		ParticleOptions particle = FluidFX.getFluidParticle(fluid);
-		level.addAlwaysVisibleParticle(particle, vec.x, vec.y, vec.z, 0, -0.1f, 0);
+		level.addAlwaysVisibleParticle(
+				particle,
+				vec.x,
+				vec.y,
+				vec.z,
+				0,
+				-0.1f,
+				0
+		);
 	}
 }

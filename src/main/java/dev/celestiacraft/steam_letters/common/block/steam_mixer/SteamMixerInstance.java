@@ -4,7 +4,7 @@ import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
-import dev.celestiacraft.steam_letters.client.block.SLBlockPartialModel;
+import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
@@ -25,14 +25,14 @@ public class SteamMixerInstance extends SingleAxisRotatingVisual<SteamMixerBlock
 
 		mixerHead = instancerProvider().instancer(
 				AllInstanceTypes.ROTATING,
-				Models.partial(SLBlockPartialModel.STEAM_MIXER_HEAD)
+				Models.partial(SlBlockPartialModel.STEAM_MIXER_HEAD)
 		).createInstance();
 
 		mixerHead.setRotationAxis(Direction.Axis.Y);
 
 		mixerPole = instancerProvider().instancer(
 				InstanceTypes.ORIENTED,
-				Models.partial(SLBlockPartialModel.STEAM_MIXER_POLE)
+				Models.partial(SlBlockPartialModel.STEAM_MIXER_POLE)
 		).createInstance();
 
 		animate(partialTick);
