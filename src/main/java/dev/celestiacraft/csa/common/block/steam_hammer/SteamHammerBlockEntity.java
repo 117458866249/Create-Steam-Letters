@@ -2,13 +2,17 @@ package dev.celestiacraft.csa.common.block.steam_hammer;
 
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import dev.celestiacraft.csa.api.machine.ISteamBasinMachine;
 import dev.celestiacraft.csa.api.machine.ISteamPressMachine;
 import dev.celestiacraft.csa.config.common.SteamHammerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -20,8 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
-public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implements ISteamPressMachine {
+public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implements ISteamPressMachine, ISteamBasinMachine {
 	private FluidStack steam = FluidStack.EMPTY;
 	private LazyOptional<IFluidHandler> steamCapability = LazyOptional.of(this::steamFluidHandler);
 
@@ -56,6 +61,47 @@ public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implement
 	}
 
 	@Override
+	protected boolean updateBasin() {
+		if (!hasEnoughSteam()) {
+			return false;
+		}
+		return super.updateBasin();
+	}
+
+	@Override
+	public boolean continueWithPreviousRecipe() {
+		if (!hasEnoughSteam()) {
+			return false;
+		}
+		return super.continueWithPreviousRecipe();
+	}
+
+	@Override
+	public Recipe<?> getBasinRecipe() {
+		return currentRecipe;
+	}
+
+	@Override
+	public Optional<BasinBlockEntity> getBasin() {
+		return super.getBasin();
+	}
+
+	@Override
+	public <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
+		return super.matchBasinRecipe(recipe);
+	}
+
+	@Override
+	public void onBasinRecipeApplied(int applied) {
+		getProcessedRecipeTrigger().ifPresent(this::award);
+	}
+
+	@Override
+	public void applyBasinRecipe() {
+		ISteamBasinMachine.super.applyBasinRecipe();
+	}
+
+	@Override
 	public boolean canProcessInBulk() {
 		return ISteamPressMachine.super.canProcessInBulk();
 	}
@@ -70,10 +116,15 @@ public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implement
 		return ISteamPressMachine.super.tryProcessInWorld(itemEntity, simulate);
 	}
 
+	/**
+	 * 工作盆路径的蒸汽由 {@code applyBasinRecipe} 按操作扣减.
+	 */
 	@Override
 	public void onPressingCompleted() {
 		super.onPressingCompleted();
-		consumeSteam();
+		if (!pressingBehaviour.onBasin()) {
+			consumeSteam();
+		}
 	}
 
 	@Override

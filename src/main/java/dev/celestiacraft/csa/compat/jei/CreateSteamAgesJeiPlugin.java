@@ -30,20 +30,22 @@ public class CreateSteamAgesJeiPlugin implements IModPlugin {
 		ItemStack hammer = CsaBlocks.STEAM_HAMMER.asStack();
 		ItemStack mixer = CsaBlocks.STEAM_MIXER.asStack();
 		ItemStack spout = CsaBlocks.ADVANCED_SPOUT.asStack();
+		ItemStack basin = CsaBlocks.BRONZE_BASIN.asStack();
 
 		addCatalyst(CsaApis.loadCreate("pressing"), hammer);
 		addCatalyst(CsaApis.loadCreate("packing"), hammer);
 		addCatalyst(CsaApis.loadCreate("automatic_packing"), hammer);
-
-		if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
-			addCatalyst(CsaApis.loadCDG("compression_molding"), hammer);
-		}
 
 		addCatalyst(CsaApis.loadCreate("mixing"), mixer);
 		addCatalyst(CsaApis.loadCreate("automatic_shapeless"), mixer);
 		addCatalyst(CsaApis.loadCreate("automatic_brewing"), mixer);
 
 		addCatalyst(CsaApis.loadCreate("spout_filling"), spout);
+
+		if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
+			addCatalyst(CsaApis.loadCDG("compression_molding"), hammer);
+			addCatalyst(CsaApis.loadCDG("casting"), basin);
+		}
 	}
 
 	@SuppressWarnings("removal")
