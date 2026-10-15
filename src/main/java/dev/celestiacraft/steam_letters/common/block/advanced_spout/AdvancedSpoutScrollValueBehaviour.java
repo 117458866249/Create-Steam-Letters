@@ -9,16 +9,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.config.common.AdvancedSpoutConfig;
-import net.createmod.catnip.math.VecHelper;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 
 public class AdvancedSpoutScrollValueBehaviour extends ScrollValueBehaviour {
 	public static final BehaviourType<AdvancedSpoutScrollValueBehaviour> TYPE = new BehaviourType<>();
@@ -186,22 +182,6 @@ public class AdvancedSpoutScrollValueBehaviour extends ScrollValueBehaviour {
 		}
 		if (nbt.contains("SpoutParallel")) {
 			parallel = Mth.clamp(nbt.getInt("SpoutParallel"), 1, MAX_PARALLEL);
-		}
-	}
-
-	public static class SpoutValueBox extends ValueBoxTransform.Sided {
-		public SpoutValueBox() {
-			fromSide(Direction.NORTH);
-		}
-
-		@Override
-		protected boolean isSideActive(BlockState state, Direction direction) {
-			return direction.getAxis().isHorizontal();
-		}
-
-		@Override
-		protected Vec3 getSouthLocation() {
-			return VecHelper.voxelSpace(8, 8, 16.5);
 		}
 	}
 }

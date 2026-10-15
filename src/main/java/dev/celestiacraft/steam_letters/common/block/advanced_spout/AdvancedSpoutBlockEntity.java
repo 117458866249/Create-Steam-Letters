@@ -45,7 +45,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 		behaviours.add(new AdvancedSpoutScrollValueBehaviour(
 				Component.translatable("block.steam_letters.advanced_spout"),
 				this,
-				new AdvancedSpoutScrollValueBehaviour.SpoutValueBox()
+				new AdvancedSpoutSpoutValueBox()
 		));
 
 		behaviours.add(new AdvancedSpoutModeScrollValueBehaviour(
