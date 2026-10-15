@@ -7,15 +7,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
-import net.createmod.catnip.math.VecHelper;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * 高级注液器的模式板: 手持扳手在顶面长按打开, 只有 3 格, 一格一种模式.
@@ -137,20 +133,5 @@ public class AdvancedSpoutModeScrollValueBehaviour extends ScrollValueBehaviour 
 	@Override
 	public String formatValue() {
 		return modeName(getMode()).getString();
-	}
-
-	/**
-	 * 模式板挂在顶面, 值框贴顶面中央稍稍靠外.
-	 */
-	public static class ModeValueBox extends ValueBoxTransform.Sided {
-		@Override
-		protected boolean isSideActive(BlockState state, Direction direction) {
-			return direction == Direction.UP;
-		}
-
-		@Override
-		protected Vec3 getSouthLocation() {
-			return VecHelper.voxelSpace(8, 8, 16.5);
-		}
 	}
 }

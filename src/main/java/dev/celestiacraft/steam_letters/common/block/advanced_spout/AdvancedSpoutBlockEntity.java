@@ -51,7 +51,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 		behaviours.add(new AdvancedSpoutModeScrollValueBehaviour(
 				Component.translatable(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE),
 				this,
-				new AdvancedSpoutModeScrollValueBehaviour.ModeValueBox()
+				new AdvancedSpoutModeValueBox()
 		));
 	}
 
