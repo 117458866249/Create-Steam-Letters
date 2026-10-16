@@ -112,16 +112,20 @@ public class SlBlocks {
 				.lang("Steam Saw")
 				.register();
 
-		BRONZE_BOILER = SlApis.REGISTRATE.block("bronze_boiler", properties -> new SteamBoilerBlock(properties,
-						SteamEngineSpec.builder()
-								.capacity(SteamBoilerConfig.CAPACITY::get)
-								.production(SteamBoilerConfig.PRODUCTION::get)
-								.build()))
+		BRONZE_BOILER = SlApis.REGISTRATE.block("bronze_boiler", (properties) -> {
+					return new SteamBoilerBlock(properties, SteamEngineSpec.builder()
+							.capacity(SteamBoilerConfig.CAPACITY::get)
+							.production(SteamBoilerConfig.PRODUCTION::get)
+							.build());
+				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/boiler/bronze"))
 				.build()
 				.initialProperties(SharedProperties::softMetal)
-				.properties(properties -> properties.noOcclusion().sound(SoundType.LANTERN))
+				.properties((properties) -> {
+					return properties.noOcclusion()
+							.sound(SoundType.LANTERN);
+				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
@@ -129,16 +133,20 @@ public class SlBlocks {
 				.lang("Bronze Boiler")
 				.register();
 
-		BRONZE_SOLAR_BOILER = SlApis.REGISTRATE.block("bronze_solar_boiler", properties -> new SolarBoilerBlock(properties,
-						SteamEngineSpec.builder()
-								.capacity(SolarBoilerConfig.CAPACITY::get)
-								.production(SolarBoilerConfig.PRODUCTION::get)
-								.build()))
+		BRONZE_SOLAR_BOILER = SlApis.REGISTRATE.block("bronze_solar_boiler", (properties) -> {
+					return new SolarBoilerBlock(properties, SteamEngineSpec.builder()
+							.capacity(SolarBoilerConfig.CAPACITY::get)
+							.production(SolarBoilerConfig.PRODUCTION::get)
+							.build());
+				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solar_boiler/bronze"))
 				.build()
 				.initialProperties(SharedProperties::softMetal)
-				.properties(properties -> properties.noOcclusion().sound(SoundType.LANTERN))
+				.properties((properties) -> {
+					return properties.noOcclusion()
+							.sound(SoundType.LANTERN);
+				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
@@ -146,15 +154,19 @@ public class SlBlocks {
 				.lang("Bronze Solar Boiler")
 				.register();
 
-		BRONZE_SOLID_BURNER = SlApis.REGISTRATE.block("bronze_solid_burner", properties -> new SolidBurnerBlock(properties,
-						SteamEngineSpec.builder()
-								.maxHeat(SteamBurnerConfig.MAX_HEAT::get)
-								.build()))
+		BRONZE_SOLID_BURNER = SlApis.REGISTRATE.block("bronze_solid_burner", (properties) -> {
+					return new SolidBurnerBlock(properties, SteamEngineSpec.builder()
+							.maxHeat(SteamBurnerConfig.MAX_HEAT::get)
+							.build());
+				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solid_burner/bronze"))
 				.build()
 				.initialProperties(SharedProperties::softMetal)
-				.properties(properties -> properties.noOcclusion().sound(SoundType.LANTERN))
+				.properties((properties) -> {
+					return properties.noOcclusion()
+							.sound(SoundType.LANTERN);
+				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
@@ -162,16 +174,20 @@ public class SlBlocks {
 				.lang("Bronze Solid Burner")
 				.register();
 
-		BRONZE_FLUID_BURNER = SlApis.REGISTRATE.block("bronze_fluid_burner", properties -> new FluidBurnerBlock(properties,
-						SteamEngineSpec.builder()
-								.capacity(SteamBurnerConfig.FLUID_CAPACITY::get)
-								.maxHeat(SteamBurnerConfig.MAX_HEAT::get)
-								.build()))
+		BRONZE_FLUID_BURNER = SlApis.REGISTRATE.block("bronze_fluid_burner", (properties) -> {
+					return new FluidBurnerBlock(properties, SteamEngineSpec.builder()
+							.capacity(SteamBurnerConfig.FLUID_CAPACITY::get)
+							.maxHeat(SteamBurnerConfig.MAX_HEAT::get)
+							.build());
+				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/fluid_burner/bronze"))
 				.build()
 				.initialProperties(SharedProperties::softMetal)
-				.properties(properties -> properties.noOcclusion().sound(SoundType.LANTERN))
+				.properties((properties) -> {
+					return properties.noOcclusion()
+							.sound(SoundType.LANTERN);
+				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)

@@ -8,7 +8,20 @@ public class SlTranKeys {
 			TOOLTIP_STEAM_HAMMER_SUMMARY,
 			TOOLTIP_STEAM_HAMMER_CONDITION,
 			TOOLTIP_STEAM_HAMMER_BEHAVIOUR1,
-			TOOLTIP_STEAM_HAMMER_BEHAVIOUR2;
+			TOOLTIP_STEAM_HAMMER_BEHAVIOUR2,
+			GOGGLE_STEAM_BURNER,
+			GOGGLE_STEAM_BURNER_TEMPERATURE,
+			GOGGLE_STEAM_BURNER_FUEL_TIME,
+			GOGGLE_STEAM_BURNER_EFFICIENCY,
+			GOGGLE_SOLAR_BOILER,
+			GOGGLE_SOLAR_BOILER_WORKING,
+			GOGGLE_SOLAR_BOILER_IDLE,
+			GOGGLE_SOLAR_BOILER_LIGHT_SUNLIGHT,
+			GOGGLE_SOLAR_BOILER_LIGHT_RAIN,
+			GOGGLE_SOLAR_BOILER_LIGHT_THUNDER,
+			GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL,
+			GOGGLE_SOLAR_BOILER_LIGHT_NONE,
+			GOGGLE_SOLAR_BOILER_EFFICIENCY;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -16,6 +29,21 @@ public class SlTranKeys {
 		TOOLTIP_STEAM_HAMMER_CONDITION = "tooltip.steam_hammer.condition1";
 		TOOLTIP_STEAM_HAMMER_BEHAVIOUR1 = "tooltip.steam_hammer.behaviour1";
 		TOOLTIP_STEAM_HAMMER_BEHAVIOUR2 = "tooltip.steam_hammer.behaviour2";
+
+		GOGGLE_STEAM_BURNER = "gui.goggles.steam_burner";
+		GOGGLE_STEAM_BURNER_TEMPERATURE = "gui.goggles.steam_burner.temperature";
+		GOGGLE_STEAM_BURNER_FUEL_TIME = "gui.goggles.steam_burner.fuel_time";
+		GOGGLE_STEAM_BURNER_EFFICIENCY = "gui.goggles.steam_burner.efficiency";
+
+		GOGGLE_SOLAR_BOILER = "gui.goggles.solar_boiler";
+		GOGGLE_SOLAR_BOILER_WORKING = "gui.goggles.solar_boiler.working";
+		GOGGLE_SOLAR_BOILER_IDLE = "gui.goggles.solar_boiler.idle";
+		GOGGLE_SOLAR_BOILER_LIGHT_SUNLIGHT = "gui.goggles.solar_boiler.light.sunlight";
+		GOGGLE_SOLAR_BOILER_LIGHT_RAIN = "gui.goggles.solar_boiler.light.rain";
+		GOGGLE_SOLAR_BOILER_LIGHT_THUNDER = "gui.goggles.solar_boiler.light.thunder";
+		GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL = "gui.goggles.solar_boiler.light.artificial";
+		GOGGLE_SOLAR_BOILER_LIGHT_NONE = "gui.goggles.solar_boiler.light.none";
+		GOGGLE_SOLAR_BOILER_EFFICIENCY = "gui.goggles.solar_boiler.efficiency";
 	}
 
 	/**

@@ -9,18 +9,11 @@ import dev.celestiacraft.steam_letters.common.register.SlMaterials;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.data.PackOutput;
-import net.minecraft.tags.FluidTags;
 import net.minecraftforge.common.Tags;
 
 public class SlMixingRecipeGen extends MixingRecipeGen {
 	public SlMixingRecipeGen(PackOutput output) {
 		super(output, CreateLettersSteam.MODID);
-
-		create("steam", (builder) -> {
-			return builder.output(SlFluids.STEAM.get(), 1000)
-					.require(FluidTags.WATER, 1000)
-					.requiresHeat(HeatCondition.HEATED);
-		});
 
 		create("superheated_steam", (builder) -> {
 			return builder.output(SlFluids.SUPERHEATED_STEAM.get(), 1000)

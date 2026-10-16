@@ -2,6 +2,9 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import dev.celestiacraft.steam_letters.api.SlApis;
+import dev.latvian.mods.kubejs.client.LangEventJS;
+import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
@@ -13,6 +16,10 @@ import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity> extends BuilderBase<Block> {
+	/**
+	 * 机器底面贴图, 与手写模型保持一致
+	 */
+	private static final String MACHINE_BOTTOM = "steam_letters:block/steam/down";
 	/**
 	 * 注册 ID 的 path 段(方块与方块实体共用)
 	 */
@@ -97,25 +104,75 @@ public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity>
 	}
 
 	@Info("内部流体容量, 单位 mB.")
-	public SteamDeviceBuilder<B, E> capacity(int value) {
-		capacity = value;
+	public SteamDeviceBuilder<B, E> capacity(int capacity) {
+		this.capacity = capacity;
 		return this;
 	}
 
 	@Info("满效率下的基础蒸汽产出速率, 单位 mB/tick.")
-	public SteamDeviceBuilder<B, E> production(double value) {
-		production = value;
+	public SteamDeviceBuilder<B, E> production(double production) {
+		this.production = production;
 		return this;
 	}
 
 	@Info("最高热量值. 燃烧室升温/降温速率均以它的百分比为基准.")
-	public SteamDeviceBuilder<B, E> maxHeat(double value) {
-		maxHeat = value;
+	public SteamDeviceBuilder<B, E> maxHeat(double maxHeat) {
+		this.maxHeat = maxHeat;
 		return this;
 	}
 
 	protected String basePath() {
 		return model == null || model.isEmpty() ? devicePath() + "/" + material : model;
+	}
+
+	/**
+	 * 默认模型的完整 ID, 例如 {@code steam_letters:block/steam/boiler/steel}
+	 */
+	protected String fullModelPath() {
+		return id.getNamespace() + ":" + basePath();
+	}
+
+	/**
+	 * 材质目录下的部件贴图 ID, 例如 {@code steam_letters:block/steam/boiler/steel/side}
+	 */
+	protected String texturePath(String part) {
+		return id.getNamespace() + ":" + basePath() + "/" + part;
+	}
+
+	/**
+	 * KubeJS 的资源生成钩子.
+	 * <p>
+	 * 脚本在运行时才注册方块, datagen 完全看不到它, 所以 blockstate、方块模型与物品模型
+	 * 都在这里交给 KubeJS 生成到虚拟资源包里. 脚本侧只需要把贴图放到
+	 * {@code kubejs/assets/<namespace>/textures/<模型目录>/{side,top}.png}.
+	 */
+	@Override
+	public void generateAssetJsons(AssetJsonGenerator generator) {
+		String fullPath = fullModelPath();
+		String side = texturePath("side");
+		String top = texturePath("top");
+
+		generator.blockState(id, (state) -> {
+			state.simpleVariant("", fullPath);
+		});
+		generator.blockModel(SlApis.loadResource(basePath()), (model) -> {
+			model.parent("minecraft:block/cube_bottom_top");
+			model.texture("particle", side);
+			model.texture("bottom", MACHINE_BOTTOM);
+			model.texture("top", top);
+			model.texture("side", side);
+		});
+		generator.itemModel(AssetJsonGenerator.asItemModelLocation(id), (model) -> {
+			model.parent(fullPath);
+		});
+	}
+
+	/**
+	 * KubeJS 的语言钩子: 补上脚本方块的显示名, 与 datagen 生成的语言文件互不干扰.
+	 */
+	@Override
+	public void generateLang(LangEventJS event) {
+		event.add(id.toLanguageKey("block"), displayName());
 	}
 
 	protected IntSupplier capacityOr(IntSupplier fallback) {

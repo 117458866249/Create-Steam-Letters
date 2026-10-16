@@ -1,7 +1,8 @@
 package dev.celestiacraft.steam_letters.datagen.recipe;
 
 import dev.celestiacraft.steam_letters.api.SlApis;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.SlShapedRecipeGen;
+import dev.celestiacraft.steam_letters.datagen.recipe.type.SlBurnerFuelRecipeGen;
+import dev.celestiacraft.steam_letters.datagen.recipe.type.vanilla.SlShapedRecipeGen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -11,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class SlRecipeProvider extends RecipeProvider {
-	public static final String SHAPED = "crafting/shaped/";
-	public static final String SHAPELESS = "crafting/shapeless/";
+	protected static final String SHAPED = "crafting/shaped/";
+	protected static final String SHAPELESS = "crafting/shapeless/";
 
 	public SlRecipeProvider(PackOutput output) {
 		super(output);
@@ -24,6 +25,7 @@ public class SlRecipeProvider extends RecipeProvider {
 
 	@Override
 	protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-		SlShapedRecipeGen.addRecipe(consumer);
+		SlShapedRecipeGen.addRecipes(consumer);
+		SlBurnerFuelRecipeGen.addRecipes(consumer);
 	}
 }

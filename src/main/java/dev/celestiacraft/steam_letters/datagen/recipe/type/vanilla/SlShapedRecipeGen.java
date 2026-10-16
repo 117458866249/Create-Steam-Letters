@@ -1,4 +1,4 @@
-package dev.celestiacraft.steam_letters.datagen.recipe.type;
+package dev.celestiacraft.steam_letters.datagen.recipe.type.vanilla;
 
 import com.simibubi.create.AllBlocks;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
@@ -16,7 +16,7 @@ public class SlShapedRecipeGen extends SlRecipeProvider {
 		super(output);
 	}
 
-	public static void addRecipe(Consumer<FinishedRecipe> consumer) {
+	public static void addRecipes(Consumer<FinishedRecipe> consumer) {
 		addBronzeBasin(consumer);
 	}
 
