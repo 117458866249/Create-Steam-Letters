@@ -10,12 +10,14 @@ import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlMixingRecipe
 import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlPressRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlSequencedAssemblyRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.tags.ItemTagsGen;
+import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +26,8 @@ import java.util.concurrent.CompletableFuture;
 public class DataGenerators {
 	@SubscribeEvent
 	public static void onDatagen(GatherDataEvent event) {
+		stopKubeJSBackgroundThread();
+
 		DataGenerator generator = event.getGenerator();
 		PackOutput output = generator.getPackOutput();
 		ExistingFileHelper helper = event.getExistingFileHelper();
@@ -43,6 +47,18 @@ public class DataGenerators {
 			generator.addProvider(server, new SlSequencedAssemblyRecipeGen(output));
 
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
+		}
+	}
+
+	private static void stopKubeJSBackgroundThread() {
+		if (!ModList.get().isLoaded(KubeJS.MOD_ID)) {
+			return;
+		}
+		try {
+			Class.forName("dev.latvian.mods.kubejs.util.KubeJSBackgroundThread")
+					.getField("running")
+					.setBoolean(null, false);
+		} catch (Throwable ignored) {
 		}
 	}
 }

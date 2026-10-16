@@ -5,7 +5,9 @@ import com.simibubi.create.content.kinetics.saw.SawVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.*;
+import dev.celestiacraft.steam_letters.common.block.boiler.*;
 import dev.celestiacraft.steam_letters.common.block.bronze_basin.*;
+import dev.celestiacraft.steam_letters.common.block.burner.*;
 import dev.celestiacraft.steam_letters.common.block.steam_hammer.*;
 import dev.celestiacraft.steam_letters.common.block.steam_mixer.*;
 import dev.celestiacraft.steam_letters.common.block.steam_saw.SteamSawBlockEntity;
@@ -16,6 +18,10 @@ public class SlBlockEntities {
 	public static final BlockEntityEntry<SteamHammerBlockEntity> STEAM_HAMMER;
 	public static final BlockEntityEntry<SteamMixerBlockEntity> STEAM_MIXER;
 	public static final BlockEntityEntry<SteamSawBlockEntity> STEAM_SAW;
+	public static final BlockEntityEntry<SteamBoilerBlockEntity> STEAM_BOILER;
+	public static final BlockEntityEntry<SolarBoilerBlockEntity> SOLAR_BOILER;
+	public static final BlockEntityEntry<SolidBurnerBlockEntity> SOLID_BURNER;
+	public static final BlockEntityEntry<FluidBurnerBlockEntity> FLUID_BURNER;
 
 	static {
 		BRONZE_BASIN = SlApis.REGISTRATE.blockEntity("bronze_basin", BronzeBasinBlockEntity::new)
@@ -44,6 +50,22 @@ public class SlBlockEntities {
 				.visual(() -> SawVisual::new)
 				.renderer(() -> SawRenderer::new)
 				.validBlock(SlBlocks.STEAM_SAW)
+				.register();
+
+		STEAM_BOILER = SlApis.REGISTRATE.blockEntity("steam_boiler", SteamBoilerBlockEntity::new)
+				.validBlock(SlBlocks.BRONZE_BOILER)
+				.register();
+
+		SOLAR_BOILER = SlApis.REGISTRATE.blockEntity("solar_boiler", SolarBoilerBlockEntity::new)
+				.validBlock(SlBlocks.BRONZE_SOLAR_BOILER)
+				.register();
+
+		SOLID_BURNER = SlApis.REGISTRATE.blockEntity("solid_burner", SolidBurnerBlockEntity::new)
+				.validBlock(SlBlocks.BRONZE_SOLID_BURNER)
+				.register();
+
+		FLUID_BURNER = SlApis.REGISTRATE.blockEntity("fluid_burner", FluidBurnerBlockEntity::new)
+				.validBlock(SlBlocks.BRONZE_FLUID_BURNER)
 				.register();
 	}
 

@@ -32,6 +32,10 @@ public class SlCreativeTabs {
 						output.accept(SlBlocks.STEAM_HAMMER.asItem());
 						output.accept(SlBlocks.STEAM_MIXER.asItem());
 						output.accept(SlBlocks.STEAM_SAW.asItem());
+						output.accept(SlBlocks.BRONZE_BOILER.asItem());
+						output.accept(SlBlocks.BRONZE_SOLAR_BOILER.asItem());
+						output.accept(SlBlocks.BRONZE_SOLID_BURNER.asItem());
+						output.accept(SlBlocks.BRONZE_FLUID_BURNER.asItem());
 						output.accept(SlBlocks.BRONZE_CASING.asItem());
 						output.accept(SlFluids.STEAM.getBucket().get());
 						output.accept(SlFluids.SUPERHEATED_STEAM.getBucket().get());

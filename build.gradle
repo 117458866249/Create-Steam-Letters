@@ -90,11 +90,20 @@ repositories {
 		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
 	}
 	maven {
-		name 'Tterrag Maven'
-		url 'https://maven.tterrag.com/'
+		name = "Tterrag Maven"
+		url = "https://maven.tterrag.com/"
 	}
 	maven {
-		url 'https://modmaven.dev/'
+		name = "Mod Maven"
+		url = "https://modmaven.dev/"
+	}
+	maven {
+		name = "Architectury"
+		url = "https://maven.architectury.dev/"
+	}
+	maven {
+		name = 'Latvian Mods (KubeJS, Rhino)'
+		url = "https://maven.latvian.dev/releases"
 	}
 }
 
@@ -105,6 +114,7 @@ dependencies {
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
 	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
 	// Create
 	implementation(fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false })
 	implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
@@ -113,12 +123,22 @@ dependencies {
 	implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
 	implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
+
 	// 柴油动力
 	implementation fg.deobf("curse.maven:create-diesel-generators-869316:7869519")
+
 	// Jade
 	implementation fg.deobf("curse.maven:jade-324717:6106101")
+
 	// Configured
 	runtimeOnly fg.deobf("curse.maven:configured-457570:5180900")
+
+	// KubeJS
+	implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
+	implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
+	implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.26")
+	runtimeOnly fg.deobf("curse.maven:probejs-585406:5227399")
+
 	// Lomkok
 	compileOnly("org.projectlombok:lombok:1.18.28")
 	annotationProcessor("org.projectlombok:lombok:1.18.28")

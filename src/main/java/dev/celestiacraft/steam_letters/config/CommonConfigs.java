@@ -14,6 +14,9 @@ public class CommonConfigs {
 	public static final SteamHammerConfig STEAM_HAMMER;
 	public static final SteamMixerConfig STEAM_MIXER;
 	public static final SteamSawConfig STEAM_SAW;
+	public static final SteamBoilerConfig STEAM_BOILER;
+	public static final SolarBoilerConfig SOLAR_BOILER;
+	public static final SteamBurnerConfig STEAM_BURNER;
 
 	static {
 		BUILDER.comment("All settings below will only take effect after restarting the server or client.")
@@ -26,6 +29,9 @@ public class CommonConfigs {
 		STEAM_MIXER = new SteamMixerConfig(BUILDER);
 		STEAM_SAW = new SteamSawConfig(BUILDER);
 		ADVANCED_SPOUT = new AdvancedSpoutConfig(BUILDER);
+		STEAM_BOILER = new SteamBoilerConfig(BUILDER);
+		SOLAR_BOILER = new SolarBoilerConfig(BUILDER);
+		STEAM_BURNER = new SteamBurnerConfig(BUILDER);
 
 		SPEC = BUILDER.build();
 		BUILDER.pop();

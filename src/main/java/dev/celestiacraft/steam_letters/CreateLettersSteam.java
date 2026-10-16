@@ -4,11 +4,13 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
+import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.register.*;
 import dev.celestiacraft.steam_letters.config.CommonConfigs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -35,6 +37,7 @@ public class CreateLettersSteam {
 		SlBlocks.init();
 		SlBlockEntities.init();
 		SlFluids.init();
+		SlRecipeTypes.init(bus);
 		SlCreativeTabs.init(bus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> {
@@ -60,13 +63,15 @@ public class CreateLettersSteam {
 		context.registerConfig(ModConfig.Type.SERVER, STRESS_VALUES_SPEC, "nebula/steam_letters/server.toml");
 	}
 
-	private void onConfigLoad(ModConfigEvent.Loading event) {
+	@SubscribeEvent
+	public void onConfigLoad(ModConfigEvent.Loading event) {
 		if (STRESS_VALUES != null && event.getConfig().getSpec().equals(STRESS_VALUES_SPEC)) {
 			STRESS_VALUES.onLoad();
 		}
 	}
 
-	private void onConfigReload(ModConfigEvent.Reloading event) {
+	@SubscribeEvent
+	public void onConfigReload(ModConfigEvent.Reloading event) {
 		if (STRESS_VALUES != null && event.getConfig().getSpec().equals(STRESS_VALUES_SPEC)) {
 			STRESS_VALUES.onReload();
 		}

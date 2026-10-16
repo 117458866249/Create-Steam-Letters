@@ -1,0 +1,71 @@
+package dev.celestiacraft.steam_letters.common.block.burner;
+
+import com.simibubi.create.foundation.block.IBE;
+
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+
+import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
+import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
+
+/**
+ * 固体燃烧室: 烧物品, 升温方式与流体燃烧室完全一致, 只有燃料来源不同.
+ */
+public class SolidBurnerBlock extends AbstractBurnerBlock implements IBE<SolidBurnerBlockEntity> {
+	private final Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType;
+
+	public SolidBurnerBlock(Properties properties, SteamEngineSpec spec) {
+		this(properties, spec, null);
+	}
+
+	public SolidBurnerBlock(Properties properties, SteamEngineSpec spec, Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType) {
+		super(properties, spec);
+		this.customBlockEntityType = customBlockEntityType;
+	}
+
+	@Override
+	public Class<SolidBurnerBlockEntity> getBlockEntityClass() {
+		return SolidBurnerBlockEntity.class;
+	}
+
+	@Override
+	public BlockEntityType<? extends SolidBurnerBlockEntity> getBlockEntityType() {
+		return customBlockEntityType != null ? customBlockEntityType.get() : SlBlockEntities.SOLID_BURNER.get();
+	}
+
+	/**
+	 * 手持可燃物右键即放入燃料槽; 不可燃的物品不拦截, 交回给其它逻辑处理.
+	 */
+	@Override
+	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+		ItemStack stack = player.getItemInHand(hand);
+		if (stack.isEmpty() || !(level.getBlockEntity(pos) instanceof SolidBurnerBlockEntity burner)) {
+			return InteractionResult.PASS;
+		}
+
+		if (level.isClientSide) {
+			return burner.isFuel(stack) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+		}
+
+		return burner.insertFuel(stack) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+	}
+
+	public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> genBlockState(String material) {
+		return SlBlockStateGen.facingLit("block/steam/solid_burner/" + material, "block/steam/solid_burner/" + material + "_lit");
+	}
+}

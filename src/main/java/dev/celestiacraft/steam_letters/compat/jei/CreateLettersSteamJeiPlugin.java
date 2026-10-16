@@ -31,6 +31,7 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		ItemStack mixer = SlBlocks.STEAM_MIXER.asStack();
 		ItemStack spout = SlBlocks.ADVANCED_SPOUT.asStack();
 		ItemStack basin = SlBlocks.BRONZE_BASIN.asStack();
+		ItemStack saw = SlBlocks.STEAM_SAW.asStack();
 
 		addCatalyst(SlApis.loadCreate("pressing"), hammer);
 		addCatalyst(SlApis.loadCreate("packing"), hammer);
@@ -41,6 +42,9 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		addCatalyst(SlApis.loadCreate("automatic_brewing"), mixer);
 
 		addCatalyst(SlApis.loadCreate("spout_filling"), spout);
+
+		addCatalyst(SlApis.loadCreate("sawing"), saw);
+		addCatalyst(SlApis.loadCreate("block_cutting"), saw);
 
 		if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
 			addCatalyst(SlApis.loadCDG("compression_molding"), hammer);
