@@ -6,6 +6,7 @@ import dev.celestiacraft.steam_letters.compat.kubejs.builder.BoilerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.FluidBurnerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.SolarBoilerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.SolidBurnerBuilder;
+import dev.celestiacraft.steam_letters.compat.kubejs.schema.BurnerSchema;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -38,7 +39,9 @@ public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 
 	@Override
 	public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
-		super.registerRecipeSchemas(event);
+		event.namespace(CreateLettersSteam.MODID)
+				.register("solid_fuel", BurnerSchema.SOLID_FUEL)
+				.register("fluid_fuel", BurnerSchema.FLUID_FUEL);
 	}
 
 	@Override

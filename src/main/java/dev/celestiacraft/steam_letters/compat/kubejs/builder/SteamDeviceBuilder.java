@@ -1,175 +1,211 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
-import com.tterrag.registrate.util.entry.BlockEntityEntry;
-import com.tterrag.registrate.util.entry.BlockEntry;
+import com.google.gson.JsonObject;
+import com.simibubi.create.AllTags;
+import com.simibubi.create.foundation.data.SharedProperties;
 import dev.celestiacraft.steam_letters.api.SlApis;
+import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
 import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity> extends BuilderBase<Block> {
-	/**
-	 * 机器底面贴图, 与手写模型保持一致
-	 */
-	private static final String MACHINE_BOTTOM = "steam_letters:block/steam/down";
-	/**
-	 * 注册 ID 的 path 段(方块与方块实体共用)
-	 */
+	protected static final String MACHINE_BOTTOM = "steam_letters:block/steam/down";
 	protected final String path;
-	/**
-	 * 内部流体容量(mB), null 表示沿用配置默认值
-	 */
 	protected Integer capacity;
-	/**
-	 * 满效率蒸汽产出速率(mB/tick), null 表示沿用配置默认值
-	 */
 	protected Double production;
-	/**
-	 * 最高热量, null 表示沿用配置默认值
-	 */
 	protected Double maxHeat;
-	/**
-	 * 材质目录名, 决定默认模型路径 block/steam/<设备>/<材质>
-	 */
-	protected String material = "bronze";
-	/**
-	 * 完整模型路径覆盖, 非空时忽略 material
-	 */
-	protected String model;
-	protected BlockEntry<B> blockEntry;
-	protected BlockEntityEntry<E> blockEntityEntry;
+	protected ResourceLocation material = SlApis.loadResource("bronze");
+	protected ResourceLocation model;
+	protected B block;
+	protected Item item;
+	protected BlockEntityType<E> blockEntityType;
 
 	protected SteamDeviceBuilder(ResourceLocation id) {
 		super(id);
 		path = id.getPath();
+		tag(BlockTags.MINEABLE_WITH_PICKAXE.location());
+		tag(BlockTags.NEEDS_STONE_TOOL.location());
+		tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag.location());
 	}
 
-	/**
-	 * KubeJS 把方块与方块实体的命名空间固定为本模组 ID(steam_letters),
-	 * 因此脚本里 ID 的命名空间部分不会生效, 只有 path 段被使用.
-	 */
 	@Override
 	public RegistryInfo getRegistryType() {
 		return RegistryInfo.BLOCK;
 	}
 
-	/**
-	 * 本类型不走 KubeJS 的对象创建路径(见 {@link #createAdditionalObjects()}),
-	 * 因此这里不需要、也无法提供实例.
-	 */
 	@Override
 	public Block createObject() {
-		throw new IllegalStateException("steam_letters: KubeJS 设备 '" + path + "' 由 Registrate 注册, 不应走到 KubeJS 的对象创建路径");
+		B created = createBlock(createProperties());
+		block = created;
+		return created;
 	}
 
 	@Override
 	public void createAdditionalObjects() {
-		if (blockEntry != null) {
-			return;
+		RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id));
+		RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id));
+	}
+
+	private class DeviceBlockEntityTypeBuilder extends BuilderBase<BlockEntityType<?>> {
+		private DeviceBlockEntityTypeBuilder(ResourceLocation id) {
+			super(id);
 		}
 
-		registerDevice();
-		// 已由 Registrate 排队注册, 让 KubeJS 跳过自己的注册流程, 否则同一个 ID 会被注册两次
-		dummyBuilder = true;
+		@Override
+		public RegistryInfo getRegistryType() {
+			return RegistryInfo.BLOCK_ENTITY_TYPE;
+		}
+
+		@Override
+		public BlockEntityType<?> createObject() {
+			BlockEntityType<E> created = BlockEntityType.Builder.of(SteamDeviceBuilder.this::createBlockEntity, block).build(null);
+			blockEntityType = created;
+			return created;
+		}
 	}
 
-	/**
-	 * 用 Registrate 排队注册方块、物品与方块实体类型
-	 */
-	protected abstract void registerDevice();
+	private class DeviceItemBuilder extends BuilderBase<Item> {
+		private DeviceItemBuilder(ResourceLocation id) {
+			super(id);
+		}
 
-	/**
-	 * 默认模型路径所在的目录, 例如 {@code block/steam/boiler}
-	 */
+		@Override
+		public RegistryInfo getRegistryType() {
+			return RegistryInfo.ITEM;
+		}
+
+		@Override
+		public Item createObject() {
+			item = createBlockItem(block);
+			return item;
+		}
+	}
+
+	protected BlockBehaviour.Properties createProperties() {
+		return BlockBehaviour.Properties.copy(SharedProperties.softMetal())
+				.noOcclusion()
+				.sound(SoundType.LANTERN);
+	}
+
+	protected Item createBlockItem(B block) {
+		return new SteamBlockItem(block, new Item.Properties());
+	}
+
+	protected abstract B createBlock(BlockBehaviour.Properties properties);
+
+	protected abstract E createBlockEntity(BlockPos pos, BlockState state);
+
 	protected abstract String devicePath();
 
-	@Info("方块模型与贴图所在的子目录名, 默认 bronze. 例如 material('steel') 会使用 block/steam/<设备>/steel.")
-	public SteamDeviceBuilder<B, E> material(String value) {
-		material = value;
+	@Info("材质, 默认 steam_letters:bronze. 用命名空间区分来自哪个模组的贴图, 例如 material('steam_letters:steel').")
+	public SteamDeviceBuilder<B, E> material(ResourceLocation material) {
+		this.material = material;
 		return this;
 	}
 
-	@Info("完整模型路径覆盖, 例如 block/steam/boiler/bronze. 设置后忽略 material.")
-	public SteamDeviceBuilder<B, E> model(String value) {
-		model = value;
+	@Info("完整模型路径覆盖, 例如 steam_letters:block/steam/boiler/bronze. 设置后忽略 material.")
+	public SteamDeviceBuilder<B, E> model(ResourceLocation model) {
+		this.model = model;
 		return this;
 	}
 
-	@Info("内部流体容量, 单位 mB.")
-	public SteamDeviceBuilder<B, E> capacity(int capacity) {
-		this.capacity = capacity;
-		return this;
-	}
-
-	@Info("满效率下的基础蒸汽产出速率, 单位 mB/tick.")
-	public SteamDeviceBuilder<B, E> production(double production) {
-		this.production = production;
-		return this;
-	}
-
-	@Info("最高热量值. 燃烧室升温/降温速率均以它的百分比为基准.")
-	public SteamDeviceBuilder<B, E> maxHeat(double maxHeat) {
-		this.maxHeat = maxHeat;
-		return this;
-	}
-
-	protected String basePath() {
-		return model == null || model.isEmpty() ? devicePath() + "/" + material : model;
+	protected String baseModel() {
+		if (model != null) {
+			return model.getPath();
+		}
+		return devicePath() + "/" + material.getPath();
 	}
 
 	/**
-	 * 默认模型的完整 ID, 例如 {@code steam_letters:block/steam/boiler/steel}
+	 * 模型路径所属的命名空间: material 与 model 各自决定, 没给 model 时跟随 material
 	 */
-	protected String fullModelPath() {
-		return id.getNamespace() + ":" + basePath();
+	protected String modelNamespace() {
+		return model != null ? model.getNamespace() : material.getNamespace();
+	}
+
+	/**
+	 * 模型的完整 ID, 例如 {@code steam_letters:block/steam/boiler/steel}
+	 */
+	protected String modelId(String modelPath) {
+		return modelNamespace() + ":" + modelPath;
 	}
 
 	/**
 	 * 材质目录下的部件贴图 ID, 例如 {@code steam_letters:block/steam/boiler/steel/side}
 	 */
-	protected String texturePath(String part) {
-		return id.getNamespace() + ":" + basePath() + "/" + part;
+	protected String textureId(String modelPath, String part) {
+		return modelNamespace() + ":" + modelPath + "/" + part;
 	}
 
-	/**
-	 * KubeJS 的资源生成钩子.
-	 * <p>
-	 * 脚本在运行时才注册方块, datagen 完全看不到它, 所以 blockstate、方块模型与物品模型
-	 * 都在这里交给 KubeJS 生成到虚拟资源包里. 脚本侧只需要把贴图放到
-	 * {@code kubejs/assets/<namespace>/textures/<模型目录>/{side,top}.png}.
-	 */
 	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
-		String fullPath = fullModelPath();
-		String side = texturePath("side");
-		String top = texturePath("top");
-
-		generator.blockState(id, (state) -> {
-			state.simpleVariant("", fullPath);
-		});
-		generator.blockModel(SlApis.loadResource(basePath()), (model) -> {
-			model.parent("minecraft:block/cube_bottom_top");
-			model.texture("particle", side);
-			model.texture("bottom", MACHINE_BOTTOM);
-			model.texture("top", top);
-			model.texture("side", side);
-		});
-		generator.itemModel(AssetJsonGenerator.asItemModelLocation(id), (model) -> {
-			model.parent(fullPath);
-		});
+		generateBlockState(generator);
+		generateModels(generator);
+		generateItemModel(generator);
 	}
 
-	/**
-	 * KubeJS 的语言钩子: 补上脚本方块的显示名, 与 datagen 生成的语言文件互不干扰.
-	 */
+	protected void generateBlockState(AssetJsonGenerator generator) {
+		JsonObject variants = new JsonObject();
+		JsonObject variant = new JsonObject();
+		variant.addProperty("model", modelId(baseModel()));
+		variants.add("", variant);
+
+		JsonObject root = new JsonObject();
+		root.add("variants", variants);
+		generator.json(stateLocation(), root);
+	}
+
+	protected void generateModels(AssetJsonGenerator generator) {
+		generator.json(modelLocation(baseModel()), createCubeBottomTopModel(baseModel(), MACHINE_BOTTOM));
+	}
+
+	protected void generateItemModel(AssetJsonGenerator generator) {
+		JsonObject root = new JsonObject();
+		root.addProperty("parent", modelId(baseModel()));
+		generator.json(itemModelLocation(), root);
+	}
+
+	protected JsonObject createCubeBottomTopModel(String modelPath, String bottom) {
+		JsonObject textures = new JsonObject();
+		textures.addProperty("particle", textureId(modelPath, "side"));
+		textures.addProperty("bottom", bottom);
+		textures.addProperty("top", textureId(modelPath, "top"));
+		textures.addProperty("side", textureId(modelPath, "side"));
+
+		JsonObject root = new JsonObject();
+		root.addProperty("parent", "minecraft:block/cube_bottom_top");
+		root.add("textures", textures);
+		return root;
+	}
+
+	protected ResourceLocation stateLocation() {
+		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "blockstates/" + id.getPath());
+	}
+
+	protected ResourceLocation modelLocation(String modelPath) {
+		return ResourceLocation.fromNamespaceAndPath(modelNamespace(), "models/" + modelPath);
+	}
+
+	protected ResourceLocation itemModelLocation() {
+		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "models/item/" + id.getPath());
+	}
+
 	@Override
 	public void generateLang(LangEventJS event) {
 		event.add(id.toLanguageKey("block"), displayName());
@@ -187,9 +223,6 @@ public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity>
 		return maxHeat == null ? fallback : maxHeat::doubleValue;
 	}
 
-	/**
-	 * 由注册 ID 推导显示名, 例如 bronze_boiler -> Bronze Boiler
-	 */
 	protected String displayName() {
 		StringBuilder builder = new StringBuilder();
 		for (String part : path.split("_")) {

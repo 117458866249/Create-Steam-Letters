@@ -23,9 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-/**
- * 固体燃烧室: 烧物品, 升温方式与流体燃烧室完全一致, 只有燃料来源不同.
- */
 public class SolidBurnerBlock extends AbstractBurnerBlock implements IBE<SolidBurnerBlockEntity> {
 	private final Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType;
 
@@ -48,9 +45,6 @@ public class SolidBurnerBlock extends AbstractBurnerBlock implements IBE<SolidBu
 		return customBlockEntityType != null ? customBlockEntityType.get() : SlBlockEntities.SOLID_BURNER.get();
 	}
 
-	/**
-	 * 手持可燃物右键即放入燃料槽; 不可燃的物品不拦截, 交回给其它逻辑处理.
-	 */
 	@Override
 	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
 		ItemStack stack = player.getItemInHand(hand);
@@ -58,7 +52,7 @@ public class SolidBurnerBlock extends AbstractBurnerBlock implements IBE<SolidBu
 			return InteractionResult.PASS;
 		}
 
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return burner.isFuel(stack) ? InteractionResult.SUCCESS : InteractionResult.PASS;
 		}
 
