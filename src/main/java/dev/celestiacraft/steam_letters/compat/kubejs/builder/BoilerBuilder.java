@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
-import dev.celestiacraft.steam_letters.config.common.SteamBoilerConfig;
+import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -22,8 +22,8 @@ public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBo
 	@Override
 	protected SteamBoilerBlock createBlock(BlockBehaviour.Properties properties) {
 		SteamEngineSpec spec = SteamEngineSpec.builder()
-				.capacity(capacityOr(SteamBoilerConfig.CAPACITY::get))
-				.production(productionOr(SteamBoilerConfig.PRODUCTION::get))
+				.capacity(capacityOr(() -> SteamBoilerBlockEntity.DEFAULT_CAPACITY))
+				.production(productionOr(() -> SteamBoilerBlockEntity.DEFAULT_PRODUCTION))
 				.build();
 		return new SteamBoilerBlock(properties, spec, () -> blockEntityType);
 	}

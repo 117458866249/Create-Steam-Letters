@@ -18,9 +18,7 @@ public class SolarBoilerConfig extends ConfigModule {
 			RAIN_EFFICIENCY,
 			THUNDER_EFFICIENCY;
 
-	public static ForgeConfigSpec.IntValue ARTIFICIAL_LIGHT_THRESHOLD, CAPACITY;
-
-	public static ForgeConfigSpec.DoubleValue PRODUCTION;
+	public static ForgeConfigSpec.IntValue ARTIFICIAL_LIGHT_THRESHOLD;
 
 	public static ForgeConfigSpec.BooleanValue REQUIRE_DAYLIGHT;
 
@@ -54,14 +52,6 @@ public class SolarBoilerConfig extends ConfigModule {
 		THUNDER_EFFICIENCY = builder.translation(key("thunder_efficiency"))
 				.comment("Weather multiplier while a thunder storm is raging at the boiler (includes snow during thunder).")
 				.defineInRange("thunder_efficiency", 0.25D, 0.0D, 1.0D);
-
-		CAPACITY = builder.translation(key("capacity"))
-				.comment("Capacity (mB) of each of the built-in solar boiler's two tanks.")
-				.defineInRange("capacity", 4000, 1000, 1000000);
-
-		PRODUCTION = builder.translation(key("production"))
-				.comment("Base steam output (mB/tick) of the built-in solar boiler at 100% efficiency.")
-				.defineInRange("production", 20.0D, 0.0D, 1000000.0D);
 	}
 
 	/**

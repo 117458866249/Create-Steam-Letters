@@ -26,6 +26,11 @@ import javax.annotation.Nullable;
  * 当前燃烧的剩余时间是独立字段, 与罐内流体存量无关.
  */
 public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
+	/**
+	 * 内置青铜流体燃烧室的默认燃料罐容量 (mB).
+	 */
+	public static final int DEFAULT_CAPACITY = 1000;
+
 	private static final String NBT_TANK = "FuelTank";
 
 	@Getter
@@ -46,7 +51,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 
 		int capacity = spec.getCapacity();
 		if (capacity <= 0) {
-			capacity = SteamBurnerConfig.FLUID_CAPACITY.get();
+			capacity = DEFAULT_CAPACITY;
 		}
 
 		fuelTank = new FluidTank(capacity) {

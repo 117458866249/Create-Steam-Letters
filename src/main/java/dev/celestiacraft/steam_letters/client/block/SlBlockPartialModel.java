@@ -6,6 +6,11 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 public class SlBlockPartialModel {
 	public static final PartialModel
 			STEAM_HAMMER,
+			STEAM_FLYWHEEL_WHEEL,
+			STEAM_FLYWHEEL_UPPER_ROTATING,
+			STEAM_FLYWHEEL_LOWER_ROTATING,
+			STEAM_FLYWHEEL_UPPER_SLIDING,
+			STEAM_FLYWHEEL_LOWER_SLIDING,
 			STEAM_MIXER_HEAD,
 			STEAM_MIXER_POLE,
 			SPOUT_TOP,
@@ -14,6 +19,12 @@ public class SlBlockPartialModel {
 
 	static {
 		STEAM_HAMMER = addPartial("steam_hammer/head");
+
+		STEAM_FLYWHEEL_WHEEL = addPartial("steam/flywheel/bronze_wheel");
+		STEAM_FLYWHEEL_UPPER_ROTATING = addPartial("steam/flywheel/bronze_upper_rotating_connector");
+		STEAM_FLYWHEEL_LOWER_ROTATING = addPartial("steam/flywheel/bronze_lower_rotating_connector");
+		STEAM_FLYWHEEL_UPPER_SLIDING = addPartial("steam/flywheel/bronze_upper_sliding_connector");
+		STEAM_FLYWHEEL_LOWER_SLIDING = addPartial("steam/flywheel/bronze_lower_sliding_connector");
 
 		STEAM_MIXER_HEAD = addPartial("steam_mixer/head");
 		STEAM_MIXER_POLE = addPartial("steam_mixer/pole");

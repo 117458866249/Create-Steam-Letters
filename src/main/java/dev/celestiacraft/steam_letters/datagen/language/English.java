@@ -13,6 +13,7 @@ public class English {
 		addSteamHammerLang(provider);
 		addAdvancedSpoutLang(provider);
 		addGoggleLang(provider);
+		addSteamEngineLang(provider);
 		addConfigLang(provider);
 	}
 
@@ -31,6 +32,16 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL), "Light: Artificial");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_NONE), "Light: None");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_EFFICIENCY), "Efficiency");
+	}
+
+	private static void addSteamEngineLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE), "Steam Engine");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_IDLE), "Idle");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_HEATUP), "Heating Up");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_RUNNING), "Running");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_HEATUP), "Heat-up");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STRESS), "Stress Output");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STEAM), "Steam");
 	}
 
 	private static void addOtherLang(RegistrateLangProvider provider) {
@@ -108,8 +119,6 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_2"), "Steam output multiplier of efficiency tier 2");
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_3"), "Steam output multiplier of efficiency tier 3");
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_4"), "Steam output multiplier of efficiency tier 4");
-		provider.add(ConfigModule.translationKey("steam_boiler", "capacity"), "Fluid capacity of each steam boiler tank (mB)");
-		provider.add(ConfigModule.translationKey("steam_boiler", "production"), "Base steam production at full efficiency (mB/tick)");
 
 		provider.add(ConfigModule.translationKey("solar_boiler"), "Solar Boiler");
 		provider.add(ConfigModule.translationKey("solar_boiler", "sunlight_efficiency"), "Efficiency multiplier when the solar boiler has unobstructed sky access");
@@ -118,14 +127,17 @@ public class English {
 		provider.add(ConfigModule.translationKey("solar_boiler", "require_daylight"), "Whether sunlight operation also requires it to be daytime");
 		provider.add(ConfigModule.translationKey("solar_boiler", "rain_efficiency"), "Weather multiplier while raining");
 		provider.add(ConfigModule.translationKey("solar_boiler", "thunder_efficiency"), "Weather multiplier during thunderstorms");
-		provider.add(ConfigModule.translationKey("solar_boiler", "capacity"), "Fluid capacity of each solar boiler tank (mB)");
-		provider.add(ConfigModule.translationKey("solar_boiler", "production"), "Base steam production at full efficiency (mB/tick)");
 
 		provider.add(ConfigModule.translationKey("steam_burner"), "Steam Burner");
 		provider.add(ConfigModule.translationKey("steam_burner", "heat_gain_percent_per_second"), "Heat gained per second while burning, as a percentage of the maximum heat");
 		provider.add(ConfigModule.translationKey("steam_burner", "heat_loss_percent_per_second"), "Heat lost per second while idle, as a percentage of the maximum heat");
-		provider.add(ConfigModule.translationKey("steam_burner", "max_heat"), "Default maximum heat of burners that do not declare one");
-		provider.add(ConfigModule.translationKey("steam_burner", "fluid_capacity"), "Default fluid fuel tank capacity (mB)");
+
+		provider.add(ConfigModule.translationKey("steam_engine"), "Steam Engine");
+		provider.add(ConfigModule.translationKey("steam_engine", "suck_efficiency"), "Ratio of steam gained when a flywheel engine draws steam directly from a boiler (0.75 = 25% loss)");
+		provider.add(ConfigModule.translationKey("steam_engine", "superheated_consumption_multiplier"), "Steam consumption multiplier of a flywheel engine running on superheated steam");
+		provider.add(ConfigModule.translationKey("steam_engine", "heatup_acceleration"), "Growth of steam consumption during heat-up (mB/tick per tick)");
+		provider.add(ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"), "Heat-up acceleration multiplier when running on superheated steam");
+		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
 	}

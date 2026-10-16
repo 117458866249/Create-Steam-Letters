@@ -17,6 +17,7 @@ public class CommonConfigs {
 	public static final SteamBoilerConfig STEAM_BOILER;
 	public static final SolarBoilerConfig SOLAR_BOILER;
 	public static final SteamBurnerConfig STEAM_BURNER;
+	public static final SteamEngineConfig STEAM_ENGINE;
 
 	static {
 		BUILDER.comment("All settings below will only take effect after restarting the server or client.")
@@ -32,6 +33,7 @@ public class CommonConfigs {
 		STEAM_BOILER = new SteamBoilerConfig(BUILDER);
 		SOLAR_BOILER = new SolarBoilerConfig(BUILDER);
 		STEAM_BURNER = new SteamBurnerConfig(BUILDER);
+		STEAM_ENGINE = new SteamEngineConfig(BUILDER);
 
 		SPEC = BUILDER.build();
 		BUILDER.pop();

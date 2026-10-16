@@ -3,7 +3,8 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.config.common.SteamBurnerConfig;
+import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -29,8 +30,8 @@ public class FluidBurnerBuilder extends BurnerDeviceBuilder<FluidBurnerBlock, Fl
 	@Override
 	protected FluidBurnerBlock createBlock(BlockBehaviour.Properties properties) {
 		SteamEngineSpec spec = SteamEngineSpec.builder()
-				.capacity(capacityOr(SteamBurnerConfig.FLUID_CAPACITY::get))
-				.maxHeat(maxHeatOr(SteamBurnerConfig.MAX_HEAT::get))
+				.capacity(capacityOr(() -> FluidBurnerBlockEntity.DEFAULT_CAPACITY))
+				.maxHeat(maxHeatOr(() -> AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT))
 				.build();
 		return new FluidBurnerBlock(properties, spec, () -> blockEntityType);
 	}

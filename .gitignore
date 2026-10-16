@@ -10,3 +10,5 @@ build
 /graphflow-out
 /.unpack
 /.dsh-probe
+/.graphflow
+/.manual-compile

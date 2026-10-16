@@ -5,6 +5,7 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.BoilerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.FluidBurnerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.SolarBoilerBuilder;
+import dev.celestiacraft.steam_letters.compat.kubejs.builder.SteamEngineDeviceBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.SolidBurnerBuilder;
 import dev.celestiacraft.steam_letters.compat.kubejs.schema.BurnerSchema;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
@@ -34,6 +35,11 @@ public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 				SlApis.loadResource("fluid_burner").toString(),
 				FluidBurnerBuilder.class,
 				FluidBurnerBuilder::new
+		);
+		RegistryInfo.BLOCK.addType(
+				"steam_engine:flywheel_and_engine",
+				SteamEngineDeviceBuilder.class,
+				SteamEngineDeviceBuilder::new
 		);
 	}
 

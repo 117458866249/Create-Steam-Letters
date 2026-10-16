@@ -31,6 +31,11 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	private static final String NBT_HEAT = "Heat";
 	private static final String NBT_BURN_TIME = "BurnTime";
 
+	/**
+	 * 内置青铜燃烧室的默认热量上限.
+	 */
+	public static final double DEFAULT_MAX_HEAT = 100.0D;
+
 	protected final SteamEngineSpec spec;
 
 	/**
@@ -101,7 +106,7 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	@Override
 	public double getMaxHeat() {
 		double configured = spec.getMaxHeat();
-		return configured > 0.0D ? configured : SteamBurnerConfig.MAX_HEAT.get();
+		return configured > 0.0D ? configured : DEFAULT_MAX_HEAT;
 	}
 
 	@Override

@@ -21,7 +21,14 @@ public class SlTranKeys {
 			GOGGLE_SOLAR_BOILER_LIGHT_THUNDER,
 			GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL,
 			GOGGLE_SOLAR_BOILER_LIGHT_NONE,
-			GOGGLE_SOLAR_BOILER_EFFICIENCY;
+			GOGGLE_SOLAR_BOILER_EFFICIENCY,
+			GOGGLE_STEAM_ENGINE,
+			GOGGLE_STEAM_ENGINE_STATUS_IDLE,
+			GOGGLE_STEAM_ENGINE_STATUS_HEATUP,
+			GOGGLE_STEAM_ENGINE_STATUS_RUNNING,
+			GOGGLE_STEAM_ENGINE_HEATUP,
+			GOGGLE_STEAM_ENGINE_STRESS,
+			GOGGLE_STEAM_ENGINE_STEAM;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -44,6 +51,14 @@ public class SlTranKeys {
 		GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL = "gui.goggles.solar_boiler.light.artificial";
 		GOGGLE_SOLAR_BOILER_LIGHT_NONE = "gui.goggles.solar_boiler.light.none";
 		GOGGLE_SOLAR_BOILER_EFFICIENCY = "gui.goggles.solar_boiler.efficiency";
+
+		GOGGLE_STEAM_ENGINE = "gui.goggles.steam_engine";
+		GOGGLE_STEAM_ENGINE_STATUS_IDLE = "gui.goggles.steam_engine.status.idle";
+		GOGGLE_STEAM_ENGINE_STATUS_HEATUP = "gui.goggles.steam_engine.status.heatup";
+		GOGGLE_STEAM_ENGINE_STATUS_RUNNING = "gui.goggles.steam_engine.status.running";
+		GOGGLE_STEAM_ENGINE_HEATUP = "gui.goggles.steam_engine.heatup";
+		GOGGLE_STEAM_ENGINE_STRESS = "gui.goggles.steam_engine.stress";
+		GOGGLE_STEAM_ENGINE_STEAM = "gui.goggles.steam_engine.steam";
 	}
 
 	/**

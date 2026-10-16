@@ -29,6 +29,12 @@ import java.util.Locale;
  * 末地没有天空光, 规则特殊: 只要上方无遮挡就按太阳光算, 且不受天气影响.
  */
 public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements IHaveGoggleInformation {
+	/**
+	 * 内置青铜太阳能锅炉的默认参数: 两个罐各 4000 mB, 100% 效率时产 20 mB/tick 蒸汽.
+	 */
+	public static final int DEFAULT_CAPACITY = 4000;
+	public static final double DEFAULT_PRODUCTION = 20.0D;
+
 	public SolarBoilerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}

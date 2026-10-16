@@ -15,10 +15,7 @@ public class SteamBoilerConfig extends ConfigModule {
 			EFFICIENCY_THRESHOLD_3, EFFICIENCY_THRESHOLD_4;
 
 	public static ForgeConfigSpec.DoubleValue
-			EFFICIENCY_1, EFFICIENCY_2, EFFICIENCY_3, EFFICIENCY_4,
-			PRODUCTION;
-
-	public static ForgeConfigSpec.IntValue CAPACITY;
+			EFFICIENCY_1, EFFICIENCY_2, EFFICIENCY_3, EFFICIENCY_4;
 
 	public SteamBoilerConfig(ForgeConfigSpec.Builder builder) {
 		super(builder, "steam_boiler");
@@ -45,14 +42,6 @@ public class SteamBoilerConfig extends ConfigModule {
 				.defineInRange("efficiency_3", 0.75D, 0.0D, 1.0D);
 		EFFICIENCY_4 = builder.translation(key("efficiency_4"))
 				.defineInRange("efficiency_4", 1.0D, 0.0D, 1.0D);
-
-		CAPACITY = builder.translation(key("capacity"))
-				.comment("Capacity (mB) of each of the built-in steam boiler's two tanks.")
-				.defineInRange("capacity", 10000, 1000, 1000000);
-
-		PRODUCTION = builder.translation(key("production"))
-				.comment("Base steam output (mB/tick) of the built-in steam boiler at 100% efficiency.")
-				.defineInRange("production", 100.0D, 0.0D, 1000000.0D);
 	}
 
 	/**
