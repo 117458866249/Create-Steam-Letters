@@ -37,7 +37,7 @@ public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 				FluidBurnerBuilder::new
 		);
 		RegistryInfo.BLOCK.addType(
-				"steam_engine:flywheel_and_engine",
+				SlApis.loadResource("steam_engine").toString(),
 				SteamEngineDeviceBuilder.class,
 				SteamEngineDeviceBuilder::new
 		);

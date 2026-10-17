@@ -2,10 +2,12 @@ package dev.celestiacraft.steam_letters.common.block.flywheel;
 
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
+import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,12 +25,34 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<SteamFlywheelBlockEntity> {
 	public static final EnumProperty<ConnectionState> CONNECTION = EnumProperty.create("connection", ConnectionState.class);
 
+	private final Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType;
+	private final ResourceLocation material;
+
 	public SteamFlywheelBlock(Properties properties) {
+		this(properties, null, SlApis.loadResource("bronze"));
+	}
+
+	public SteamFlywheelBlock(Properties properties, Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType) {
+		this(properties, customBlockEntityType, SlApis.loadResource("bronze"));
+	}
+
+	public SteamFlywheelBlock(Properties properties, Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType, ResourceLocation material) {
 		super(properties);
+		this.customBlockEntityType = customBlockEntityType;
+		this.material = material;
 		registerDefaultState(defaultBlockState().setValue(CONNECTION, ConnectionState.NONE));
+	}
+
+	/**
+	 * 飞轮轮盘用的材质, 决定渲染时取哪一个轮盘模型: {@code <材质命名空间>:block/steam/flywheel/<材质>_wheel}.
+	 */
+	public ResourceLocation getMaterial() {
+		return material;
 	}
 
 	@Override
@@ -110,7 +134,7 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 
 	@Override
 	public BlockEntityType<? extends SteamFlywheelBlockEntity> getBlockEntityType() {
-		return SlBlockEntities.STEAM_FLYWHEEL.get();
+		return customBlockEntityType != null ? customBlockEntityType.get() : SlBlockEntities.STEAM_FLYWHEEL.get();
 	}
 
 	public static NonNullBiConsumer<DataGenContext<Block, SteamFlywheelBlock>, RegistrateBlockstateProvider> genBlockState(String material) {

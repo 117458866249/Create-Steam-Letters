@@ -29,6 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<SteamEngineBlockEntity>, IWrenchable {
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -36,8 +37,15 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 	@Getter
 	private final SteamEngineDriveSpec driveSpec;
 
+	private final Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType;
+
 	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer) {
+		this(properties, configurer, null);
+	}
+
+	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer, Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType) {
 		super(properties);
+		this.customBlockEntityType = customBlockEntityType;
 		driveSpec = SteamEngineDriveSpec.of(configurer);
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH)
@@ -81,7 +89,7 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 
 	@Override
 	public BlockEntityType<? extends SteamEngineBlockEntity> getBlockEntityType() {
-		return SlBlockEntities.STEAM_ENGINE.get();
+		return customBlockEntityType != null ? customBlockEntityType.get() : SlBlockEntities.STEAM_ENGINE.get();
 	}
 
 	public static NonNullBiConsumer<DataGenContext<Block, SteamEngineBlock>, RegistrateBlockstateProvider> genBlockState(String material) {

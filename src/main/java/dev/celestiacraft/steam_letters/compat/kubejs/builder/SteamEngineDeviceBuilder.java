@@ -1,90 +1,147 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
 import com.google.gson.JsonObject;
-import com.simibubi.create.foundation.data.SharedProperties;
-import dev.celestiacraft.steam_letters.api.SlApis;
-import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
-import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
-import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
- * 蒸汽飞轮 + 飞轮引擎的 KubeJS 注册器.
+ * 蒸汽引擎 + 蒸汽飞轮的 KubeJS 注册器.
  * <p>
- * 文档中这两个设备共用同一条写法, 但落地时必须是两个方块, 因此这里用「容器 builder + 两个子 builder」
- * 的结构: 脚本里创建的 builder 自身被打上 dummy 标记 (KubeJS 会跳过它的注册), 真正的设备由构造器
- * 里追加注册的 {@code <id>_flywheel} 与 {@code <id>_engine} 两个子 builder 产出, 资源与语言也由它们各自生成.
+ * 一次 {@code event.create(id, "steam_letters:steam_engine")} 只产出两个方块: 脚本 id 本身就是引擎方块
+ * (脚本 id 为 {@code steel_engine} 时注册 {@code kubejs:steel_engine}), 飞轮由构造器追加注册, id 是把
+ * 脚本 id 末尾的 {@code _engine} 换成 {@code _flywheel} ({@code kubejs:steel_flywheel}).
  * <p>
- * 参数全部挂在引擎一侧: 飞轮本身不决定任何数值, 它只是把引擎给出的转速与应力送进 Create 的动力网络.
+ * 五个参数全部挂在引擎一侧: 飞轮不决定任何数值, 它只把引擎给出的转速与应力送进 Create 的动力网络.
  */
-public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
+public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity> {
 	public static final String FLYWHEEL_SUFFIX = "_flywheel";
 	public static final String ENGINE_SUFFIX = "_engine";
 
-	protected ResourceLocation material = SlApis.loadResource("bronze");
-	protected ResourceLocation model;
-	protected double strength;
-	protected double speed;
-	protected double consumption;
-	protected int storage;
-
-	private final DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> flywheel;
-	private final DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity> engine;
+	private final FlywheelBuilder flywheel;
+	private boolean engineObjectsCreated;
+	private boolean flywheelObjectsCreated;
 
 	public SteamEngineDeviceBuilder(ResourceLocation id) {
 		super(id);
 
-		dummyBuilder = true;
-
-		flywheel = new FlywheelBuilder(derive(id, FLYWHEEL_SUFFIX));
-		engine = new EngineBuilder(derive(id, ENGINE_SUFFIX));
+		flywheel = new FlywheelBuilder(flywheelId(id));
 
 		RegistryInfo.BLOCK.addBuilder(flywheel);
-		RegistryInfo.BLOCK.addBuilder(engine);
-	}
-
-	private static ResourceLocation derive(ResourceLocation id, String suffix) {
-		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + suffix);
-	}
-
-	@Override
-	public RegistryInfo getRegistryType() {
-		return RegistryInfo.BLOCK;
 	}
 
 	/**
-	 * 容器本身不注册方块, 这里只为了在被别处取用时也有一个合法对象.
+	 * {@code steel_engine} 的飞轮叫 {@code steel_flywheel}, 其余 id 直接追加后缀.
 	 */
-	@Override
-	public Block createObject() {
-		return new SteamFlywheelBlock(BlockBehaviour.Properties.copy(SharedProperties.softMetal()));
+	private static ResourceLocation flywheelId(ResourceLocation id) {
+		String path = id.getPath();
+
+		if (path.endsWith(ENGINE_SUFFIX) && path.length() > ENGINE_SUFFIX.length()) {
+			path = path.substring(0, path.length() - ENGINE_SUFFIX.length());
+		}
+
+		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path + FLYWHEEL_SUFFIX);
 	}
 
-	@Info("材质, 决定默认模型与贴图目录, 默认 steam_letters:bronze")
+	@Override
+	protected String devicePath() {
+		return "block/steam/engine";
+	}
+
+	@Override
+	protected SteamEngineBlock createBlock(BlockBehaviour.Properties properties) {
+		/*
+		 * KubeJS 的 startup 脚本在配置文件加载之前执行, 注册阶段不读取任何配置.
+		 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
+		 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
+		 */
+		return new SteamEngineBlock(properties, (builder) -> builder
+				.strength(strength)
+				.speed(speed)
+				.consumption(consumption)
+				.storage(storage), () -> blockEntityType);
+	}
+
+	@Override
+	protected SteamEngineBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new SteamEngineBlockEntity(blockEntityType, pos, state);
+	}
+
+	@Override
+	protected void generateBlockState(AssetJsonGenerator generator) {
+		JsonObject variants = new JsonObject();
+
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
+			for (boolean lit : new boolean[] {false, true}) {
+				JsonObject variant = new JsonObject();
+				variant.addProperty("model", modelId(baseModel()));
+				variant.addProperty("y", (int) direction.toYRot() + 180);
+				variants.add("facing=" + direction.getSerializedName() + ",lit=" + lit, variant);
+			}
+		}
+
+		writeBlockState(generator, variants);
+	}
+
+	@Override
+	protected void generateBlockModels(AssetJsonGenerator generator) {
+		if (model != null || usesBuiltinModel()) {
+			return;
+		}
+
+		generateModel(generator, baseModel(), "block/steam/engine/bronze", engineTextures());
+		generateModel(generator, baseModel() + "_item", "block/steam/engine/bronze_item", engineTextures());
+	}
+
+	private static Map<String, String> engineTextures() {
+		Map<String, String> textures = new LinkedHashMap<>();
+		textures.put("5", "block/steam/casing/%s_casing");
+		textures.put("1_1", "block/steam/engine/%s_cylinder");
+		textures.put("particle", "block/steam/metal_block/%s_block");
+		return textures;
+	}
+
+	/**
+	 * 引擎自己的方块实体类型与方块物品由这里补注册(KubeJS 只会对脚本创建出来的 builder 调用本方法),
+	 * 飞轮是构造器里 addBuilder 追加的, 同样不在事件的 created 列表里, 必须在这里一并转发.
+	 */
+	@Override
+	public void createAdditionalObjects() {
+		if (!engineObjectsCreated) {
+			engineObjectsCreated = true;
+			super.createAdditionalObjects();
+		}
+
+		if (!flywheelObjectsCreated) {
+			flywheelObjectsCreated = true;
+			flywheel.createAdditionalObjects();
+		}
+	}
+
+	@Info("材质, 决定默认模型与贴图目录, 默认 steam_letters:bronze; 引擎与配对飞轮同时生效")
 	public SteamEngineDeviceBuilder material(ResourceLocation material) {
 		this.material = material;
+		flywheel.material = material;
 		return this;
 	}
 
-	@Info("完整模型路径, 不写则按设备目录 + 材质推导")
+	@Info("完整模型路径, 不写则按设备目录 + 材质推导; 引擎与配对飞轮同时生效")
 	public SteamEngineDeviceBuilder model(ResourceLocation model) {
 		this.model = model;
+		flywheel.model = model;
 		return this;
 	}
 
@@ -100,7 +157,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 		return this;
 	}
 
-	@Info("满负荷蒸汽消耗 (mB/tick), 默认 12")
+	@Info("满负荷蒸汽消耗 (mB/tick), 不写时使用引擎类的默认值")
 	public SteamEngineDeviceBuilder consumption(double consumption) {
 		this.consumption = consumption;
 		return this;
@@ -112,124 +169,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 		return this;
 	}
 
-	private abstract class DeviceBuilder<B extends Block, E extends BlockEntity> extends BuilderBase<Block> {
-		protected B block;
-		protected Item item;
-		protected BlockEntityType<E> blockEntityType;
-
-		protected DeviceBuilder(ResourceLocation id) {
-			super(id);
-		}
-
-		@Override
-		public RegistryInfo getRegistryType() {
-			return RegistryInfo.BLOCK;
-		}
-
-		@Override
-		public Block createObject() {
-			block = createBlock(createProperties());
-			return block;
-		}
-
-		@Override
-		public void createAdditionalObjects() {
-			RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id, this::buildBlockEntityType));
-			RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id, this::buildItem));
-		}
-
-		/**
-		 * 建方块实体类型, 只由 DeviceBlockEntityTypeBuilder 在方块实体类型注册阶段调用.
-		 */
-		protected BlockEntityType<E> buildBlockEntityType() {
-			BlockEntityType<E> created = BlockEntityType.Builder.of(this::createBlockEntity, block).build(null);
-			blockEntityType = created;
-			return created;
-		}
-
-		/**
-		 * 建方块物品, 只由 DeviceItemBuilder 在物品注册阶段调用.
-		 */
-		protected Item buildItem() {
-			item = new SteamBlockItem(block, new Item.Properties());
-			return item;
-		}
-
-		@Override
-		public void generateAssetJsons(AssetJsonGenerator generator) {
-			generateBlockState(generator);
-			generateItemModel(generator);
-		}
-
-		@Override
-		public void generateLang(LangEventJS event) {
-			event.add(id.toLanguageKey("block"), displayName(id.getPath()));
-		}
-
-		protected abstract String devicePath();
-
-		protected abstract B createBlock(BlockBehaviour.Properties properties);
-
-		protected abstract E createBlockEntity(BlockPos pos, BlockState state);
-
-		protected abstract void generateBlockState(AssetJsonGenerator generator);
-
-		protected String itemModel() {
-			return baseModel() + "_item";
-		}
-
-		protected void generateItemModel(AssetJsonGenerator generator) {
-			JsonObject root = new JsonObject();
-			root.addProperty("parent", modelId(itemModel()));
-			generator.json(itemModelLocation(), root);
-		}
-
-		protected BlockBehaviour.Properties createProperties() {
-			return BlockBehaviour.Properties.copy(SharedProperties.softMetal())
-					.noOcclusion()
-					.sound(SoundType.LANTERN);
-		}
-
-		protected String modelNamespace() {
-			ResourceLocation source = model != null ? model : material;
-			return source.getNamespace();
-		}
-
-		protected String baseModel() {
-			return model != null ? model.getPath() : devicePath() + "/" + material.getPath();
-		}
-
-		protected String modelId(String path) {
-			return modelNamespace() + ":" + path;
-		}
-
-		protected void writeBlockState(AssetJsonGenerator generator, JsonObject variants) {
-			JsonObject root = new JsonObject();
-			root.add("variants", variants);
-			generator.json(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "blockstates/" + id.getPath()), root);
-		}
-
-		protected ResourceLocation itemModelLocation() {
-			return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "models/item/" + id.getPath());
-		}
-
-		protected String displayName(String path) {
-			StringBuilder builder = new StringBuilder();
-			for (String part : path.split("_")) {
-				if (part.isEmpty()) {
-					continue;
-				}
-				if (!builder.isEmpty()) {
-					builder.append(' ');
-				}
-				builder.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
-			}
-			return builder.toString();
-		}
-
-	}
-
-	private class FlywheelBuilder extends DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> {
+	private static class FlywheelBuilder extends DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> {
 		private FlywheelBuilder(ResourceLocation id) {
 			super(id);
 		}
@@ -241,7 +181,14 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 
 		@Override
 		protected SteamFlywheelBlock createBlock(BlockBehaviour.Properties properties) {
-			return new SteamFlywheelBlock(properties);
+			return new SteamFlywheelBlock(properties, () -> blockEntityType, material);
+		}
+
+		@Override
+		protected BlockEntityType<SteamFlywheelBlockEntity> buildBlockEntityType() {
+			BlockEntityType<SteamFlywheelBlockEntity> created = super.buildBlockEntityType();
+			SteamFlywheelBlockEntity.DYNAMIC_TYPES.add(created);
+			return created;
 		}
 
 		@Override
@@ -252,6 +199,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 		@Override
 		protected void generateBlockState(AssetJsonGenerator generator) {
 			JsonObject variants = new JsonObject();
+
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
 				for (String connection : new String[] {"none", "left", "right"}) {
 					JsonObject variant = new JsonObject();
@@ -260,52 +208,43 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 					variants.add("facing=" + direction.getSerializedName() + ",connection=" + connection, variant);
 				}
 			}
+
 			writeBlockState(generator, variants);
 		}
-	}
-
-	private class EngineBuilder extends DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity> {
-		private EngineBuilder(ResourceLocation id) {
-			super(id);
-		}
 
 		@Override
-		protected String devicePath() {
-			return "block/steam/engine";
-		}
-
-		@Override
-		protected SteamEngineBlock createBlock(BlockBehaviour.Properties properties) {
-			/*
-			 * KubeJS 的 startup 脚本在配置文件加载之前执行, 注册阶段不读取任何配置.
-			 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
-			 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
-			 */
-			return new SteamEngineBlock(properties, (builder) -> builder
-					.strength(strength)
-					.speed(speed)
-					.consumption(consumption)
-					.storage(storage));
-		}
-
-		@Override
-		protected SteamEngineBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-			return new SteamEngineBlockEntity(blockEntityType, pos, state);
-		}
-
-
-		@Override
-		protected void generateBlockState(AssetJsonGenerator generator) {
-			JsonObject variants = new JsonObject();
-			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				for (boolean lit : new boolean[] {false, true}) {
-					JsonObject variant = new JsonObject();
-					variant.addProperty("model", modelId(baseModel()));
-					variant.addProperty("y", (int) direction.toYRot() + 180);
-					variants.add("facing=" + direction.getSerializedName() + ",lit=" + lit, variant);
-				}
+		protected void generateBlockModels(AssetJsonGenerator generator) {
+			if (model != null || usesBuiltinModel()) {
+				return;
 			}
-			writeBlockState(generator, variants);
+
+			for (String connection : new String[] {"none", "left", "right"}) {
+				generateModel(generator, baseModel() + "_casing_" + connection, "block/steam/flywheel/bronze_casing_" + connection, flywheelTextures());
+			}
+
+			generateModel(generator, baseModel() + "_wheel", "block/steam/flywheel/bronze_wheel", wheelTextures());
+
+			for (String part : new String[] {"upper_rotating_connector", "lower_rotating_connector", "upper_sliding_connector", "lower_sliding_connector"}) {
+				generateModel(generator, baseModel() + "_" + part, "block/steam/flywheel/bronze_" + part, wheelTextures());
+			}
+
+			generateModel(generator, baseModel() + "_item", "block/steam/flywheel/bronze_item", flywheelTextures());
+		}
+
+		private static Map<String, String> wheelTextures() {
+			Map<String, String> textures = new LinkedHashMap<>();
+			textures.put("0", "block/steam/flywheel/%s_wheel");
+			textures.put("particle", "block/steam/flywheel/%s_wheel");
+			return textures;
+		}
+
+		private static Map<String, String> flywheelTextures() {
+			Map<String, String> textures = new LinkedHashMap<>();
+			textures.put("0", "block/steam/flywheel/%s_wheel");
+			textures.put("5", "block/steam/casing/%s_casing");
+			textures.put("7", "block/steam/gearbox/%s_gearbox");
+			textures.put("particle", "block/steam/flywheel/%s_wheel");
+			return textures;
 		}
 	}
 }

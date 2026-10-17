@@ -11,6 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 蒸汽飞轮方块实体.
  * <p>
@@ -25,6 +28,12 @@ public class SteamFlywheelBlockEntity extends GeneratingKineticBlockEntity {
 	 * 引擎断汽后的缓冲时间 (tick).
 	 */
 	private static final int STOPPING_COOLDOWN = 40;
+
+	/**
+	 * KubeJS 动态注册出来的飞轮方块实体类型. 这些类型不在 Registrate 手上, 客户端要在
+	 * {@code FMLClientSetupEvent} 里补挂 Flywheel 可视化, 在 {@code RegisterRenderers} 里补挂后端渲染器.
+	 */
+	public static final List<BlockEntityType<SteamFlywheelBlockEntity>> DYNAMIC_TYPES = new ArrayList<>();
 
 	private float generatedCapacity;
 	private float generatedSpeed;

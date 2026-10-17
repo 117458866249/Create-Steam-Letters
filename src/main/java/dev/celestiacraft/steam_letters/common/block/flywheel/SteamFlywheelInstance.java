@@ -2,6 +2,7 @@ package dev.celestiacraft.steam_letters.common.block.flywheel;
 
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.base.ShaftVisual;
+import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
@@ -14,6 +15,7 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
 import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 
@@ -44,7 +46,7 @@ public class SteamFlywheelInstance extends ShaftVisual<SteamFlywheelBlockEntity>
 		connectedLeft = blockState.getValue(SteamFlywheelBlock.CONNECTION) == SteamFlywheelBlock.ConnectionState.LEFT;
 
 		wheel = instancerProvider()
-				.instancer(InstanceTypes.TRANSFORMED, Models.partial(SlBlockPartialModel.STEAM_FLYWHEEL_WHEEL, facing.getClockWise()))
+				.instancer(InstanceTypes.TRANSFORMED, Models.partial(SlBlockPartialModel.flywheelWheel(material()), facing.getClockWise()))
 				.createInstance();
 
 		if (connection == null) {
@@ -53,10 +55,10 @@ public class SteamFlywheelInstance extends ShaftVisual<SteamFlywheelBlockEntity>
 			upperSliding = null;
 			lowerSliding = null;
 		} else {
-			upperRotating = createConnector(SlBlockPartialModel.STEAM_FLYWHEEL_UPPER_ROTATING);
-			lowerRotating = createConnector(SlBlockPartialModel.STEAM_FLYWHEEL_LOWER_ROTATING);
-			upperSliding = createConnector(SlBlockPartialModel.STEAM_FLYWHEEL_UPPER_SLIDING);
-			lowerSliding = createConnector(SlBlockPartialModel.STEAM_FLYWHEEL_LOWER_SLIDING);
+			upperRotating = createConnector(SlBlockPartialModel.flywheelConnector(material(), SlBlockPartialModel.UPPER_ROTATING_CONNECTOR));
+			lowerRotating = createConnector(SlBlockPartialModel.flywheelConnector(material(), SlBlockPartialModel.LOWER_ROTATING_CONNECTOR));
+			upperSliding = createConnector(SlBlockPartialModel.flywheelConnector(material(), SlBlockPartialModel.UPPER_SLIDING_CONNECTOR));
+			lowerSliding = createConnector(SlBlockPartialModel.flywheelConnector(material(), SlBlockPartialModel.LOWER_SLIDING_CONNECTOR));
 		}
 
 		wheel.translate(getVisualPosition());
@@ -64,6 +66,13 @@ public class SteamFlywheelInstance extends ShaftVisual<SteamFlywheelBlockEntity>
 
 		animate(entity.angle);
 		lastAngle = entity.angle;
+	}
+
+	/**
+	 * 轮盘与四根传动杆都跟随方块自己的材质.
+	 */
+	private ResourceLocation material() {
+		return blockState.getBlock() instanceof SteamFlywheelBlock flywheel ? flywheel.getMaterial() : SlApis.loadResource("bronze");
 	}
 
 	private TransformedInstance createConnector(PartialModel model) {

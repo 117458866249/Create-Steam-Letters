@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.celestiacraft.steam_letters.compat.shaders.ShaderCompat;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,18 +64,27 @@ public class SteamFlywheelRenderer extends KineticBlockEntityRenderer<SteamFlywh
 			boolean flipAngle = connection.getAxis() == Direction.Axis.X ^ connection.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
 			float rotation = flipAngle ? -angle : angle;
 
-			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.STEAM_FLYWHEEL_UPPER_ROTATING, state), connection), true, true, rotation, flip).light(connectorLight).renderInto(stack, buffer);
-			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.STEAM_FLYWHEEL_LOWER_ROTATING, state), connection), false, true, rotation, flip).light(connectorLight).renderInto(stack, buffer);
-			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.STEAM_FLYWHEEL_UPPER_SLIDING, state), connection), true, false, rotation, flip).light(connectorLight).renderInto(stack, buffer);
-			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.STEAM_FLYWHEEL_LOWER_SLIDING, state), connection), false, false, rotation, flip).light(connectorLight).renderInto(stack, buffer);
+			ResourceLocation material = material(state);
+
+			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.flywheelConnector(material, SlBlockPartialModel.UPPER_ROTATING_CONNECTOR), state), connection), true, true, rotation, flip).light(connectorLight).renderInto(stack, buffer);
+			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.flywheelConnector(material, SlBlockPartialModel.LOWER_ROTATING_CONNECTOR), state), connection), false, true, rotation, flip).light(connectorLight).renderInto(stack, buffer);
+			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.flywheelConnector(material, SlBlockPartialModel.UPPER_SLIDING_CONNECTOR), state), connection), true, false, rotation, flip).light(connectorLight).renderInto(stack, buffer);
+			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.flywheelConnector(material, SlBlockPartialModel.LOWER_SLIDING_CONNECTOR), state), connection), false, false, rotation, flip).light(connectorLight).renderInto(stack, buffer);
 		}
 
 		BlockState referenceState = state.rotate(Rotation.CLOCKWISE_90);
 		Direction referenceFacing = referenceState.getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
 
-		SuperByteBuffer wheel = CachedBuffers.partialFacing(SlBlockPartialModel.STEAM_FLYWHEEL_WHEEL, referenceState, referenceFacing);
+		SuperByteBuffer wheel = CachedBuffers.partialFacing(SlBlockPartialModel.flywheelWheel(material(state)), referenceState, referenceFacing);
 		kineticRotationTransform(wheel, entity, facing.getAxis(), AngleHelper.rad(angle), light);
 		wheel.renderInto(stack, buffer);
+	}
+
+	/**
+	 * 轮盘与四根传动杆都跟随方块自己的材质.
+	 */
+	private ResourceLocation material(BlockState state) {
+		return state.getBlock() instanceof SteamFlywheelBlock flywheel ? flywheel.getMaterial() : SlApis.loadResource("bronze");
 	}
 
 	@Override

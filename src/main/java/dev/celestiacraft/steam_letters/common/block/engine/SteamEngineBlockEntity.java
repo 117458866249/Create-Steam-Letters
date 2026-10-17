@@ -437,24 +437,123 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 	// 客户端表现
 
+	/**
+	 * 排气阀在死点前多少度打开. 活塞走到行程末端之前阀门就开了, 这是蒸汽机的提前排气.
+	 */
+	private static final float EXHAUST_LEAD = 25.0F;
+
+	/**
+	 * 排气过程在曲轴角上占多宽: 死点前 25 度打开, 过死点 15 度后关闭.
+	 */
+	private static final float EXHAUST_SPAN = 40.0F;
+
+	/**
+	 * 排气最猛的一段: 阀门刚打开的前三分之一窗口, 一次喷三颗, 之后每次一颗.
+	 */
+	private static final float EXHAUST_BURST = EXHAUST_SPAN / 3.0F;
+
+	/**
+	 * 上一次排气窗口的序号 ((飞轮角度 + 提前量) / 180 取整). 取整跳一次就是排气阀打开一次,
+	 * 飞轮每一转跳两次: 活塞走到最内与最外两端前后各排气一次.
+	 */
+	private int lastExhaustWindow = Integer.MIN_VALUE;
+
 	private void clientTick() {
-		if (!lit || level == null) {
+		if (level == null || !isRunningOnClient()) {
+			lastExhaustWindow = Integer.MIN_VALUE;
 			return;
 		}
 
-		// 固定每 2 tick 一颗, 不走随机概率, 否则疏密不匀
-		if (level.getGameTime() % 2L != 0L) {
+		SteamFlywheelBlockEntity wheel = getWheel();
+		if (wheel == null) {
 			return;
 		}
 
-		// 端口在模型北侧 (见 block/steam/engine/bronze.json 的 Port 元素, Z 从 -1.8 到 0.2, Y 从 4 到 12),
-		// 中心高度约 0.5 格. 不加横向抖动, 让粒子沿着端口中心排成一条竖直的柱.
+		float angle = wheel.angle;
+		int window = Mth.floor((angle + EXHAUST_LEAD) / 180.0F);
+
+		if (window != lastExhaustWindow) {
+			// 刚进入加载范围时只记下位置, 不补放一次
+			boolean first = lastExhaustWindow == Integer.MIN_VALUE;
+			lastExhaustWindow = window;
+
+			if (!first) {
+				playExhaustSound();
+			}
+		}
+
+		if (isInExhaustWindow(angle)) {
+			// 阀门刚打开时缸压最高, 喷得最猛, 之后随着压力下降变稀
+			spawnExhaustParticles(exhaustProgress(angle) < EXHAUST_BURST ? 3 : 1);
+		}
+	}
+
+	/**
+	 * 当前曲轴角是否落在排气窗口里. 窗口每半转重复一次, 所以按半转取余判断.
+	 */
+	private static boolean isInExhaustWindow(float angle) {
+		return exhaustProgress(angle) <= EXHAUST_SPAN;
+	}
+
+	/**
+	 * 当前曲轴角距离最近一次排气阀打开过去了多少度, 取值落在 [0, 180).
+	 */
+	private static float exhaustProgress(float angle) {
+		return Mth.positiveModulo(angle + EXHAUST_LEAD, 180.0F);
+	}
+
+	/**
+	 * 客户端认为引擎在运转时返回 true.
+	 * <p>
+	 * 读方块状态的 LIT 而不是同名字段: 状态随方块更新同步到客户端, 字段要走 {@code sendData},
+	 * 两者不同步时会出现停转已久的引擎还在冒汽.
+	 */
+	private boolean isRunningOnClient() {
+		BlockState state = getBlockState();
+		return state.hasProperty(SteamEngineBlock.LIT) && state.getValue(SteamEngineBlock.LIT);
+	}
+
+	/**
+	 * 排气阀打开的那一 tick 放一次声音. 音效与 SteamPowered 的蒸汽引擎一致
+	 * ({@link SoundEvents#FIRE_EXTINGUISH}, 音量与音高都是 0.25), 区别只在于触发时机由固定间隔
+	 * 改成活塞行程末端的排气窗口, 因此频率跟着转速走, 每一转两次.
+	 */
+	private void playExhaustSound() {
 		Direction front = getFacing();
-		double x = worldPosition.getX() + 0.5D + front.getStepX() * 0.6D;
-		double y = worldPosition.getY() + 0.5D;
-		double z = worldPosition.getZ() + 0.5D + front.getStepZ() * 0.6D;
+		level.playLocalSound(
+				portX(front), portY(), portZ(front),
+				SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.25F, 0.25F, false
+		);
+	}
 
-		level.addParticle(SlParticles.STEAM.get(), x, y, z, 0.0D, 0.02D, 0.0D);
+	/**
+	 * 在端口喷蒸汽, 与声音出自同一个位置: 排气窗口里每 tick 一次, 阀门刚打开的那一下最多.
+	 */
+	private void spawnExhaustParticles(int count) {
+		Direction front = getFacing();
+		double x = portX(front);
+		double y = portY();
+		double z = portZ(front);
+
+		for (int i = 0; i < count; i++) {
+			double offsetX = (level.random.nextDouble() - 0.5D) * 0.2D;
+			double offsetZ = (level.random.nextDouble() - 0.5D) * 0.2D;
+			level.addParticle(SlParticles.STEAM.get(), x + offsetX, y, z + offsetZ, 0.0D, 0.02D, 0.0D);
+		}
+	}
+
+	// 端口在模型北侧 (见 block/steam/engine/bronze.json 的 Port 元素, Z 从 -1.8 到 0.2, Y 从 4 到 12),
+	// 中心高度约 0.5 格.
+	private double portX(Direction front) {
+		return worldPosition.getX() + 0.5D + front.getStepX() * 0.6D;
+	}
+
+	private double portY() {
+		return worldPosition.getY() + 0.5D;
+	}
+
+	private double portZ(Direction front) {
+		return worldPosition.getZ() + 0.5D + front.getStepZ() * 0.6D;
 	}
 
 	@Override
