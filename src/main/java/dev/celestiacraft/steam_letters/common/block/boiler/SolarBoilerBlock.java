@@ -6,7 +6,7 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
-import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
@@ -24,11 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-/**
- * 太阳能锅炉: 不需要燃料, 直接靠环境光照把水变成蒸汽.
- * <p>
- * 单方块结构, 没有朝向也没有点燃状态.
- */
 public class SolarBoilerBlock extends Block implements IBE<SolarBoilerBlockEntity>, ISteamEngineBlock {
 	private final SteamEngineSpec spec;
 	private final Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType;

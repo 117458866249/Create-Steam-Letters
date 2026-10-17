@@ -135,8 +135,25 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 
 		@Override
 		public void createAdditionalObjects() {
-			RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new BlockEntityTypeBuilder(id));
-			RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id));
+			RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id, this::buildBlockEntityType));
+			RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id, this::buildItem));
+		}
+
+		/**
+		 * 建方块实体类型, 只由 DeviceBlockEntityTypeBuilder 在方块实体类型注册阶段调用.
+		 */
+		protected BlockEntityType<E> buildBlockEntityType() {
+			BlockEntityType<E> created = BlockEntityType.Builder.of(this::createBlockEntity, block).build(null);
+			blockEntityType = created;
+			return created;
+		}
+
+		/**
+		 * 建方块物品, 只由 DeviceItemBuilder 在物品注册阶段调用.
+		 */
+		protected Item buildItem() {
+			item = new SteamBlockItem(block, new Item.Properties());
+			return item;
 		}
 
 		@Override
@@ -203,7 +220,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 				if (part.isEmpty()) {
 					continue;
 				}
-				if (builder.length() > 0) {
+				if (!builder.isEmpty()) {
 					builder.append(' ');
 				}
 				builder.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
@@ -211,40 +228,6 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 			return builder.toString();
 		}
 
-		private class BlockEntityTypeBuilder extends BuilderBase<BlockEntityType<?>> {
-			private BlockEntityTypeBuilder(ResourceLocation id) {
-				super(id);
-			}
-
-			@Override
-			public RegistryInfo getRegistryType() {
-				return RegistryInfo.BLOCK_ENTITY_TYPE;
-			}
-
-			@Override
-			public BlockEntityType<?> createObject() {
-				BlockEntityType<E> created = BlockEntityType.Builder.of(DeviceBuilder.this::createBlockEntity, block).build(null);
-				blockEntityType = created;
-				return created;
-			}
-		}
-
-		private class DeviceItemBuilder extends BuilderBase<Item> {
-			private DeviceItemBuilder(ResourceLocation id) {
-				super(id);
-			}
-
-			@Override
-			public RegistryInfo getRegistryType() {
-				return RegistryInfo.ITEM;
-			}
-
-			@Override
-			public Item createObject() {
-				item = new SteamBlockItem(block, new Item.Properties());
-				return item;
-			}
-		}
 	}
 
 	private class FlywheelBuilder extends DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> {
@@ -271,7 +254,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 		protected void generateBlockState(AssetJsonGenerator generator) {
 			JsonObject variants = new JsonObject();
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				for (String connection : new String[]{"none", "left", "right"}) {
+				for (String connection : new String[] {"none", "left", "right"}) {
 					JsonObject variant = new JsonObject();
 					variant.addProperty("model", modelId(baseModel() + "_casing_" + connection));
 					variant.addProperty("y", (int) direction.toYRot() + 90);
@@ -294,9 +277,11 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 
 		@Override
 		protected SteamEngineBlock createBlock(BlockBehaviour.Properties properties) {
-			// KubeJS 的 startup 脚本在配置文件加载之前执行, 注册阶段不读取任何配置.
-			// 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
-			// SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
+			/*
+			 * KubeJS 的 startup 脚本在配置文件加载之前执行, 注册阶段不读取任何配置.
+			 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
+			 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
+			 */
 			SteamEngineDriveSpec.Builder builder = SteamEngineDriveSpec.builder();
 
 			if (strength != null) {
@@ -324,7 +309,7 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 		protected void generateBlockState(AssetJsonGenerator generator) {
 			JsonObject variants = new JsonObject();
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				for (boolean lit : new boolean[]{false, true}) {
+				for (boolean lit : new boolean[] {false, true}) {
 					JsonObject variant = new JsonObject();
 					variant.addProperty("model", modelId(baseModel()));
 					variant.addProperty("y", (int) direction.toYRot() + 180);

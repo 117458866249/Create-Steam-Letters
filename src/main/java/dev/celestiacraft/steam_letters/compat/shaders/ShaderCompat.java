@@ -14,11 +14,8 @@ import java.util.function.BooleanSupplier;
  * 在光影下可能被光影的着色器接管并整批丢弃, 这时需要让方块实体渲染器继续兜底,
  * 否则玩家看到的就是"方块还在、轮盘整个不见".
  */
-public final class ShaderCompat {
+public class ShaderCompat {
 	private static final BooleanSupplier SHADER_PACK_IN_USE = resolve();
-
-	private ShaderCompat() {
-	}
 
 	public static boolean isShaderPackInUse() {
 		return SHADER_PACK_IN_USE.getAsBoolean();

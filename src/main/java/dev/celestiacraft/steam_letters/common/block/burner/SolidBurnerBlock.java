@@ -6,7 +6,7 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
-import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
 import net.minecraft.core.BlockPos;

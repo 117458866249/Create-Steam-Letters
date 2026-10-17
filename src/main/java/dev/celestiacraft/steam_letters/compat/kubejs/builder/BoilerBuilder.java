@@ -3,7 +3,6 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;

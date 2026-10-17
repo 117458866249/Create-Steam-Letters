@@ -3,7 +3,6 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import com.google.gson.JsonObject;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlock;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
-import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +13,6 @@ public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity
 		super(id);
 	}
 
-	@Info("最高热量值. 燃烧室升温/降温速率均以它的百分比为基准.")
 	public BurnerDeviceBuilder<B, E> maxHeat(double value) {
 		maxHeat = value;
 		return this;

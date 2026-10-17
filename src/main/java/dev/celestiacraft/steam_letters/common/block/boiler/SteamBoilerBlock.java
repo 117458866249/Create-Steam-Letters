@@ -4,7 +4,7 @@ import com.simibubi.create.foundation.block.IBE;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
@@ -22,11 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-/**
- * 蒸汽锅炉: 与正下方的燃烧室配对工作, 消耗水产出蒸汽.
- * <p>
- * 锅炉自身不保存热量, 用水量/产汽量均由注册参数与配置决定.
- */
 public class SteamBoilerBlock extends Block implements IBE<SteamBoilerBlockEntity>, ISteamEngineBlock {
 	private final SteamEngineSpec spec;
 	private final Supplier<BlockEntityType<? extends SteamBoilerBlockEntity>> customBlockEntityType;

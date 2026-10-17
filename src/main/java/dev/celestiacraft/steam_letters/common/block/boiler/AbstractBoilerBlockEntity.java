@@ -1,6 +1,7 @@
 package dev.celestiacraft.steam_letters.common.block.boiler;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.api.machine.heat.IHeatSource;
@@ -23,6 +24,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	public static final int TANK_INPUT = 0;
@@ -75,8 +77,7 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	}
 
 	@Override
-	public void addBehaviours(java.util.List<com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour> behaviours) {
-		// 本设备不依赖任何 Create 行为组件
+	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 	}
 
 	@Override

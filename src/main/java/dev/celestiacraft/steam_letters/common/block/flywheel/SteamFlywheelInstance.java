@@ -21,16 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * 蒸汽飞轮的前端渲染.
- * <p>
- * 半轴由 {@link ShaftVisual} 负责, 这里额外画轮盘与四根传动杆. 轮盘模型
- * (block/steam/flywheel/bronze_wheel) 的盘面法线沿 X 轴, 与 SteamPowered 的飞轮同款,
- * 因此构造时用 reference state 把朝向烘焙进实例, 之后每帧只绕飞轮转轴自转.
- * <p>
- * 所有部件都使用 flywheel 内置的 TRANSFORMED 实例, 不用 Create 的 ROTATING 实例类型:
- * 后者自带自定义顶点程序, 光影包(Iris/Oculus)会接管并丢弃这批实例.
- */
 public class SteamFlywheelInstance extends ShaftVisual<SteamFlywheelBlockEntity> implements SimpleDynamicVisual {
 	private final Direction facing;
 	private final Direction connection;

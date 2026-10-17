@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.flywheel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.celestiacraft.steam_letters.compat.shaders.ShaderCompat;
@@ -19,8 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-
-import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 
 /**
  * 飞轮的后端渲染: 半轴交给父类, 轮盘与四根传动杆在这里补上.
@@ -49,7 +48,7 @@ public class SteamFlywheelRenderer extends KineticBlockEntityRenderer<SteamFlywh
 		}
 
 		BlockState state = entity.getBlockState();
-		Direction facing = state.getValue(HORIZONTAL_FACING);
+		Direction facing = state.getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
 
 		float speed = entity.visualSpeed.get(partialTicks) * 3.0F / 10.0F;
 		float angle = entity.angle + speed * partialTicks;
@@ -69,9 +68,8 @@ public class SteamFlywheelRenderer extends KineticBlockEntityRenderer<SteamFlywh
 			transformConnector(rotateToFacing(CachedBuffers.partial(SlBlockPartialModel.STEAM_FLYWHEEL_LOWER_SLIDING, state), connection), false, false, rotation, flip).light(connectorLight).renderInto(stack, buffer);
 		}
 
-		@SuppressWarnings("deprecation")
 		BlockState referenceState = state.rotate(Rotation.CLOCKWISE_90);
-		Direction referenceFacing = referenceState.getValue(HORIZONTAL_FACING);
+		Direction referenceFacing = referenceState.getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
 
 		SuperByteBuffer wheel = CachedBuffers.partialFacing(SlBlockPartialModel.STEAM_FLYWHEEL_WHEEL, referenceState, referenceFacing);
 		kineticRotationTransform(wheel, entity, facing.getAxis(), AngleHelper.rad(angle), light);
@@ -80,7 +78,7 @@ public class SteamFlywheelRenderer extends KineticBlockEntityRenderer<SteamFlywh
 
 	@Override
 	protected SuperByteBuffer getRotatedModel(SteamFlywheelBlockEntity entity, BlockState state) {
-		return CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, state, state.getValue(HORIZONTAL_FACING).getOpposite());
+		return CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, state, state.getValue(HorizontalKineticBlock.HORIZONTAL_FACING).getOpposite());
 	}
 
 	private SuperByteBuffer transformConnector(SuperByteBuffer buffer, boolean upper, boolean rotating, float angle, boolean flip) {
@@ -109,8 +107,8 @@ public class SteamFlywheelRenderer extends KineticBlockEntityRenderer<SteamFlywh
 		return buffer;
 	}
 
-	private SuperByteBuffer rotateToFacing(SuperByteBuffer buffer, Direction facing) {
-		buffer.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(facing)), Direction.Axis.Y);
+	private SuperByteBuffer rotateToFacing(SuperByteBuffer buffer, Direction direction) {
+		buffer.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(direction)), Direction.Axis.Y);
 		return buffer;
 	}
 }

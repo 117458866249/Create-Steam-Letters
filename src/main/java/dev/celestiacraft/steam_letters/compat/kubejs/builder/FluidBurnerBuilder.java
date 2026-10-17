@@ -4,7 +4,6 @@ import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

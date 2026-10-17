@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import org.jetbrains.annotations.NotNull;
 
 /**

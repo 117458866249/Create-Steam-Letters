@@ -460,8 +460,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		level.addParticle(ParticleTypes.CLOUD, x, y, z, 0.0D, 0.012D, 0.0D);
 	}
 
-	// 护目镜
-
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 		SlLang.translate(SlTranKeys.GOGGLE_STEAM_ENGINE)
@@ -519,8 +517,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	private static String formatSeconds(int ticks) {
 		return String.format(Locale.ROOT, "%.1f", ticks / 20.0D) + "s";
 	}
-
-	// 能力与持久化
 
 	private static boolean isSteamFluid(FluidStack stack) {
 		if (stack.isEmpty()) {

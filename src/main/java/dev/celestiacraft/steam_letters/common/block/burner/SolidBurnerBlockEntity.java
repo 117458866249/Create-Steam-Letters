@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
  */
 public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	private static final String NBT_FUEL = "Fuel";
-
 	/**
 	 * 燃料槽容量, 允许玩家一次性囤一小堆.
 	 */

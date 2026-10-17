@@ -9,7 +9,6 @@ import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
-import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -58,43 +57,19 @@ public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity>
 
 	@Override
 	public void createAdditionalObjects() {
-		RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id));
-		RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id));
+		RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id, this::buildBlockEntityType));
+		RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id, this::buildItem));
 	}
 
-	private class DeviceBlockEntityTypeBuilder extends BuilderBase<BlockEntityType<?>> {
-		private DeviceBlockEntityTypeBuilder(ResourceLocation id) {
-			super(id);
-		}
-
-		@Override
-		public RegistryInfo getRegistryType() {
-			return RegistryInfo.BLOCK_ENTITY_TYPE;
-		}
-
-		@Override
-		public BlockEntityType<?> createObject() {
-			BlockEntityType<E> created = BlockEntityType.Builder.of(SteamDeviceBuilder.this::createBlockEntity, block).build(null);
-			blockEntityType = created;
-			return created;
-		}
+	BlockEntityType<E> buildBlockEntityType() {
+		BlockEntityType<E> created = BlockEntityType.Builder.of(this::createBlockEntity, block).build(null);
+		blockEntityType = created;
+		return created;
 	}
 
-	private class DeviceItemBuilder extends BuilderBase<Item> {
-		private DeviceItemBuilder(ResourceLocation id) {
-			super(id);
-		}
-
-		@Override
-		public RegistryInfo getRegistryType() {
-			return RegistryInfo.ITEM;
-		}
-
-		@Override
-		public Item createObject() {
-			item = createBlockItem(block);
-			return item;
-		}
+	Item buildItem() {
+		item = createBlockItem(block);
+		return item;
 	}
 
 	protected BlockBehaviour.Properties createProperties() {
@@ -113,13 +88,11 @@ public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity>
 
 	protected abstract String devicePath();
 
-	@Info("材质, 默认 steam_letters:bronze. 用命名空间区分来自哪个模组的贴图, 例如 material('steam_letters:steel').")
 	public SteamDeviceBuilder<B, E> material(ResourceLocation material) {
 		this.material = material;
 		return this;
 	}
 
-	@Info("完整模型路径覆盖, 例如 steam_letters:block/steam/boiler/bronze. 设置后忽略 material.")
 	public SteamDeviceBuilder<B, E> model(ResourceLocation model) {
 		this.model = model;
 		return this;
@@ -132,23 +105,14 @@ public abstract class SteamDeviceBuilder<B extends Block, E extends BlockEntity>
 		return devicePath() + "/" + material.getPath();
 	}
 
-	/**
-	 * 模型路径所属的命名空间: material 与 model 各自决定, 没给 model 时跟随 material
-	 */
 	protected String modelNamespace() {
 		return model != null ? model.getNamespace() : material.getNamespace();
 	}
 
-	/**
-	 * 模型的完整 ID, 例如 {@code steam_letters:block/steam/boiler/steel}
-	 */
 	protected String modelId(String modelPath) {
 		return modelNamespace() + ":" + modelPath;
 	}
 
-	/**
-	 * 材质目录下的部件贴图 ID, 例如 {@code steam_letters:block/steam/boiler/steel/side}
-	 */
 	protected String textureId(String modelPath, String part) {
 		return modelNamespace() + ":" + modelPath + "/" + part;
 	}

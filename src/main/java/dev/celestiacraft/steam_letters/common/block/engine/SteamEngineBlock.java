@@ -6,7 +6,8 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
-import dev.celestiacraft.steam_letters.client.block.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
+import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
 import dev.celestiacraft.steam_letters.utils.BlockFluidInteractions;
 import lombok.Getter;
@@ -57,7 +58,8 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+		return defaultBlockState()
+				.setValue(FACING, context.getHorizontalDirection());
 	}
 
 	/**
