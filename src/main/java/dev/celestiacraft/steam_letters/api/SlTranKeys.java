@@ -30,7 +30,12 @@ public class SlTranKeys {
 			GOGGLE_STEAM_ENGINE_STRESS,
 			GOGGLE_STEAM_ENGINE_STEAM,
 			JEI_SOLID_FUEL,
-			JEI_FLUID_FUEL;
+			JEI_FLUID_FUEL,
+			TOOLTIP_SEALED_CONTAINER_EMPTY,
+			TOOLTIP_SEALED_CONTAINER_FLUID,
+			TOOLTIP_STEAM_CONTAINER_EXTRACT,
+			TOOLTIP_STEAM_CONTAINER_INSERT,
+			TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -64,6 +69,12 @@ public class SlTranKeys {
 
 		JEI_SOLID_FUEL = "jei.solid_fuel";
 		JEI_FLUID_FUEL = "jei.fluid_fuel";
+
+		TOOLTIP_SEALED_CONTAINER_EMPTY = "tooltip.sealed_steam_container.empty";
+		TOOLTIP_SEALED_CONTAINER_FLUID = "tooltip.sealed_steam_container.fluid";
+		TOOLTIP_STEAM_CONTAINER_EXTRACT = "tooltip.steam_container.extract";
+		TOOLTIP_STEAM_CONTAINER_INSERT = "tooltip.steam_container.insert";
+		TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE = "tooltip.steam_container.extract_more";
 	}
 
 	/**

@@ -92,6 +92,11 @@
 	"steam_letters.gui.goggles.steam_engine.stress": "应力输出",
 	"steam_letters.jei.fluid_fuel": "流体燃料",
 	"steam_letters.jei.solid_fuel": "固体燃料",
+	"steam_letters.tooltip.sealed_steam_container.empty": "可容纳 _%s mB_ 蒸汽",
+	"steam_letters.tooltip.sealed_steam_container.fluid": "%s: _%s_ / %s mB",
+	"steam_letters.tooltip.steam_container.extract": "▸ 右键锅炉、流体储罐或飞轮引擎以抽取蒸汽",
+	"steam_letters.tooltip.steam_container.extract_more": "▸ 潜行右键以继续抽取",
+	"steam_letters.tooltip.steam_container.insert": "▸ 右键流体储罐或飞轮引擎以灌出蒸汽",
 	"steam_letters.tooltip.steam_hammer.behaviour1": "仅当机器内有 _%s mB_ 蒸汽时才能工作",
 	"steam_letters.tooltip.steam_hammer.behaviour2": "每次工作消耗 _%s mB_ 蒸汽",
 	"steam_letters.tooltip.steam_hammer.condition1": "工作时:",
@@ -104,5 +109,7 @@
 	"item.steam_letters.bronze_plate": "青铜板",
 	"item.steam_letters.incomplete_steam_mechanism": "蒸汽构件(半成品)",
 	"item.steam_letters.steam_mechanism": "蒸汽构件",
-	"itemGroup.steam_letters.basic": "机械动力: 来自蒸汽的信"
+	"itemGroup.steam_letters.basic": "机械动力: 来自蒸汽的信",
+	"item.steam_letters.empty_steam_container": "空的密封蒸汽容器",
+	"item.steam_letters.sealed_steam_container": "密封蒸汽容器"
 }

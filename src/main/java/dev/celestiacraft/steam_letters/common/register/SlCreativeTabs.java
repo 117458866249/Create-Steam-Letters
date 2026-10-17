@@ -2,13 +2,15 @@ package dev.celestiacraft.steam_letters.common.register;
 
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
+import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,17 +31,31 @@ public class SlCreativeTabs {
 					.displayItems((parameters, output) -> {
 						ForgeRegistries.ITEMS.getEntries().forEach((entry) -> {
 							ResourceKey<Item> key = entry.getKey();
+							Item item = entry.getValue();
 
-							if (key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
-								output.accept(entry.getValue());
+							if (!key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
+								return;
 							}
-						});
-						ForgeRegistries.BLOCKS.getEntries().forEach((entry) -> {
-							ResourceKey<Block> key = entry.getKey();
 
-							if (key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
-								output.accept(entry.getValue());
+							if (item instanceof SteamContainerItem container && !container.isEmptied()) {
+								ItemStack steam = item.getDefaultInstance();
+								SteamContainerItem.writeFluid(steam, new FluidStack(
+										SlFluids.STEAM.get(),
+										SteamContainerItem.CAPACITY
+								));
+								output.accept(steam);
+
+								ItemStack superheatedSteam = item.getDefaultInstance();
+								SteamContainerItem.writeFluid(superheatedSteam, new FluidStack(
+										SlFluids.SUPERHEATED_STEAM.get(),
+										SteamContainerItem.CAPACITY
+								));
+								output.accept(superheatedSteam);
+
+								return;
 							}
+
+							output.accept(item);
 						});
 					})
 					.build();

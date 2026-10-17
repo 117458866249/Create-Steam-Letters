@@ -15,7 +15,16 @@ public class English {
 		addGoggleLang(provider);
 		addSteamEngineLang(provider);
 		addJeiLang(provider);
+		addSteamContainerLang(provider);
 		addConfigLang(provider);
+	}
+
+	private static void addSteamContainerLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SEALED_CONTAINER_EMPTY), "Holds up to _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SEALED_CONTAINER_FLUID), "%s: _%s_ / %s mB");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT), "▸ Right-click a boiler, fluid tank or steam engine to extract steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_INSERT), "▸ Right-click a fluid tank or steam engine to inject steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE), "▸ Sneak-right-click to keep extracting");
 	}
 
 	private static void addGoggleLang(RegistrateLangProvider provider) {
