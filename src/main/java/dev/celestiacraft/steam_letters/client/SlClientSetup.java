@@ -30,6 +30,7 @@ public class SlClientSetup {
 		event.registerSpriteSet(SlParticles.STEAM.get(), SteamParticle.Factory::new);
 	}
 
+
 	private static <T extends ForgeFlowingFluid> void applyTranslucentLayer(FluidEntry<T> entry) {
 		RenderType translucent = RenderType.translucent();
 		Fluid flowing = entry.get();
