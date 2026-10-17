@@ -1,13 +1,13 @@
 package dev.celestiacraft.steam_letters.config.common;
 
-import javax.annotation.Nullable;
-
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
 
 public class SteamConfig extends ConfigModule {
 	public static ForgeConfigSpec.DoubleValue
@@ -25,7 +25,7 @@ public class SteamConfig extends ConfigModule {
 				.defineInRange("superheated_steam_consumption_multiplier", 0.25, 0.0, 1.0);
 
 		OUTPUT_STEAM_FLUID = builder.translation(key("output_steam_fluid"))
-				.comment("Fluid id produced by steam boilers and solar boilers. Existing tank contents are never converted when this changes.")
+				.comment(commentKeyOf("output_steam_fluid"))
 				.define("output_steam_fluid", "steam_letters:steam");
 	}
 

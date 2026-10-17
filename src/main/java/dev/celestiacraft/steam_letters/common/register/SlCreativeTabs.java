@@ -18,8 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class SlCreativeTabs {
 	public static final DeferredRegister<CreativeModeTab> TABS;
 
-	public static final RegistryObject<CreativeModeTab>
-			BASIC;
+	public static final RegistryObject<CreativeModeTab> BASIC;
 
 	static {
 		TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), CreateLettersSteam.MODID);

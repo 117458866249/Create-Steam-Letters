@@ -24,14 +24,14 @@ public class SteamBoilerConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		EFFICIENCY_THRESHOLD_1 = builder.translation(key("efficiency_threshold_1"))
-				.comment("Lowest heat percentage at which the boiler starts producing steam.")
+				.comment(commentKeyOf("efficiency_threshold_1"))
 				.defineInRange("efficiency_threshold_1", 25, 0, 100);
 		EFFICIENCY_THRESHOLD_2 = builder.translation(key("efficiency_threshold_2"))
 				.defineInRange("efficiency_threshold_2", 50, 0, 100);
 		EFFICIENCY_THRESHOLD_3 = builder.translation(key("efficiency_threshold_3"))
 				.defineInRange("efficiency_threshold_3", 75, 0, 100);
 		EFFICIENCY_THRESHOLD_4 = builder.translation(key("efficiency_threshold_4"))
-				.comment("Heat percentage required for the boiler to run at full efficiency.")
+				.comment(commentKeyOf("efficiency_threshold_4"))
 				.defineInRange("efficiency_threshold_4", 100, 0, 100);
 
 		EFFICIENCY_1 = builder.translation(key("efficiency_1"))

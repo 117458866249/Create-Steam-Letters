@@ -20,7 +20,7 @@ public class CommonConfigs {
 	public static final SteamEngineConfig STEAM_ENGINE;
 
 	static {
-		BUILDER.comment("All settings below will only take effect after restarting the server or client.")
+		BUILDER.comment(ConfigModule.commentKey("general"))
 				.translation(ConfigModule.translationKey("general"))
 				.push("general");
 
