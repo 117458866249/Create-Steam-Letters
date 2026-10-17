@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.security.SecureRandom;
 
 /*
- * Portions derived from SteamPowered, Copyright (c) 2026 yision1.
+ * Portions derived from SteamPowered, Copyright (c) 2026 TeamMoegMC.
  * <p>
  * Source: <a href="https://github.com/TeamMoegMC/SteamPowered">
  * https://github.com/TeamMoegMC/SteamPowered
