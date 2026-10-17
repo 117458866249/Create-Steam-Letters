@@ -83,7 +83,7 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 		tickProduction();

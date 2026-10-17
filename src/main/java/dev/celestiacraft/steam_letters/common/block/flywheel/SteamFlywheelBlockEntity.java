@@ -157,7 +157,7 @@ public class SteamFlywheelBlockEntity extends GeneratingKineticBlockEntity {
 		if (level == null) {
 			return;
 		}
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			float target = isVirtual() ? getSpeed() : getGeneratedSpeed();
 			visualSpeed.target(target).tick();
 			angle += visualSpeed.value() * 3.0F / 10.0F;
@@ -180,7 +180,7 @@ public class SteamFlywheelBlockEntity extends GeneratingKineticBlockEntity {
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 		Direction connection = SteamFlywheelBlock.getConnection(getBlockState());

@@ -89,7 +89,7 @@ public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage
 		boolean applied = inventory.appliedRecipe;
 		super.tick();
 
-		if (level.isClientSide || applied || !inventory.appliedRecipe) {
+		if (level.isClientSide() || applied || !inventory.appliedRecipe) {
 			return;
 		}
 

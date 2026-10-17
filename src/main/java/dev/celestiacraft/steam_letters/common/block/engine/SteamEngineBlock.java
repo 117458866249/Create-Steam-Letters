@@ -62,7 +62,7 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 			return InteractionResult.PASS;
 		}
 		Level level = context.getLevel();
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		}
 		level.setBlock(context.getClickedPos(), state.setValue(FACING, face), 3);

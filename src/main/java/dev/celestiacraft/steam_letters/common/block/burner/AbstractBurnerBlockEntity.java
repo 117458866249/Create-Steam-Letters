@@ -66,7 +66,7 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 
@@ -133,7 +133,7 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 		if (heat == syncedHeat && burnTime == syncedBurnTime) {

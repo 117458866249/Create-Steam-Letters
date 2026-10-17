@@ -40,7 +40,7 @@ public class BlockFluidInteractions {
 			}
 		}
 
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		}
 

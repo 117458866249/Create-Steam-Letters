@@ -28,7 +28,7 @@ public class SteamBoilerBlockEntity extends AbstractBoilerBlockEntity {
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 		hasValidBurner = getHeatSource() != null;

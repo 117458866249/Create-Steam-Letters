@@ -119,7 +119,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		if (level == null) {
 			return;
 		}
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			clientTick();
 			return;
 		}
@@ -129,7 +129,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 

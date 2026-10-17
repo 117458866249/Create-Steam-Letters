@@ -189,7 +189,7 @@ public class BronzeBasinBlockEntity extends BasinBlockEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide) {
+		if (level == null || level.isClientSide()) {
 			return;
 		}
 		pushOutputFluidsToSpoutputTarget();
