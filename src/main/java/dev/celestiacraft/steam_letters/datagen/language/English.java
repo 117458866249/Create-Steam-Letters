@@ -6,6 +6,9 @@ import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutModeScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
+import net.createmod.ponder.api.registration.LangRegistryAccess;
+import net.createmod.ponder.foundation.PonderIndex;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
@@ -17,6 +20,9 @@ public class English {
 		addJeiLang(provider);
 		addSteamContainerLang(provider);
 		addConfigLang(provider);
+
+		LangRegistryAccess access = PonderIndex.getLangAccess();
+		access.provideLang(CreateLettersSteam.MODID, provider::add);
 	}
 
 	private static void addSteamContainerLang(RegistrateLangProvider provider) {
@@ -162,7 +168,7 @@ public class English {
 	/**
 	 * 配置项的说明文字 (comment) 翻译.
 	 * <p>
-	 * {@link net.minecraftforge.common.ForgeConfigSpec.Builder#comment(String...)} 只接受纯字符串,
+	 * {@link ForgeConfigSpec.Builder#comment(String...)} 只接受纯字符串,
 	 * 没有任何翻译通道, 所以各 ConfigModule 里写的是 {@code .comment(commentKeyOf("xxx"))} ——
 	 * 直接把说明本身写成翻译键, toml 里看到的就是那串键名.
 	 * <p>
@@ -202,9 +208,10 @@ public class English {
 				"Heat lost per second while no fuel is burning, as a percentage of the burner max heat.");
 
 		provider.add(ConfigModule.commentKey("steam_engine", "suck_efficiency"),
-				"Efficiency (0~1) of steam drawn directly from an adjacent boiler.\n"
-						+ "4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine,\n"
-						+ "so a directly fed engine caps out at 75% of its stress output.");
+				"""
+						Efficiency (0~1) of steam drawn directly from an adjacent boiler.
+						4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine,
+						so a directly fed engine caps out at 75% of its stress output.""");
 		provider.add(ConfigModule.commentKey("steam_engine", "superheated_consumption_multiplier"),
 				"Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n"
 						+ "0.5 means it only needs half the steam of a normal-steam run.");

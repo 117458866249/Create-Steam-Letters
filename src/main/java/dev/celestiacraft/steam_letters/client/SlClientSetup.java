@@ -3,8 +3,10 @@ package dev.celestiacraft.steam_letters.client;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.client.particle.SteamParticle;
+import dev.celestiacraft.steam_letters.client.ponder.SlPonderPlugin;
 import dev.celestiacraft.steam_letters.common.register.SlFluids;
 import dev.celestiacraft.steam_letters.common.register.SlParticles;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.material.Fluid;
@@ -19,6 +21,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class SlClientSetup {
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
+		PonderIndex.addPlugin(new SlPonderPlugin());
+
 		event.enqueueWork(() -> {
 			applyTranslucentLayer(SlFluids.STEAM);
 			applyTranslucentLayer(SlFluids.SUPERHEATED_STEAM);
