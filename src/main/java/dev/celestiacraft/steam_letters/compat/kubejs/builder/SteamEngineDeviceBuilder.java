@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.data.SharedProperties;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
-import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
@@ -40,10 +39,10 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 
 	protected ResourceLocation material = SlApis.loadResource("bronze");
 	protected ResourceLocation model;
-	protected Double strength;
-	protected Double speed;
-	protected Double consumption;
-	protected Integer storage;
+	protected double strength;
+	protected double speed;
+	protected double consumption;
+	protected int storage;
 
 	private final DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> flywheel;
 	private final DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity> engine;
@@ -282,21 +281,11 @@ public class SteamEngineDeviceBuilder extends BuilderBase<Block> {
 			 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
 			 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
 			 */
-			SteamEngineDriveSpec.Builder builder = SteamEngineDriveSpec.builder();
-
-			if (strength != null) {
-				builder.strength(strength);
-			}
-			if (speed != null) {
-				builder.speed(speed);
-			}
-			if (consumption != null) {
-				builder.consumption(consumption);
-			}
-			if (storage != null) {
-				builder.storage(storage);
-			}
-			return new SteamEngineBlock(properties, builder.build());
+			return new SteamEngineBlock(properties, (builder) -> builder
+					.strength(strength)
+					.speed(speed)
+					.consumption(consumption)
+					.storage(storage));
 		}
 
 		@Override

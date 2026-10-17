@@ -7,7 +7,6 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
 import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
-import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
 import dev.celestiacraft.steam_letters.utils.BlockFluidInteractions;
 import lombok.Getter;
@@ -29,23 +28,17 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * 飞轮引擎: 消耗蒸汽、驱动飞轮做功的设备.
- * <p>
- * 它本身不接入 Create 动力网络, 只是「控制器 + 耗汽方」: 所有动力参数都写在它身上,
- * 再通过 {@link SteamFlywheelBlockEntity} 把转速与应力推进网络.
- * <p>
- * 空间关系: 引擎水平朝向的两格之外是配对飞轮, 背面紧贴的那一格是可选汽源 (锅炉输出罐).
- */
+import java.util.function.Consumer;
+
 public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<SteamEngineBlockEntity>, IWrenchable {
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
 	@Getter
 	private final SteamEngineDriveSpec driveSpec;
 
-	public SteamEngineBlock(Properties properties, SteamEngineDriveSpec driveSpec) {
+	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer) {
 		super(properties);
-		this.driveSpec = driveSpec;
+		driveSpec = SteamEngineDriveSpec.of(configurer);
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH)
 				.setValue(LIT, false));
@@ -62,9 +55,6 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 				.setValue(FACING, context.getHorizontalDirection());
 	}
 
-	/**
-	 * 扳手把引擎转向点击的水平面, 方便对准飞轮.
-	 */
 	@Override
 	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
 		Direction face = context.getClickedFace();
@@ -79,9 +69,6 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 		return InteractionResult.SUCCESS;
 	}
 
-	/**
-	 * 手持蒸汽容器右键时, 把容器里的蒸汽灌进引擎自带的罐里.
-	 */
 	@Override
 	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, BlockHitResult result) {
 		return BlockFluidInteractions.fillOnly(level, pos, player, hand, result.getDirection());

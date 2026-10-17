@@ -1,6 +1,5 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
-import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -20,11 +19,10 @@ public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBo
 
 	@Override
 	protected SteamBoilerBlock createBlock(BlockBehaviour.Properties properties) {
-		SteamEngineSpec spec = SteamEngineSpec.builder()
+		return new SteamBoilerBlock(properties, (builder) -> builder
 				.capacity(capacityOr(() -> SteamBoilerBlockEntity.DEFAULT_CAPACITY))
-				.production(productionOr(() -> SteamBoilerBlockEntity.DEFAULT_PRODUCTION))
-				.build();
-		return new SteamBoilerBlock(properties, spec, () -> blockEntityType);
+				.production(productionOr(() -> SteamBoilerBlockEntity.DEFAULT_PRODUCTION)),
+				() -> blockEntityType);
 	}
 
 	@Override

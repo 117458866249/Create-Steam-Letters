@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -29,12 +30,12 @@ import java.util.function.Supplier;
 public class FluidBurnerBlock extends AbstractBurnerBlock implements IBE<FluidBurnerBlockEntity> {
 	private final Supplier<BlockEntityType<? extends FluidBurnerBlockEntity>> customBlockEntityType;
 
-	public FluidBurnerBlock(Properties properties, SteamEngineSpec spec) {
-		this(properties, spec, null);
+	public FluidBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
+		this(properties, configurer, null);
 	}
 
-	public FluidBurnerBlock(Properties properties, SteamEngineSpec spec, Supplier<BlockEntityType<? extends FluidBurnerBlockEntity>> customBlockEntityType) {
-		super(properties, spec);
+	public FluidBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends FluidBurnerBlockEntity>> customBlockEntityType) {
+		super(properties, configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}
 

@@ -37,16 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * 飞轮引擎的方块实体: 蒸汽的消费者与飞轮的动力来源.
- * <p>
- * 工作流程 (只在服务端执行):
- * <ol>
- *     <li>确认正前方 {@value #WHEEL_DISTANCE} 格外存在配对飞轮, 否则立刻停机且不消耗蒸汽;</li>
- *     <li>按预热曲线累加本 tick 的蒸汽需求, 先扣自带罐, 再向背面的汽源抽取 (抽多少都要打掉固定的损耗);</li>
- *     <li>按实际到手蒸汽与需求的比值缩放应力, 连同恒定转速一起写进飞轮, 由飞轮推进动力网络.</li>
- * </ol>
- */
 public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 	public static final String NBT_TANK = "Tank";
 	public static final String NBT_HEATUP = "Heatup";
@@ -54,18 +44,9 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	public static final String NBT_STRENGTH = "AppliedStrength";
 	public static final String NBT_LIT = "Lit";
 	public static final String NBT_WHEEL = "Wheel";
-
-	/**
-	 * 引擎与飞轮的间距 (隔一格, 中间允许塞入其他方块).
-	 */
 	public static final int WHEEL_DISTANCE = 2;
-
 	private static final int STAGES = 4;
 	private static final double MIN_SUCK_EFFICIENCY = 0.001D;
-
-	/**
-	 * 内置青铜飞轮引擎的默认参数: 16384 SU / 32 RPM / 12 mB/tick, 自带蒸汽罐 32000 mB.
-	 */
 	public static final double DEFAULT_STRENGTH = 16384.0D;
 	public static final double DEFAULT_SPEED = 32.0D;
 	public static final double DEFAULT_CONSUMPTION = 12.0D;

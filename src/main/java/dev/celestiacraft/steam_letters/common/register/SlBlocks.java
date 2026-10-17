@@ -13,21 +13,19 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
 import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
 import dev.celestiacraft.steam_letters.client.models.ItemModelGen;
-import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
-import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
-import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
-import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
-import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
-import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlock;
-import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlock;
-import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutBlock;
+import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlock;
+import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
+import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.bronze_basin.BronzeBasinBlock;
+import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
+import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlock;
+import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
+import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_hammer.SteamHammerBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_mixer.SteamMixerBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_saw.SteamSawBlock;
@@ -120,10 +118,10 @@ public class SlBlocks {
 				.register();
 
 		BRONZE_BOILER = SlApis.REGISTRATE.block("bronze_boiler", (properties) -> {
-					return new SteamBoilerBlock(properties, SteamEngineSpec.builder()
-							.capacity(SteamBoilerBlockEntity.DEFAULT_CAPACITY)
-							.production(SteamBoilerBlockEntity.DEFAULT_PRODUCTION)
-							.build());
+					return new SteamBoilerBlock(properties, (builder) -> {
+						builder.capacity(SteamBoilerBlockEntity.DEFAULT_CAPACITY)
+								.production(SteamBoilerBlockEntity.DEFAULT_PRODUCTION);
+					});
 				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/boiler/bronze"))
@@ -141,10 +139,10 @@ public class SlBlocks {
 				.register();
 
 		BRONZE_SOLAR_BOILER = SlApis.REGISTRATE.block("bronze_solar_boiler", (properties) -> {
-					return new SolarBoilerBlock(properties, SteamEngineSpec.builder()
-							.capacity(SolarBoilerBlockEntity.DEFAULT_CAPACITY)
-							.production(SolarBoilerBlockEntity.DEFAULT_PRODUCTION)
-							.build());
+					return new SolarBoilerBlock(properties, (builder) -> {
+						builder.capacity(SolarBoilerBlockEntity.DEFAULT_CAPACITY)
+								.production(SolarBoilerBlockEntity.DEFAULT_PRODUCTION);
+					});
 				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solar_boiler/bronze"))
@@ -162,9 +160,9 @@ public class SlBlocks {
 				.register();
 
 		BRONZE_SOLID_BURNER = SlApis.REGISTRATE.block("bronze_solid_burner", (properties) -> {
-					return new SolidBurnerBlock(properties, SteamEngineSpec.builder()
-							.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)
-							.build());
+					return new SolidBurnerBlock(properties, (builder) -> {
+						builder.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT);
+					});
 				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solid_burner/bronze"))
@@ -182,10 +180,10 @@ public class SlBlocks {
 				.register();
 
 		BRONZE_FLUID_BURNER = SlApis.REGISTRATE.block("bronze_fluid_burner", (properties) -> {
-					return new FluidBurnerBlock(properties, SteamEngineSpec.builder()
-							.capacity(FluidBurnerBlockEntity.DEFAULT_CAPACITY)
-							.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)
-							.build());
+					return new FluidBurnerBlock(properties, (builder) -> {
+						builder.capacity(FluidBurnerBlockEntity.DEFAULT_CAPACITY)
+								.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT);
+					});
 				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/fluid_burner/bronze"))
@@ -219,12 +217,12 @@ public class SlBlocks {
 				.register();
 
 		BRONZE_STEAM_ENGINE = SlApis.REGISTRATE.block("bronze_steam_engine", (properties) -> {
-					return new SteamEngineBlock(properties, SteamEngineDriveSpec.builder()
-							.strength(SteamEngineBlockEntity.DEFAULT_STRENGTH)
-							.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
-							.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
-							.storage(SteamEngineBlockEntity.DEFAULT_STORAGE)
-							.build());
+					return new SteamEngineBlock(properties, (builder) -> {
+						builder.strength(SteamEngineBlockEntity.DEFAULT_STRENGTH)
+								.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
+								.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
+								.storage(SteamEngineBlockEntity.DEFAULT_STORAGE);
+					});
 				})
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/engine/bronze_item"))

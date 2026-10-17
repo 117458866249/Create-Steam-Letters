@@ -21,17 +21,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SolidBurnerBlock extends AbstractBurnerBlock implements IBE<SolidBurnerBlockEntity> {
 	private final Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType;
 
-	public SolidBurnerBlock(Properties properties, SteamEngineSpec spec) {
-		this(properties, spec, null);
+	public SolidBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
+		this(properties, configurer, null);
 	}
 
-	public SolidBurnerBlock(Properties properties, SteamEngineSpec spec, Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType) {
-		super(properties, spec);
+	public SolidBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SolidBurnerBlockEntity>> customBlockEntityType) {
+		super(properties, configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}
 

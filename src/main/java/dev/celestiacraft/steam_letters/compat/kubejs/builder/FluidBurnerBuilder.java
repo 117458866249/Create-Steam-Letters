@@ -1,6 +1,5 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
-import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
@@ -28,11 +27,10 @@ public class FluidBurnerBuilder extends BurnerDeviceBuilder<FluidBurnerBlock, Fl
 
 	@Override
 	protected FluidBurnerBlock createBlock(BlockBehaviour.Properties properties) {
-		SteamEngineSpec spec = SteamEngineSpec.builder()
+		return new FluidBurnerBlock(properties, (builder) -> builder
 				.capacity(capacityOr(() -> FluidBurnerBlockEntity.DEFAULT_CAPACITY))
-				.maxHeat(maxHeatOr(() -> AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT))
-				.build();
-		return new FluidBurnerBlock(properties, spec, () -> blockEntityType);
+				.maxHeat(maxHeatOr(() -> AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)),
+				() -> blockEntityType);
 	}
 
 	@Override

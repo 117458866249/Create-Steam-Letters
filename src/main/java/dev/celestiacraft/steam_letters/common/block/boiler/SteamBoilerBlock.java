@@ -20,19 +20,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SteamBoilerBlock extends Block implements IBE<SteamBoilerBlockEntity>, ISteamEngineBlock {
 	private final SteamEngineSpec spec;
 	private final Supplier<BlockEntityType<? extends SteamBoilerBlockEntity>> customBlockEntityType;
 
-	public SteamBoilerBlock(Properties properties, SteamEngineSpec spec) {
-		this(properties, spec, null);
+	public SteamBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
+		this(properties, configurer, null);
 	}
 
-	public SteamBoilerBlock(Properties properties, SteamEngineSpec spec, Supplier<BlockEntityType<? extends SteamBoilerBlockEntity>> customBlockEntityType) {
+	public SteamBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SteamBoilerBlockEntity>> customBlockEntityType) {
 		super(properties);
-		this.spec = spec;
+		this.spec = SteamEngineSpec.of(configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}
 

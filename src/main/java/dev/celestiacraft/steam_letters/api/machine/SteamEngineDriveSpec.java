@@ -1,16 +1,9 @@
 package dev.celestiacraft.steam_letters.api.machine;
 
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
-/**
- * 飞轮引擎的动力规格.
- * <p>
- * 与 {@link SteamEngineSpec} (锅炉/燃烧室的罐容量、产汽量、最大热量) 是两套完全独立的参数:
- * 那一套描述「蒸汽产能」, 这一套描述「蒸汽做功」. 飞轮本身不持有任何参数, 全部参数都挂在引擎上.
- * <p>
- * 所有数值都用 Supplier 承载, 因为方块注册发生在配置加载之前.
- */
 public class SteamEngineDriveSpec {
 	private final DoubleSupplier strength;
 	private final DoubleSupplier speed;
@@ -56,6 +49,15 @@ public class SteamEngineDriveSpec {
 		return new Builder();
 	}
 
+	/**
+	 * 用一段配置代码直接建出 spec, 调用方不需要再手动写 build().
+	 */
+	public static SteamEngineDriveSpec of(Consumer<Builder> configurer) {
+		Builder builder = builder();
+		configurer.accept(builder);
+		return builder.build();
+	}
+
 	public static class Builder {
 		private DoubleSupplier strength = () -> 0.0D;
 		private DoubleSupplier speed = () -> 0.0D;
@@ -67,7 +69,7 @@ public class SteamEngineDriveSpec {
 		}
 
 		public Builder strength(DoubleSupplier supplier) {
-			this.strength = supplier;
+			strength = supplier;
 			return this;
 		}
 
@@ -76,7 +78,7 @@ public class SteamEngineDriveSpec {
 		}
 
 		public Builder speed(DoubleSupplier supplier) {
-			this.speed = supplier;
+			speed = supplier;
 			return this;
 		}
 
@@ -85,7 +87,7 @@ public class SteamEngineDriveSpec {
 		}
 
 		public Builder consumption(DoubleSupplier supplier) {
-			this.consumption = supplier;
+			consumption = supplier;
 			return this;
 		}
 
@@ -94,7 +96,7 @@ public class SteamEngineDriveSpec {
 		}
 
 		public Builder storage(IntSupplier supplier) {
-			this.storage = supplier;
+			storage = supplier;
 			return this;
 		}
 

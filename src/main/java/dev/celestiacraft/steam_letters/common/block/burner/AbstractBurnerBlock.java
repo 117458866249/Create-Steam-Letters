@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 /**
  * 燃烧室的公共外观与状态: 水平朝向 + 点燃标记.
  * <p>
@@ -26,9 +28,9 @@ public abstract class AbstractBurnerBlock extends Block implements ISteamEngineB
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	private final SteamEngineSpec spec;
 
-	protected AbstractBurnerBlock(Properties properties, SteamEngineSpec spec) {
+	protected AbstractBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
 		super(properties);
-		this.spec = spec;
+		this.spec = SteamEngineSpec.of(configurer);
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH)
 				.setValue(LIT, false));

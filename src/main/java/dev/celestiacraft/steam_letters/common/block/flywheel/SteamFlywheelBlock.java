@@ -23,15 +23,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * 蒸汽飞轮: 由飞轮引擎驱动的动力源.
- * <p>
- * 飞轮本身不消耗任何资源, 也不持有任何参数, 只是把引擎输出的旋转接入 Create 动力网络.
- * 只有朝向的背面伸出传动轴, 用于连接传动杆/轴.
- * <p>
- * {@code CONNECTION} 记录飞轮平面两侧哪一边停着引擎: 引擎与飞轮之间必须隔 1 格,
- * 因此连接方向指向引擎所在的那一侧.
- */
 public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<SteamFlywheelBlockEntity> {
 	public static final EnumProperty<ConnectionState> CONNECTION = EnumProperty.create("connection", ConnectionState.class);
 

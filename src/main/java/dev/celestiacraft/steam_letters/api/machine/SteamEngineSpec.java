@@ -2,6 +2,7 @@ package dev.celestiacraft.steam_letters.api.machine;
 
 import dev.latvian.mods.rhino.util.RemapForJS;
 
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
@@ -50,9 +51,12 @@ public class SteamEngineSpec {
 		return new Builder();
 	}
 
-	/**
-	 * 逐项写入注册参数. 未显式写入的项保持 0, 即该设备不使用这项参数.
-	 */
+	public static SteamEngineSpec of(Consumer<Builder> configurer) {
+		Builder builder = builder();
+		configurer.accept(builder);
+		return builder.build();
+	}
+
 	public static class Builder {
 		private IntSupplier capacity = () -> 0;
 		private DoubleSupplier production = () -> 0.0D;

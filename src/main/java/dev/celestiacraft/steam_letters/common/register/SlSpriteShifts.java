@@ -6,9 +6,13 @@ import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
 import dev.celestiacraft.steam_letters.api.SlApis;
 
 public class SlSpriteShifts {
-	public static final CTSpriteShiftEntry BRONZE_CASING = CTSpriteShifter.getCT(
-			AllCTTypes.OMNIDIRECTIONAL,
-			SlApis.loadResource("block/bronze_casing"),
-			SlApis.loadResource("block/bronze_casing_connected")
-	);
+	public static final CTSpriteShiftEntry BRONZE_CASING;
+
+	static {
+		BRONZE_CASING = CTSpriteShifter.getCT(
+				AllCTTypes.OMNIDIRECTIONAL,
+				SlApis.loadResource("block/bronze_casing"),
+				SlApis.loadResource("block/bronze_casing_connected")
+		);
+	}
 }
