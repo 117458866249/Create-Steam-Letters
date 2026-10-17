@@ -5,10 +5,7 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.datagen.language.English;
 import dev.celestiacraft.steam_letters.datagen.recipe.SlRecipeProvider;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlItemApplicationRecipeGen;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlMixingRecipeGen;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlPressRecipeGen;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.create.SlSequencedAssemblyRecipeGen;
+import dev.celestiacraft.steam_letters.datagen.recipe.type.create.*;
 import dev.celestiacraft.steam_letters.datagen.tags.ItemTagsGen;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.core.HolderLookup;
@@ -45,6 +42,7 @@ public class DataGenerators {
 			generator.addProvider(server, new SlPressRecipeGen(output));
 			generator.addProvider(server, new SlItemApplicationRecipeGen(output));
 			generator.addProvider(server, new SlSequencedAssemblyRecipeGen(output));
+			generator.addProvider(server, new SlCrushingRecipeGen(output));
 
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
 		}

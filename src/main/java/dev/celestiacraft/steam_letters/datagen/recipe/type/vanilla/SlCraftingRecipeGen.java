@@ -23,19 +23,50 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 		addBronzeBasin(consumer);
 		addBurner(consumer);
 		addBoiler(consumer);
+		addMaterial(consumer);
+	}
 
+	private static void addMaterial(Consumer<FinishedRecipe> consumer) {
+		// Bronze
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SlMaterials.BRONZE_BLOCK)
 				.pattern("AAA")
 				.pattern("AAA")
 				.pattern("AAA")
 				.define('A', SlItemTags.BRONZE_INGOT)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
-				.save(consumer, save(SHAPED + "bronze_block"));
+				.save(consumer, save(SHAPED + "bronze_block_ingot"));
 
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SlMaterials.BRONZE_INGOT, 9)
 				.requires(SlItemTags.BRONZE_BLOCK)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
-				.save(consumer, save(SHAPELESS + "bronze_ingot"));
+				.save(consumer, save(SHAPELESS + "bronze_ingot_block"));
+
+		// Tin
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SlMaterials.TIN_BLOCK)
+				.pattern("AAA")
+				.pattern("AAA")
+				.pattern("AAA")
+				.define('A', SlItemTags.TIN_INGOT)
+				.unlockedBy("tin", has(SlItemTags.TIN_INGOT))
+				.save(consumer, save(SHAPED + "tin_block_ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SlMaterials.TIN_INGOT)
+				.pattern("AAA")
+				.pattern("AAA")
+				.pattern("AAA")
+				.define('A', SlItemTags.TIN_NUGGET)
+				.unlockedBy("tin", has(SlItemTags.TIN_NUGGET))
+				.save(consumer, save(SHAPED + "tin_ingot_nugget"));
+
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SlMaterials.TIN_INGOT, 9)
+				.requires(SlItemTags.TIN_BLOCK)
+				.unlockedBy("tin", has(SlItemTags.TIN_INGOT))
+				.save(consumer, save(SHAPELESS + "tin_ingot_block"));
+
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SlMaterials.TIN_NUGGET, 9)
+				.requires(SlItemTags.TIN_INGOT)
+				.unlockedBy("tin", has(SlItemTags.TIN_INGOT))
+				.save(consumer, save(SHAPELESS + "tin_nugget_ingot"));
 	}
 
 	private static void addBronzeBasin(Consumer<FinishedRecipe> consumer) {

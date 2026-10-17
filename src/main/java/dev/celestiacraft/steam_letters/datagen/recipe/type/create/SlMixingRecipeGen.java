@@ -24,14 +24,7 @@ public class SlMixingRecipeGen extends MixingRecipeGen {
 		create("material/bronze/ingot", (builder) -> {
 			SlApis.require(builder, Tags.Items.INGOTS_COPPER, 3);
 			return builder.output(SlMaterials.BRONZE_INGOT, 4)
-					.require(SlItemTags.ANDESITE_ALLOY_INGOT)
-					.requiresHeat(HeatCondition.HEATED);
-		});
-
-		create("material/bronze/ingot_but_glass", (builder) -> {
-			SlApis.require(builder, Tags.Items.INGOTS_COPPER, 3);
-			return builder.output(SlMaterials.BRONZE_INGOT, 4)
-					.require(Tags.Items.GLASS)
+					.require(SlItemTags.TIN_INGOT)
 					.requiresHeat(HeatCondition.HEATED);
 		});
 	}
