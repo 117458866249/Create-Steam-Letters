@@ -2,11 +2,14 @@ package dev.celestiacraft.steam_letters.client;
 
 import com.tterrag.registrate.util.entry.FluidEntry;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
+import dev.celestiacraft.steam_letters.client.particle.SteamParticle;
 import dev.celestiacraft.steam_letters.common.register.SlFluids;
+import dev.celestiacraft.steam_letters.common.register.SlParticles;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.common.Mod;
@@ -22,11 +25,17 @@ public class SlClientSetup {
 		});
 	}
 
+	@SubscribeEvent
+	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+		event.registerSpriteSet(SlParticles.STEAM.get(), SteamParticle.Factory::new);
+	}
+
 	private static <T extends ForgeFlowingFluid> void applyTranslucentLayer(FluidEntry<T> entry) {
 		RenderType translucent = RenderType.translucent();
+		Fluid flowing = entry.get();
 		Fluid source = entry.getSource();
 
-		ItemBlockRenderTypes.setRenderLayer(entry.get(), translucent);
+		ItemBlockRenderTypes.setRenderLayer(flowing, translucent);
 		ItemBlockRenderTypes.setRenderLayer(source, translucent);
 	}
 }

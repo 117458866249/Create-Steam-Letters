@@ -37,6 +37,7 @@ public class CreateLettersSteam {
 		SlBlocks.init();
 		SlBlockEntities.init();
 		SlFluids.init();
+		SlParticles.init(bus);
 		SlRecipeTypes.init(bus);
 		SlCreativeTabs.init(bus);
 

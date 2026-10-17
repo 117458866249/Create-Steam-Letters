@@ -15,7 +15,7 @@ import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
+import dev.celestiacraft.steam_letters.common.register.SlParticles;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -429,16 +429,23 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	// 客户端表现
 
 	private void clientTick() {
-		if (!lit || level == null || level.getRandom().nextFloat() > 0.35F) {
+		if (!lit || level == null) {
 			return;
 		}
 
-		Direction front = getFacing();
-		double x = worldPosition.getX() + 0.5D + front.getStepX() * 0.6D + (level.getRandom().nextDouble() - 0.5D) * 0.3D;
-		double y = worldPosition.getY() + 0.75D + (level.getRandom().nextDouble() - 0.5D) * 0.3D;
-		double z = worldPosition.getZ() + 0.5D + front.getStepZ() * 0.6D + (level.getRandom().nextDouble() - 0.5D) * 0.3D;
+		// 固定每 2 tick 一颗, 不走随机概率, 否则疏密不匀
+		if (level.getGameTime() % 2L != 0L) {
+			return;
+		}
 
-		level.addParticle(ParticleTypes.CLOUD, x, y, z, 0.0D, 0.012D, 0.0D);
+		// 端口在模型北侧 (见 block/steam/engine/bronze.json 的 Port 元素, Z 从 -1.8 到 0.2, Y 从 4 到 12),
+		// 中心高度约 0.5 格. 不加横向抖动, 让粒子沿着端口中心排成一条竖直的柱.
+		Direction front = getFacing();
+		double x = worldPosition.getX() + 0.5D + front.getStepX() * 0.6D;
+		double y = worldPosition.getY() + 0.5D;
+		double z = worldPosition.getZ() + 0.5D + front.getStepZ() * 0.6D;
+
+		level.addParticle(SlParticles.STEAM.get(), x, y, z, 0.0D, 0.02D, 0.0D);
 	}
 
 	@Override
