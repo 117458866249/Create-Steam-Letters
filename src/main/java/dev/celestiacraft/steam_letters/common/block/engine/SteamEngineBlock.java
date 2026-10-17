@@ -52,7 +52,7 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState()
-				.setValue(FACING, context.getHorizontalDirection());
+				.setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
