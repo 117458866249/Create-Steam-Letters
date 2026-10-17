@@ -34,8 +34,9 @@ public class SteamEngineConfig extends ConfigModule {
 				.defineInRange("superheated_consumption_multiplier", 0.5D, 0.0D, 1.0D);
 
 		HEATUP_ACCELERATION = builder.translation(key("heatup_acceleration"))
-				.comment("Steam consumption ramp-up (mB/tick per tick) while the flywheel engine is heating up.")
-				.defineInRange("heatup_acceleration", 1.0D, 0.1D, 100.0D);
+				.comment("Steam consumption ramp-up (mB/tick per tick) while the flywheel engine is heating up.",
+						"0.5 means a 36 mB/tick engine needs 72 ticks to reach full consumption.")
+				.defineInRange("heatup_acceleration", 0.5D, 0.1D, 100.0D);
 
 		SUPERHEATED_ACCELERATION_MULTIPLIER = builder.translation(key("superheated_acceleration_multiplier"))
 				.comment("Heat-up acceleration multiplier applied while running on superheated steam.")

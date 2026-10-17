@@ -49,7 +49,11 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	private static final double MIN_SUCK_EFFICIENCY = 0.001D;
 	public static final double DEFAULT_STRENGTH = 16384.0D;
 	public static final double DEFAULT_SPEED = 32.0D;
-	public static final double DEFAULT_CONSUMPTION = 12.0D;
+	/**
+	 * 满负荷蒸汽消耗速率 (mB/tick): 与同材料锅炉的最高产汽速率 (36 mB/tick) 相等.
+	 * 预热时长 = consumption / heatup_acceleration, 默认 0.5 时为 72 tick.
+	 */
+	public static final double DEFAULT_CONSUMPTION = 36.0D;
 	public static final int DEFAULT_STORAGE = 32000;
 
 	@Getter
@@ -171,16 +175,23 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		double ratio = 1.0D;
 
 		if (request > 0) {
-			int obtained = drawSteam(request);
-			if (obtained <= 0) {
-				shutdown();
-				return;
-			}
-			ratio = obtained / (double) request;
-			pending -= obtained;
+			int fromTank = tank.drain(request, IFluidHandler.FluidAction.EXECUTE).getAmount();
+			int remaining = request - fromTank;
+			int fromSource = remaining > 0 ? drawFromBoiler(remaining) : 0;
+			int drawn = fromTank + fromSource;
+
+			// 以请求量结算: 没抽到的部分不跨 tick 累积, 否则欠账会滚雪球, 应力一路下滑.
+			pending -= request;
 			if (pending < 0.0D) {
 				pending = 0.0D;
 			}
+			if (drawn <= 0) {
+				shutdown();
+				return;
+			}
+
+			// 应力只按到手蒸汽算: 汽源抽上来的部分只入账 suck_efficiency, 自带罐里的蒸汽全额入账.
+			ratio = Mth.clamp((fromTank + fromSource * getSuckEfficiency()) / request, 0.0D, 1.0D);
 		}
 
 		if (heatup < (int) Math.ceil(getHeatupTicks())) {
@@ -211,28 +222,10 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	}
 
 	/**
-	 * 先扣自带罐, 不够的部分再去背面汽源抽.
-	 *
-	 * @return 本 tick 真正到手的蒸汽量
-	 */
-	private int drawSteam(int amount) {
-		if (amount <= 0) {
-			return 0;
-		}
-
-		int fromTank = tank.drain(amount, IFluidHandler.FluidAction.EXECUTE).getAmount();
-		int remaining = amount - fromTank;
-		if (remaining <= 0) {
-			return fromTank;
-		}
-		return fromTank + drawFromBoiler(remaining);
-	}
-
-	/**
 	 * 从背面紧贴的那一格抽取蒸汽.
 	 * <p>
-	 * 抽取速率上限与引擎自身的消耗速率上限一致, 抽上来的蒸汽按 {@code SteamEngineConfig.SUCK_EFFICIENCY}
-	 * 打折入账 (默认 0.75, 也就是 25% 的损耗); 因此贴着锅炉直抽最多只能跑出额定的 75% 应力.
+	 * 抽取量上限与引擎自身的满负荷消耗速率一致, 返回值是实际从汽源抽走的原始蒸汽量;
+	 * 抽上来的蒸汽按 {@code SteamEngineConfig.SUCK_EFFICIENCY} 折算成到手量, 因此贴着锅炉直抽最多跑出额定的 75% 应力.
 	 */
 	private int drawFromBoiler(int needed) {
 		if (level == null || needed <= 0) {
@@ -250,25 +243,29 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			return 0;
 		}
 
-		double efficiency = Mth.clamp(SteamEngineConfig.SUCK_EFFICIENCY.get(), MIN_SUCK_EFFICIENCY, 1.0D);
 		int rawCap = Math.max((int) Math.ceil(getTargetConsumption()), 1);
-		int raw = Math.min((int) Math.ceil(needed / efficiency), rawCap);
+		int raw = Math.min(needed, rawCap);
 
 		if (handler.getTanks() <= 0) {
 			return 0;
 		}
 
-		// 按汽源罐里实际装的蒸汽流体去抽: 配置里换过蒸汽流体时, 硬编码本模组的蒸汽一滴也抽不上来.
-		FluidStack content = handler.getFluidInTank(0);
-		if (!isSteamFluid(content)) {
+		// 汽源把蒸汽装在哪个罐里由它自己决定 (锅炉的 0 号罐是水, 1 号罐才是蒸汽),
+		// 因此逐个罐找一个装着蒸汽的, 再用那种流体构造抽取请求.
+		FluidStack steamStack = FluidStack.EMPTY;
+		for (int i = 0; i < handler.getTanks(); i++) {
+			FluidStack content = handler.getFluidInTank(i);
+			if (!content.isEmpty() && isSteamFluid(content)) {
+				steamStack = content;
+				break;
+			}
+		}
+		if (steamStack.isEmpty()) {
 			return 0;
 		}
 
-		FluidStack drained = handler.drain(new FluidStack(content.getFluid(), raw), IFluidHandler.FluidAction.EXECUTE);
-		if (drained.isEmpty()) {
-			return 0;
-		}
-		return (int) Math.floor(drained.getAmount() * efficiency);
+		FluidStack drained = handler.drain(new FluidStack(steamStack.getFluid(), raw), IFluidHandler.FluidAction.EXECUTE);
+		return drained.getAmount();
 	}
 
 	private void updateLitState(boolean value) {
@@ -357,6 +354,13 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	private Direction getFacing() {
 		BlockState state = getBlockState();
 		return state.hasProperty(SteamEngineBlock.FACING) ? state.getValue(SteamEngineBlock.FACING) : Direction.NORTH;
+	}
+
+	/**
+	 * 直抽效率 (0~1): 从汽源抽上来的蒸汽只有这一比例计入引擎.
+	 */
+	private double getSuckEfficiency() {
+		return Mth.clamp(SteamEngineConfig.SUCK_EFFICIENCY.get(), MIN_SUCK_EFFICIENCY, 1.0D);
 	}
 
 	public boolean isSuperheated() {

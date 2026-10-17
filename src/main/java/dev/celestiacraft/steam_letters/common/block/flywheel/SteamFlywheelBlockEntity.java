@@ -124,7 +124,13 @@ public class SteamFlywheelBlockEntity extends GeneratingKineticBlockEntity {
 
 	@Override
 	public float calculateAddedStressCapacity() {
-		return lastCapacityProvided = generatedCapacity;
+		// Create 的动力网络把发电机的容量按「SU / RPM」记账: 网络总容量 = 本方法返回值 × |转速|.
+		// 引擎写进来的 generatedCapacity 是对外承诺的总容量 (SU), 所以这里必须先除掉转速再交给网络,
+		// 否则 32 RPM 下 16384 会变成 16384 × 32 = 524288 SU.
+		if (generatedSpeed == 0.0F) {
+			return lastCapacityProvided = 0.0F;
+		}
+		return lastCapacityProvided = generatedCapacity / Math.abs(generatedSpeed);
 	}
 
 	@Override
