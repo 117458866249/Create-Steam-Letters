@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.datagen.language;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
+import dev.celestiacraft.steam_letters.client.ponder.SlPonderPlugin;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutModeScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
@@ -20,6 +21,9 @@ public class English {
 		addJeiLang(provider);
 		addSteamContainerLang(provider);
 		addConfigLang(provider);
+
+		// datagen 运行在独立 JVM 中, 不会触发 FMLClientSetupEvent, 这里需要再注册一次插件
+		SlPonderPlugin.register();
 
 		LangRegistryAccess access = PonderIndex.getLangAccess();
 		access.provideLang(CreateLettersSteam.MODID, provider::add);
