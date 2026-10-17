@@ -19,10 +19,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @AllArgsConstructor
-public class FluidFuelRecipe implements Recipe<Container> {
-	/**
-	 * 单次燃烧消耗的流体量 (mB), 固定值.
-	 */
+public class FluidFuelRecipe implements Recipe<Container>, IBurnerFuelRecipe {
 	public static final int FUEL_AMOUNT = 1000;
 	@Getter
 	private final ResourceLocation id;
@@ -33,6 +30,11 @@ public class FluidFuelRecipe implements Recipe<Container> {
 
 	public boolean matches(FluidStack stack) {
 		return stack != null && !stack.isEmpty() && ingredient.test(stack);
+	}
+
+	@Override
+	public List<FluidStack> getFuelFluids() {
+		return ingredient.getMatchingFluidStacks();
 	}
 
 	@Override

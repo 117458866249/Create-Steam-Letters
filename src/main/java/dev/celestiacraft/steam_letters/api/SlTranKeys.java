@@ -28,7 +28,9 @@ public class SlTranKeys {
 			GOGGLE_STEAM_ENGINE_STATUS_RUNNING,
 			GOGGLE_STEAM_ENGINE_HEATUP,
 			GOGGLE_STEAM_ENGINE_STRESS,
-			GOGGLE_STEAM_ENGINE_STEAM;
+			GOGGLE_STEAM_ENGINE_STEAM,
+			JEI_SOLID_FUEL,
+			JEI_FLUID_FUEL;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -59,6 +61,9 @@ public class SlTranKeys {
 		GOGGLE_STEAM_ENGINE_HEATUP = "gui.goggles.steam_engine.heatup";
 		GOGGLE_STEAM_ENGINE_STRESS = "gui.goggles.steam_engine.stress";
 		GOGGLE_STEAM_ENGINE_STEAM = "gui.goggles.steam_engine.steam";
+
+		JEI_SOLID_FUEL = "jei.solid_fuel";
+		JEI_FLUID_FUEL = "jei.fluid_fuel";
 	}
 
 	/**

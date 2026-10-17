@@ -31,7 +31,12 @@ public class SlBurnerFuelRecipeGen extends SlRecipeProvider {
 	private static void addSolidFuel(Consumer<FinishedRecipe> consumer) {
 		SolidFuelRecipeBuilder.builder()
 				.tag(Tags.Items.GEMS_DIAMOND)
-				.time(20 * 30)
+				.time(20 * (60 * 5))
 				.save(consumer, SlApis.loadResource("solid_fuel/diamond"));
+
+		SolidFuelRecipeBuilder.builder()
+				.tag(Tags.Items.STORAGE_BLOCKS_DIAMOND)
+				.time(20 * (60 * 50))
+				.save(consumer, SlApis.loadResource("solid_fuel/diamond_block"));
 	}
 }

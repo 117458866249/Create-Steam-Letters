@@ -14,6 +14,7 @@ public class English {
 		addAdvancedSpoutLang(provider);
 		addGoggleLang(provider);
 		addSteamEngineLang(provider);
+		addJeiLang(provider);
 		addConfigLang(provider);
 	}
 
@@ -42,6 +43,11 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_HEATUP), "Heat-up");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STRESS), "Stress Output");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_ENGINE_STEAM), "Steam");
+	}
+
+	private static void addJeiLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_SOLID_FUEL), "Solid Fuel");
+		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_FLUID_FUEL), "Fluid Fuel");
 	}
 
 	private static void addOtherLang(RegistrateLangProvider provider) {

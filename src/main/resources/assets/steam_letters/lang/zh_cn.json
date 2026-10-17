@@ -90,6 +90,8 @@
 	"steam_letters.gui.goggles.steam_engine.status.running": "运行中",
 	"steam_letters.gui.goggles.steam_engine.steam": "蒸汽储量",
 	"steam_letters.gui.goggles.steam_engine.stress": "应力输出",
+	"steam_letters.jei.fluid_fuel": "流体燃料",
+	"steam_letters.jei.solid_fuel": "固体燃料",
 	"steam_letters.tooltip.steam_hammer.behaviour1": "仅当机器内有 _%s mB_ 蒸汽时才能工作",
 	"steam_letters.tooltip.steam_hammer.behaviour2": "每次工作消耗 _%s mB_ 蒸汽",
 	"steam_letters.tooltip.steam_hammer.condition1": "工作时:",

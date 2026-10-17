@@ -19,15 +19,18 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class SolidFuelRecipe implements Recipe<Container> {
+public class SolidFuelRecipe implements Recipe<Container>, IBurnerFuelRecipe {
 	private final ResourceLocation id;
-	@Getter
 	private final Ingredient ingredient;
-	@Getter
 	private final int time;
 
 	public boolean matches(ItemStack stack) {
 		return !stack.isEmpty() && ingredient.test(stack);
+	}
+
+	@Override
+	public List<ItemStack> getFuelItems() {
+		return List.of(ingredient.getItems());
 	}
 
 	@Override
@@ -65,12 +68,6 @@ public class SolidFuelRecipe implements Recipe<Container> {
 		return SlRecipeTypes.SOLID_FUEL.get();
 	}
 
-	/**
-	 * 在全部固体燃料配方里找出匹配该物品的一条.
-	 * <p>
-	 * 同一物品可能命中多条配方, 此时取 {@code time} 最大的一条; 调用方必须自行缓存结果,
-	 * 该方法每次都完整遍历配方列表, 不可在 tick 中反复调用.
-	 */
 	@Nullable
 	public static SolidFuelRecipe find(Level level, ItemStack stack) {
 		if (stack.isEmpty()) {
