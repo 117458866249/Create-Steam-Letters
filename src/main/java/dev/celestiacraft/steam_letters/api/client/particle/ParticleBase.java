@@ -8,7 +8,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-/**
+/*
  * Portions derived from SteamPowered, Copyright (c) 2026 yision1.
  * <p>
  * Source: <a href="https://github.com/TeamMoegMC/SteamPowered">
