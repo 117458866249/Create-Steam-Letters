@@ -85,6 +85,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 	private int syncedHeatup = -1;
 	private float syncedStrength = -1.0F;
+	private int syncedFluidAmount = -1;
 
 	public SteamEngineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -135,9 +136,13 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 		refreshWheel();
 
-		if (syncedHeatup != heatup || syncedStrength != appliedStrength) {
+		// 罐里的量也得算进同步条件: 护目镜读的是客户端这边的 tank,
+		// 只同步热机进度和应力的话, 罐里进进出出的蒸汽在客户端永远是旧值.
+		int fluidAmount = tank.getFluidAmount();
+		if (syncedHeatup != heatup || syncedStrength != appliedStrength || syncedFluidAmount != fluidAmount) {
 			syncedHeatup = heatup;
 			syncedStrength = appliedStrength;
+			syncedFluidAmount = fluidAmount;
 			sendData();
 		}
 	}

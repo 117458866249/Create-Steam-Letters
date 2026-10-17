@@ -9,11 +9,13 @@ public class SlItemTags {
 	public static final TagKey<Item>
 			BRONZE_INGOT,
 			BRONZE_PLATES,
+			BRONZE_BLOCK,
 			ANDESITE_ALLOY_INGOT;
 
 	static {
 		BRONZE_INGOT = create("forge", "ingots/bronze");
 		BRONZE_PLATES = create("forge", "plates/bronze");
+		BRONZE_BLOCK = create("forge", "storage_blocks/bronze");
 		ANDESITE_ALLOY_INGOT = create("forge", "ingots/andesite_alloy");
 	}
 

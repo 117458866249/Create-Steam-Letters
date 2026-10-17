@@ -4,9 +4,13 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class SlCreativeTabs {
@@ -23,24 +27,20 @@ public class SlCreativeTabs {
 					.icon(SlBlocks.STEAM_HAMMER::asStack)
 					.title(Component.translatable(SlTranKeys.BASIC_TAB))
 					.displayItems((parameters, output) -> {
-						output.accept(SlMaterials.BRONZE_INGOT.asItem());
-						output.accept(SlMaterials.BRONZE_PLATE.asItem());
-						output.accept(SlItems.STEAM_MECHANISM.asItem());
-						output.accept(SlItems.INCOMPLETE_STEAM_MECHANISM.asItem());
-						output.accept(SlBlocks.BRONZE_BASIN.asItem());
-						output.accept(SlBlocks.ADVANCED_SPOUT.asItem());
-						output.accept(SlBlocks.STEAM_HAMMER.asItem());
-						output.accept(SlBlocks.STEAM_MIXER.asItem());
-						output.accept(SlBlocks.STEAM_SAW.asItem());
-						output.accept(SlBlocks.BRONZE_BOILER.asItem());
-						output.accept(SlBlocks.BRONZE_SOLAR_BOILER.asItem());
-						output.accept(SlBlocks.BRONZE_SOLID_BURNER.asItem());
-						output.accept(SlBlocks.BRONZE_FLUID_BURNER.asItem());
-						output.accept(SlBlocks.BRONZE_STEAM_FLYWHEEL);
-						output.accept(SlBlocks.BRONZE_STEAM_ENGINE);
-						output.accept(SlBlocks.BRONZE_CASING.asItem());
-						output.accept(SlFluids.STEAM.getBucket().get());
-						output.accept(SlFluids.SUPERHEATED_STEAM.getBucket().get());
+						ForgeRegistries.ITEMS.getEntries().forEach((entry) -> {
+							ResourceKey<Item> key = entry.getKey();
+
+							if (key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
+								output.accept(entry.getValue());
+							}
+						});
+						ForgeRegistries.BLOCKS.getEntries().forEach((entry) -> {
+							ResourceKey<Block> key = entry.getKey();
+
+							if (key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
+								output.accept(entry.getValue());
+							}
+						});
 					})
 					.build();
 		});

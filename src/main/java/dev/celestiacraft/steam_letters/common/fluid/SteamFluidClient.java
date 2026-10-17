@@ -43,11 +43,6 @@ public class SteamFluidClient implements IClientFluidTypeExtensions {
 		return flowingTexture;
 	}
 
-	/**
-	 * Create 的 FluidStackParticle 与 FluidFX 走的都是这几个带 FluidStack 的重载.
-	 * 接口的默认实现会直接返回 null, 于是 TextureAtlas.getSprite(null) 抛 NPE,
-	 * 所以这里必须显式覆写, 而不是指望无参版本被转调.
-	 */
 	@Override
 	public ResourceLocation getStillTexture(FluidStack stack) {
 		return stillTexture;
@@ -58,9 +53,6 @@ public class SteamFluidClient implements IClientFluidTypeExtensions {
 		return flowingTexture;
 	}
 
-	/**
-	 * 方块形态的流体渲染同样走这三个重载, 一并覆写避免走到默认的 null.
-	 */
 	@Override
 	public ResourceLocation getStillTexture(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
 		return stillTexture;

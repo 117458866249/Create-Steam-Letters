@@ -1,7 +1,5 @@
 package dev.celestiacraft.steam_letters.common.fluid;
 
-import dev.celestiacraft.steam_letters.common.register.SlGameRules;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -17,10 +15,5 @@ public abstract class SteamFlowingFluid extends ForgeFlowingFluid {
 	@Override
 	public @NotNull BlockState createLegacyBlock(FluidState state) {
 		return Blocks.AIR.defaultBlockState();
-	}
-
-	@Override
-	protected boolean canConvertToSource(Level level) {
-		return level.getGameRules().getBoolean(SlGameRules.STEAM_CAN_CONVERT_TO_SOURCE);
 	}
 }

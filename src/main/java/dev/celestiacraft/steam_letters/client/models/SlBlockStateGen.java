@@ -15,9 +15,6 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 public class SlBlockStateGen {
-	/**
-	 * 单一变体方块: 只有一个模型文件, 与状态无关.
-	 */
 	public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> simple(String model) {
 		return (context, provider) -> {
 			BlockModelProvider models = provider.models();
