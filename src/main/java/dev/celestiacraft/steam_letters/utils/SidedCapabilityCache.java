@@ -40,7 +40,9 @@ public class SidedCapabilityCache<T> {
 				return null;
 			}
 			caches.put(side, resolved);
-			resolved.addListener(opt -> caches.remove(side, resolved));
+			resolved.addListener((lazy) -> {
+				caches.remove(side, resolved);
+			});
 			cache = resolved;
 		}
 		return cache.orElse(null);
