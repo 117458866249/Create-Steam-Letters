@@ -1,7 +1,6 @@
 package dev.celestiacraft.steam_letters.common.block.burner;
 
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
-import dev.celestiacraft.steam_letters.config.common.SteamBurnerConfig;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,8 +21,12 @@ import javax.annotation.Nullable;
  * 流体燃烧室的方块实体.
  * <p>
  * 可燃性完全由 {@code steam_letters:fluid_fuel} 配方决定, 不参考流体的类型或属性;
- * 每开始新一轮燃烧固定消耗 {@link FluidFuelRecipe#FUEL_AMOUNT} mB, 不足则不开新一轮.
- * 当前燃烧的剩余时间是独立字段, 与罐内流体存量无关.
+ * 燃料按 tick 持续推进: 一份 {@link FluidFuelRecipe#FUEL_AMOUNT} mB 恰好铺满配方的
+ * {@code time} tick, 所以每 tick 从罐里抽 {@code FUEL_AMOUNT / time} mB,
+ * 一整份烧完的时间与配方声明的时长完全一致.
+ * <p>
+ * 罐里不足一整份时按同样速率继续烧, <b>有多少烧多少</b>, 烧空即停; 因此不存在
+ * 「凑不满一份就永远点不着」的死角.
  */
 public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	/**
@@ -32,6 +35,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	public static final int DEFAULT_CAPACITY = 1000;
 
 	private static final String NBT_TANK = "FuelTank";
+	private static final String NBT_BURN_TOTAL = "BurnTotal";
 
 	@Getter
 	private final FluidTank fuelTank;
@@ -43,6 +47,17 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	@Nullable
 	private FluidFuelRecipe recipeValue;
 	private boolean recipeCacheValid;
+
+	/**
+	 * 当前这一轮燃烧的名义总时长 (tick), 用来把 {@link FluidFuelRecipe#FUEL_AMOUNT} 均摊到每 tick;
+	 * 0 表示当前没有进行中的一轮. 需要持久化, 否则读档后速率归零会变成永不消耗.
+	 */
+	private int burnTotalTime;
+
+	/**
+	 * 已累计但还不足 1 mB 的消耗量, 留到后续 tick 一起扣, 避免整数化把零头丢掉.
+	 */
+	private double drainRemainder;
 
 	private LazyOptional<IFluidHandler> fluidCapability;
 
@@ -57,7 +72,8 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		fuelTank = new FluidTank(capacity) {
 			@Override
 			protected void onContentsChanged() {
-				invalidateRecipeCache();
+				// 配方只取决于流体种类, 缓存命中用 isFluidEqual 比对,
+				// 量的变化不需要清缓存, 否则持续消耗时每 tick 都要重扫一遍配方表
 				setChanged();
 			}
 
@@ -86,17 +102,29 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 
 	@Override
 	protected boolean tickFuel() {
-		if (burnTime > 0) {
-			burnTime--;
-			return true;
-		}
-
-		if (fuelTank.isEmpty()) {
+		if (level == null) {
 			return false;
 		}
 
+		if (burnTime <= 0 && !beginRound()) {
+			return false;
+		}
+
+		if (!consumeOneTick()) {
+			clearRound();
+			return false;
+		}
+
+		burnTime--;
+		return true;
+	}
+
+	/**
+	 * 开启新的一轮燃烧: 找配方, 按罐内现有燃料换算这一轮实际能烧多久.
+	 */
+	private boolean beginRound() {
 		FluidStack stored = fuelTank.getFluid();
-		if (stored.getAmount() < FluidFuelRecipe.FUEL_AMOUNT) {
+		if (stored.isEmpty()) {
 			return false;
 		}
 
@@ -105,10 +133,56 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 			return false;
 		}
 
-		fuelTank.drain(FluidFuelRecipe.FUEL_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
-		burnTime = recipe.getTime();
+		int total = recipe.getTime();
+		if (total <= 0) {
+			return false;
+		}
+
+		// 罐里的料按比例折算成 tick, 不足一整份时缩短本轮, 烧空自然停下
+		long affordable = (long) stored.getAmount() * total / FluidFuelRecipe.FUEL_AMOUNT;
+		if (affordable <= 0) {
+			return false;
+		}
+
+		burnTotalTime = total;
+		burnTime = (int) Math.min(total, affordable);
+		drainRemainder = 0.0D;
 		setChanged();
 		return true;
+	}
+
+	/**
+	 * 推进一 tick 的燃料消耗.
+	 *
+	 * @return false 表示罐里已经没有可以抽出的燃料, 本轮应当中止
+	 */
+	private boolean consumeOneTick() {
+		if (burnTotalTime <= 0) {
+			return false;
+		}
+
+		drainRemainder += FluidFuelRecipe.FUEL_AMOUNT / (double) burnTotalTime;
+
+		int whole = (int) drainRemainder;
+		if (whole <= 0) {
+			return true;
+		}
+
+		FluidStack drained = fuelTank.drain(whole, IFluidHandler.FluidAction.EXECUTE);
+		drainRemainder -= whole;
+
+		if (drained.getAmount() < whole) {
+			return false;
+		}
+
+		setChanged();
+		return true;
+	}
+
+	private void clearRound() {
+		burnTime = 0;
+		burnTotalTime = 0;
+		drainRemainder = 0.0D;
 	}
 
 	/**
@@ -166,6 +240,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	protected void write(CompoundTag tag, boolean clientPacket) {
 		super.write(tag, clientPacket);
 		tag.put(NBT_TANK, fuelTank.writeToNBT(new CompoundTag()));
+		tag.putInt(NBT_BURN_TOTAL, burnTotalTime);
 	}
 
 	@Override
@@ -174,6 +249,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		if (tag.contains(NBT_TANK)) {
 			fuelTank.readFromNBT(tag.getCompound(NBT_TANK));
 		}
+		burnTotalTime = tag.getInt(NBT_BURN_TOTAL);
 		invalidateRecipeCache();
 	}
 }

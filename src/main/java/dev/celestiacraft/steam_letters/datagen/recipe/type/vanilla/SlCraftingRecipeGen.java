@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
 
@@ -20,6 +21,8 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 
 	public static void addRecipes(Consumer<FinishedRecipe> consumer) {
 		addBronzeBasin(consumer);
+		addBurner(consumer);
+		addBoiler(consumer);
 
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, SlMaterials.BRONZE_BLOCK)
 				.pattern("AAA")
@@ -65,5 +68,67 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 				.define('B', AllBlocks.BASIN)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
 				.save(consumer, save(SHAPED + "bronze_basin_plate_update"));
+	}
+
+	private static void addBurner(Consumer<FinishedRecipe> consumer) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_SOLID_BURNER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("CCC")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.define('B', Blocks.FURNACE)
+				.define('C', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "burner/solid_ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_SOLID_BURNER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("CCC")
+				.define('A', SlItemTags.BRONZE_PLATES)
+				.define('B', Blocks.FURNACE)
+				.define('C', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "burner/solid_plate"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_FLUID_BURNER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("CCC")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.define('B', AllBlocks.FLUID_TANK)
+				.define('C', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "burner/fluid_ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_FLUID_BURNER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("CCC")
+				.define('A', SlItemTags.BRONZE_PLATES)
+				.define('B', AllBlocks.FLUID_TANK)
+				.define('C', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "burner/fluid_plate"));
+	}
+
+	private static void addBoiler(Consumer<FinishedRecipe> consumer) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BOILER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("AAA")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.define('B', AllBlocks.FLUID_TANK)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "boiler/ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BOILER)
+				.pattern("AAA")
+				.pattern("ABA")
+				.pattern("AAA")
+				.define('A', SlItemTags.BRONZE_PLATES)
+				.define('B', AllBlocks.FLUID_TANK)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "boiler/plate"));
 	}
 }
