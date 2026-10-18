@@ -12,12 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * 固体燃料配方.
- * <p>
- * 本类走的是 Create 的处理配方体系, JSON 形状为
- * {@code {"ingredients": [{"tag": "..."}], "results": [], "processingTime": 6000}}.
- */
 public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
 	public SolidFuelRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
 		super(SlRecipeTypes.SOLID_FUEL_INFO, params);
@@ -38,9 +32,6 @@ public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 		return true;
 	}
 
-	/**
-	 * 本配方声明的唯一物品原料, 配方损坏或未声明时为 {@code null}.
-	 */
 	@Nullable
 	public Ingredient ingredient() {
 		return ingredients.isEmpty() ? null : ingredients.get(0);
@@ -62,9 +53,6 @@ public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 		return getProcessingDuration();
 	}
 
-	/**
-	 * 燃烧室不走配方匹配, 只按物品判定, 详见 {@link #matches(ItemStack)}.
-	 */
 	@Override
 	public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
 		return false;

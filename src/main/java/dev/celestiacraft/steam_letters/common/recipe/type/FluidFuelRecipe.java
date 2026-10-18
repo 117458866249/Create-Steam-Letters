@@ -12,16 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * 流体燃料配方.
- * <p>
- * 一份 {@link #FUEL_AMOUNT} mB 的该流体恰好能铺满 {@link #getTime()} tick 的燃烧,
- * 所以每 tick 从罐里抽 {@code FUEL_AMOUNT / time} mB.
- * <p>
- * 本类走的是 Create 的处理配方体系, JSON 形状为
- * {@code {"ingredients": [{"fluidTag": "...", "amount": 1000}], "results": [], "processingTime": 600}},
- * 因此可以直接用 {@code ProcessingRecipeGen} 生成, 也能被 {@code ProcessingRecipeSerializer} 读写.
- */
 public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
 	/**
 	 * 一份燃料的流体量, 同时也是配方里 fluid ingredient 的 amount.
@@ -52,9 +42,6 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 		return true;
 	}
 
-	/**
-	 * 本配方声明的唯一流体原料, 配方损坏或未声明时为 {@code null}.
-	 */
 	@Nullable
 	public FluidIngredient ingredient() {
 		return fluidIngredients.isEmpty() ? null : fluidIngredients.get(0);
@@ -76,19 +63,11 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 		return getProcessingDuration();
 	}
 
-	/**
-	 * 燃烧室不走配方匹配, 只按流体判定, 详见 {@link #matches(FluidStack)}.
-	 */
 	@Override
 	public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
 		return false;
 	}
 
-	/**
-	 * 在全部流体燃料配方里找出匹配该流体的一条.
-	 * <p>
-	 * 调用方必须自行缓存结果, 该方法每次都完整遍历配方列表, 不可在 tick 中反复调用.
-	 */
 	@Nullable
 	public static FluidFuelRecipe find(Level level, FluidStack stack) {
 		if (stack == null || stack.isEmpty()) {
