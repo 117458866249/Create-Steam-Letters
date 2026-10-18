@@ -26,8 +26,12 @@ import java.util.Map;
  * 脚本 id 末尾的 {@code _engine} 换成 {@code _flywheel} ({@code kubejs:steel_flywheel}).
  * <p>
  * 五个参数全部挂在引擎一侧: 飞轮不决定任何数值, 它只把引擎给出的转速与应力送进 Create 的动力网络.
+ * <p>
+ * {@code material(...)} / {@code model(...)} 由基类提供, 这里通过 {@link #onAppearanceChanged()} 钩子
+ * 把材质与模型同时同步给配对的飞轮, 而不用覆盖那两个方法 —— 覆盖会生成 bridge 方法, Rhino 上会留下
+ * 同名同参的重载.
  */
-public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity> {
+public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity, SteamEngineDeviceBuilder> {
 	public static final String FLYWHEEL_SUFFIX = "_flywheel";
 	public static final String ENGINE_SUFFIX = "_engine";
 
@@ -54,6 +58,20 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		}
 
 		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path + FLYWHEEL_SUFFIX);
+	}
+
+	@Override
+	protected SteamEngineDeviceBuilder self() {
+		return this;
+	}
+
+	/**
+	 * 引擎与配对飞轮共用同一份材质和模型, 任何一个变了都要一起改.
+	 */
+	@Override
+	protected void onAppearanceChanged() {
+		flywheel.material = material;
+		flywheel.model = model;
 	}
 
 	@Override
@@ -106,6 +124,11 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		generateModel(generator, baseModel() + "_item", "block/steam/engine/bronze_item", engineTextures());
 	}
 
+	@Override
+	protected String itemModel() {
+		return baseModel() + "_item";
+	}
+
 	private static Map<String, String> engineTextures() {
 		Map<String, String> textures = new LinkedHashMap<>();
 		textures.put("5", "block/steam/casing/%s_casing");
@@ -131,47 +154,38 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		}
 	}
 
-	@Info("材质, 决定默认模型与贴图目录, 默认 steam_letters:bronze; 引擎与配对飞轮同时生效")
-	public SteamEngineDeviceBuilder material(ResourceLocation material) {
-		this.material = material;
-		flywheel.material = material;
-		return this;
-	}
-
-	@Info("完整模型路径, 不写则按设备目录 + 材质推导; 引擎与配对飞轮同时生效")
-	public SteamEngineDeviceBuilder model(ResourceLocation model) {
-		this.model = model;
-		flywheel.model = model;
-		return this;
-	}
-
-	@Info("飞轮的应力上限 (SU), 默认 16384")
+	@Info("Flywheel stress capacity (SU). Defaults to 16384")
 	public SteamEngineDeviceBuilder strength(double strength) {
 		this.strength = strength;
 		return this;
 	}
 
-	@Info("飞轮转速 (RPM), 默认 32")
+	@Info("Flywheel rotation speed (RPM). Defaults to 32")
 	public SteamEngineDeviceBuilder speed(double speed) {
 		this.speed = speed;
 		return this;
 	}
 
-	@Info("满负荷蒸汽消耗 (mB/tick), 不写时使用引擎类的默认值")
+	@Info("Steam consumption at full load (mB/tick). When omitted the engine class default is used")
 	public SteamEngineDeviceBuilder consumption(double consumption) {
 		this.consumption = consumption;
 		return this;
 	}
 
-	@Info("引擎自带蒸汽罐容量 (mB), 默认 32000")
+	@Info("Built-in engine steam tank capacity (mB). Defaults to 32000")
 	public SteamEngineDeviceBuilder storage(int storage) {
 		this.storage = storage;
 		return this;
 	}
 
-	private static class FlywheelBuilder extends DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity> {
+	private static class FlywheelBuilder extends DeviceBuilder<SteamFlywheelBlock, SteamFlywheelBlockEntity, FlywheelBuilder> {
 		private FlywheelBuilder(ResourceLocation id) {
 			super(id);
+		}
+
+		@Override
+		protected FlywheelBuilder self() {
+			return this;
 		}
 
 		@Override
@@ -229,6 +243,11 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 			}
 
 			generateModel(generator, baseModel() + "_item", "block/steam/flywheel/bronze_item", flywheelTextures());
+		}
+
+		@Override
+		protected String itemModel() {
+			return baseModel() + "_item";
 		}
 
 		private static Map<String, String> wheelTextures() {

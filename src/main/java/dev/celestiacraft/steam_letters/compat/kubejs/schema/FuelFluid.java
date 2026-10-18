@@ -10,10 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
+@Getter
 public class FuelFluid {
-	@Getter
 	private final FluidStackJS fluid;
-	@Getter
 	private final ResourceLocation tag;
 
 	public static @NotNull FuelFluid of(@Nullable Object from) {
@@ -45,11 +44,11 @@ public class FuelFluid {
 		return new FuelFluid(FluidStackJS.of(value), null);
 	}
 
-	public static @NotNull FuelFluid of(@NotNull FluidStackJS fluid) {
+	public static @NotNull FuelFluid ofFluid(@NotNull FluidStackJS fluid) {
 		return new FuelFluid(fluid, null);
 	}
 
-	public static @NotNull FuelFluid tag(@NotNull ResourceLocation tag) {
+	public static @NotNull FuelFluid ofTag(@NotNull ResourceLocation tag) {
 		return new FuelFluid(null, tag);
 	}
 

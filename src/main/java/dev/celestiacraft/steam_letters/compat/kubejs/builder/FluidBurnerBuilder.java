@@ -1,17 +1,21 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
+import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
-import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FluidBurnerBuilder extends BurnerDeviceBuilder<FluidBurnerBlock, FluidBurnerBlockEntity> {
+public class FluidBurnerBuilder extends BurnerDeviceBuilder<FluidBurnerBlock, FluidBurnerBlockEntity, FluidBurnerBuilder> {
 	public FluidBurnerBuilder(ResourceLocation id) {
 		super(id);
+	}
+
+	@Override
+	protected FluidBurnerBuilder self() {
+		return this;
 	}
 
 	@Override
@@ -19,18 +23,12 @@ public class FluidBurnerBuilder extends BurnerDeviceBuilder<FluidBurnerBlock, Fl
 		return "block/steam/fluid_burner";
 	}
 
-	@Info("内部流体容量, 单位 mB.")
-	public FluidBurnerBuilder capacity(int capacity) {
-		this.capacity = capacity;
-		return this;
-	}
-
 	@Override
 	protected FluidBurnerBlock createBlock(BlockBehaviour.Properties properties) {
-		return new FluidBurnerBlock(properties, (builder) -> builder
-				.capacity(capacityOr(() -> FluidBurnerBlockEntity.DEFAULT_CAPACITY))
-				.maxHeat(maxHeatOr(() -> AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)),
-				() -> blockEntityType);
+		return new FluidBurnerBlock(properties, (builder) -> {
+			builder.capacity(capacityOr(() -> FluidBurnerBlockEntity.DEFAULT_CAPACITY))
+					.maxHeat(maxHeatOr(() -> AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT));
+		}, () -> blockEntityType);
 	}
 
 	@Override

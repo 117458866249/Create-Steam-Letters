@@ -4,6 +4,7 @@ import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
+import lombok.Getter;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,6 +32,7 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 	public static final EnumProperty<ConnectionState> CONNECTION = EnumProperty.create("connection", ConnectionState.class);
 
 	private final Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType;
+	@Getter
 	private final ResourceLocation material;
 
 	public SteamFlywheelBlock(Properties properties) {
@@ -46,13 +48,6 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 		this.customBlockEntityType = customBlockEntityType;
 		this.material = material;
 		registerDefaultState(defaultBlockState().setValue(CONNECTION, ConnectionState.NONE));
-	}
-
-	/**
-	 * 飞轮轮盘用的材质, 决定渲染时取哪一个轮盘模型: {@code <材质命名空间>:block/steam/flywheel/<材质>_wheel}.
-	 */
-	public ResourceLocation getMaterial() {
-		return material;
 	}
 
 	@Override

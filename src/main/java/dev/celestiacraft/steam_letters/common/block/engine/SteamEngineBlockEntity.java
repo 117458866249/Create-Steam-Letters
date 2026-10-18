@@ -428,7 +428,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			strength = DEFAULT_STRENGTH;
 		}
 
-		double value = strength * getStressStage() / (double) STAGES;
+		double value = strength * getStressStage() / STAGES;
 		if (isSuperheated()) {
 			value *= SteamEngineConfig.SUPERHEATED_OUTPUT_MULTIPLIER.get();
 		}
@@ -521,14 +521,17 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	private void playExhaustSound() {
 		Direction front = getFacing();
 		level.playLocalSound(
-				portX(front), portY(), portZ(front),
-				SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.25F, 0.25F, false
+				portX(front),
+				portY(),
+				portZ(front),
+				SoundEvents.FIRE_EXTINGUISH,
+				SoundSource.BLOCKS,
+				0.10F,
+				0.25F,
+				false
 		);
 	}
 
-	/**
-	 * 在端口喷蒸汽, 与声音出自同一个位置: 排气窗口里每 tick 一次, 阀门刚打开的那一下最多.
-	 */
 	private void spawnExhaustParticles(int count) {
 		Direction front = getFacing();
 		double x = portX(front);
@@ -538,12 +541,18 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		for (int i = 0; i < count; i++) {
 			double offsetX = (level.random.nextDouble() - 0.5D) * 0.2D;
 			double offsetZ = (level.random.nextDouble() - 0.5D) * 0.2D;
-			level.addParticle(SlParticles.STEAM.get(), x + offsetX, y, z + offsetZ, 0.0D, 0.02D, 0.0D);
+			level.addParticle(
+					SlParticles.STEAM.get(),
+					x + offsetX,
+					y,
+					z + offsetZ,
+					0.0D,
+					0.02D,
+					0.0D
+			);
 		}
 	}
 
-	// 端口在模型北侧 (见 block/steam/engine/bronze.json 的 Port 元素, Z 从 -1.8 到 0.2, Y 从 4 到 12),
-	// 中心高度约 0.5 格.
 	private double portX(Direction front) {
 		return worldPosition.getX() + 0.5D + front.getStepX() * 0.6D;
 	}

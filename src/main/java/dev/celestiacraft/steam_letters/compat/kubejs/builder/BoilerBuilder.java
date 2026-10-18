@@ -7,9 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBoilerBlockEntity> {
+public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBoilerBlockEntity, BoilerBuilder> {
 	public BoilerBuilder(ResourceLocation id) {
 		super(id);
+	}
+
+	@Override
+	protected BoilerBuilder self() {
+		return this;
 	}
 
 	@Override

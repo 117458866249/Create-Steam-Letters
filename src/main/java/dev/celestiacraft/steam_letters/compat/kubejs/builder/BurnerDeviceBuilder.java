@@ -3,19 +3,29 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import com.google.gson.JsonObject;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlock;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
+import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity> extends SteamDeviceBuilder<B, E> {
+import java.util.function.DoubleSupplier;
+
+public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity, SELF extends DeviceBuilder<B, E, SELF>> extends DeviceBuilder<B, E, SELF> {
+	protected Double maxHeat;
+
 	protected BurnerDeviceBuilder(ResourceLocation id) {
 		super(id);
 	}
 
-	public BurnerDeviceBuilder<B, E> maxHeat(double value) {
+	@Info("Maximum heat")
+	public SELF maxHeat(double value) {
 		maxHeat = value;
-		return this;
+		return self();
+	}
+
+	protected DoubleSupplier maxHeatOr(DoubleSupplier fallback) {
+		return maxHeat == null ? fallback : maxHeat::doubleValue;
 	}
 
 	@Override
@@ -42,13 +52,11 @@ public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity
 			}
 		}
 
-		JsonObject root = new JsonObject();
-		root.add("variants", variants);
-		generator.json(stateLocation(), root);
+		writeBlockState(generator, variants);
 	}
 
 	@Override
-	protected void generateModels(AssetJsonGenerator generator) {
+	protected void generateBlockModels(AssetJsonGenerator generator) {
 		generator.json(modelLocation(baseModel()), createOrientableModel(baseModel(), "off"));
 		generator.json(modelLocation(baseModel() + "_lit"), createOrientableModel(baseModel(), "on"));
 	}

@@ -1,6 +1,7 @@
 package dev.celestiacraft.steam_letters.compat.jei;
 
 import com.jesz.createdieselgenerators.CreateDieselGenerators;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
@@ -105,7 +106,10 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 				continue;
 			}
 			ResourceLocation id = SlApis.loadResource("solid_fuel/derived/" + key.getNamespace() + "/" + key.getPath());
-			derived.add(new SolidFuelRecipe(id, Ingredient.of(stack), time));
+			derived.add(new ProcessingRecipeBuilder<>(SolidFuelRecipe::new, id)
+					.withItemIngredients(Ingredient.of(stack))
+					.duration(time)
+					.build());
 		}
 		return derived;
 	}

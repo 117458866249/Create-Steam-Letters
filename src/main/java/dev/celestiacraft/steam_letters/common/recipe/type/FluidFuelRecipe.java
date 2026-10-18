@@ -1,75 +1,87 @@
 package dev.celestiacraft.steam_letters.common.recipe.type;
 
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-@AllArgsConstructor
-public class FluidFuelRecipe implements Recipe<Container>, IBurnerFuelRecipe {
+/**
+ * 流体燃料配方.
+ * <p>
+ * 一份 {@link #FUEL_AMOUNT} mB 的该流体恰好能铺满 {@link #getTime()} tick 的燃烧,
+ * 所以每 tick 从罐里抽 {@code FUEL_AMOUNT / time} mB.
+ * <p>
+ * 本类走的是 Create 的处理配方体系, JSON 形状为
+ * {@code {"ingredients": [{"fluidTag": "...", "amount": 1000}], "results": [], "processingTime": 600}},
+ * 因此可以直接用 {@code ProcessingRecipeGen} 生成, 也能被 {@code ProcessingRecipeSerializer} 读写.
+ */
+public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
+	/**
+	 * 一份燃料的流体量, 同时也是配方里 fluid ingredient 的 amount.
+	 */
 	public static final int FUEL_AMOUNT = 1000;
-	@Getter
-	private final ResourceLocation id;
-	@Getter
-	private final FluidIngredient ingredient;
-	@Getter
-	private final int time;
 
-	public boolean matches(FluidStack stack) {
-		return stack != null && !stack.isEmpty() && ingredient.test(stack);
+	public FluidFuelRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+		super(SlRecipeTypes.FLUID_FUEL_INFO, params);
+	}
+
+	@Override
+	protected int getMaxInputCount() {
+		return 0;
+	}
+
+	@Override
+	protected int getMaxOutputCount() {
+		return 0;
+	}
+
+	@Override
+	protected int getMaxFluidInputCount() {
+		return 1;
+	}
+
+	@Override
+	protected boolean canSpecifyDuration() {
+		return true;
+	}
+
+	/**
+	 * 本配方声明的唯一流体原料, 配方损坏或未声明时为 {@code null}.
+	 */
+	@Nullable
+	public FluidIngredient ingredient() {
+		return fluidIngredients.isEmpty() ? null : fluidIngredients.get(0);
+	}
+
+	public boolean matches(@Nullable FluidStack stack) {
+		FluidIngredient ingredient = ingredient();
+		return ingredient != null && stack != null && !stack.isEmpty() && ingredient.test(stack);
 	}
 
 	@Override
 	public List<FluidStack> getFuelFluids() {
-		return ingredient.getMatchingFluidStacks();
+		FluidIngredient ingredient = ingredient();
+		return ingredient == null ? List.of() : ingredient.getMatchingFluidStacks();
 	}
 
 	@Override
-	public boolean matches(@NotNull Container container, @NotNull Level level) {
+	public int getTime() {
+		return getProcessingDuration();
+	}
+
+	/**
+	 * 燃烧室不走配方匹配, 只按流体判定, 详见 {@link #matches(FluidStack)}.
+	 */
+	@Override
+	public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
 		return false;
-	}
-
-	@Override
-	public @NotNull ItemStack assemble(@NotNull Container container, @NotNull RegistryAccess access) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return false;
-	}
-
-	@Override
-	public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean isSpecial() {
-		return true;
-	}
-
-	@Override
-	public @NotNull RecipeSerializer<?> getSerializer() {
-		return SlRecipeTypes.FLUID_FUEL_SERIALIZER.get();
-	}
-
-	@Override
-	public @NotNull RecipeType<?> getType() {
-		return SlRecipeTypes.FLUID_FUEL.get();
 	}
 
 	/**
@@ -89,7 +101,7 @@ public class FluidFuelRecipe implements Recipe<Container>, IBurnerFuelRecipe {
 			if (!recipe.matches(stack)) {
 				continue;
 			}
-			if (best == null || recipe.time > best.time) {
+			if (best == null || recipe.getTime() > best.getTime()) {
 				best = recipe;
 			}
 		}

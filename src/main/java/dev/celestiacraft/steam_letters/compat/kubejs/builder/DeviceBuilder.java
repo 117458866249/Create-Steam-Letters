@@ -12,6 +12,7 @@ import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -32,20 +33,32 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.function.IntSupplier;
 
 /**
  * 蒸汽方块的注册骨架: 方块 / 方块实体类型 / 方块物品 / 资源与语言.
  * <p>
  * 方块实体类型与方块物品不在方块那张注册表里, 只能等各自的注册事件打开时才能建,
  * 所以这里把两头拆开: 方块本身由 createObject 建, 另外两样挂到 createAdditionalObjects.
+ * <p>
+ * 第三个类型参数 {@code SELF} 是具体 builder 自己的类型, 由子类以 {@code self()} 返回 {@code this} 固定下来.
+ * 所有链式配置方法一律返回 {@code SELF}, 因此在任何一环调用之后, 补全都还收窄在具体 builder 上,
+ * 例如 {@code boilerBuilder.material(...).production(...)} 也能正常补全.
+ * <p>
+ * 注意不要用「子类覆盖 material/model 返回自身类型」的办法做同样的事: 协变返回会在字节码里生成
+ * synthetic bridge 方法, Rhino 那一侧就会出现同名同参、只有返回类型不同的两个方法, 没有必要冒这个险.
+ * 子类若要在材质/模型变化时做额外动作, 覆盖 {@link #onAppearanceChanged()} 钩子即可.
  */
-public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> extends BuilderBase<Block> {
+public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF extends DeviceBuilder<B, E, SELF>> extends BuilderBase<Block> {
+	protected static final String MACHINE_BOTTOM = "steam_letters:block/steam/down";
+
 	protected B block;
 	protected Item item;
 	protected BlockEntityType<E> blockEntityType;
 
 	protected ResourceLocation material = SlApis.loadResource("bronze");
 	protected ResourceLocation model;
+	protected Integer capacity;
 	protected double strength;
 	protected double speed;
 	protected double consumption;
@@ -57,6 +70,11 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> exte
 		tag(BlockTags.NEEDS_STONE_TOOL.location());
 		tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag.location());
 	}
+
+	/**
+	 * 返回 {@code this}, 类型固定成具体 builder, 让基类的链式方法把类型收窄回去.
+	 */
+	protected abstract SELF self();
 
 	@Override
 	public RegistryInfo getRegistryType() {
@@ -92,6 +110,43 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> exte
 		return item;
 	}
 
+	@Info("Material. Determines the default model and texture directory. Defaults to steam_letters:bronze")
+	public SELF material(ResourceLocation material) {
+		if (!material.equals(this.material)) {
+			this.material = material;
+			onAppearanceChanged();
+		}
+		return self();
+	}
+
+	@Info("Full model path. When omitted it is derived from the device directory and the material")
+	public SELF model(ResourceLocation model) {
+		if (!model.equals(this.model)) {
+			this.model = model;
+			onAppearanceChanged();
+		}
+		return self();
+	}
+
+	/**
+	 * 材质或模型变化之后的钩子, 默认无操作.
+	 * <p>
+	 * 用钩子而不是让子类覆盖 {@link #material(ResourceLocation)} / {@link #model(ResourceLocation)}:
+	 * 覆盖会生成 bridge 方法, 在 Rhino 上留下同名同参的重载.
+	 */
+	protected void onAppearanceChanged() {
+	}
+
+	@Info("Internal fluid capacity in mB")
+	public SELF capacity(int capacity) {
+		this.capacity = capacity;
+		return self();
+	}
+
+	protected IntSupplier capacityOr(IntSupplier fallback) {
+		return capacity == null ? fallback : capacity::intValue;
+	}
+
 	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
 		generateBlockModels(generator);
@@ -110,10 +165,46 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> exte
 
 	protected abstract E createBlockEntity(BlockPos pos, BlockState state);
 
-	protected abstract void generateBlockState(AssetJsonGenerator generator);
+	/**
+	 * 默认方块状态: 单一 variant, 直接指向当前模型. 有朝向或状态的设备覆盖本方法.
+	 */
+	protected void generateBlockState(AssetJsonGenerator generator) {
+		JsonObject variant = new JsonObject();
+		variant.addProperty("model", modelId(baseModel()));
 
+		JsonObject variants = new JsonObject();
+		variants.add("", variant);
+
+		writeBlockState(generator, variants);
+	}
+
+	/**
+	 * 默认方块模型: cube_bottom_top 造型, 贴图按 模型目录 + 固定部件后缀 推导.
+	 * <p>
+	 * 例如 {@code material("steam_letters:steel")} 的锅炉, 侧面贴图是
+	 * {@code steam_letters:block/steam/boiler/steel/side}, 顶面是 {@code .../steel/top}.
+	 */
+	protected void generateBlockModels(AssetJsonGenerator generator) {
+		String path = baseModel();
+
+		JsonObject textures = new JsonObject();
+		textures.addProperty("particle", textureId(path, "side"));
+		textures.addProperty("bottom", MACHINE_BOTTOM);
+		textures.addProperty("top", textureId(path, "top"));
+		textures.addProperty("side", textureId(path, "side"));
+
+		JsonObject root = new JsonObject();
+		root.addProperty("parent", "minecraft:block/cube_bottom_top");
+		root.add("textures", textures);
+
+		generator.json(modelLocation(path), root);
+	}
+
+	/**
+	 * 物品模型 parent 的模型路径. 多数设备直接复用方块模型, 自带独立物品造型的设备覆盖本方法.
+	 */
 	protected String itemModel() {
-		return baseModel() + "_item";
+		return baseModel();
 	}
 
 	protected void generateItemModel(AssetJsonGenerator generator) {
@@ -192,11 +283,6 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> exte
 		throw new IllegalStateException("Missing model template " + path);
 	}
 
-	/**
-	 * 生成方块本体与物品模型, 只在没有显式指定 model 且材质不是 bronze 时才有活儿.
-	 */
-	protected abstract void generateBlockModels(AssetJsonGenerator generator);
-
 	protected BlockBehaviour.Properties createProperties() {
 		return BlockBehaviour.Properties.copy(SharedProperties.softMetal())
 				.noOcclusion()
@@ -214,6 +300,14 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity> exte
 
 	protected String modelId(String path) {
 		return modelNamespace() + ":" + path;
+	}
+
+	protected String textureId(String modelPath, String part) {
+		return modelNamespace() + ":" + modelPath + "/" + part;
+	}
+
+	protected ResourceLocation modelLocation(String modelPath) {
+		return ResourceLocation.fromNamespaceAndPath(modelNamespace(), "models/" + modelPath);
 	}
 
 	protected void writeBlockState(AssetJsonGenerator generator, JsonObject variants) {

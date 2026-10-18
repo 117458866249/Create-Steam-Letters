@@ -7,9 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SolarBoilerBuilder extends BoilerDeviceBuilder<SolarBoilerBlock, SolarBoilerBlockEntity> {
+public class SolarBoilerBuilder extends BoilerDeviceBuilder<SolarBoilerBlock, SolarBoilerBlockEntity, SolarBoilerBuilder> {
 	public SolarBoilerBuilder(ResourceLocation id) {
 		super(id);
+	}
+
+	@Override
+	protected SolarBoilerBuilder self() {
+		return this;
 	}
 
 	@Override

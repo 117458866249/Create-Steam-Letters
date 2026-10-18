@@ -1,7 +1,10 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.schema;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import dev.latvian.mods.kubejs.item.InputItem;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
@@ -13,16 +16,38 @@ import dev.latvian.mods.kubejs.recipe.component.RecipeComponentValue;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+
 public class BurnerSchema {
 	public static final RecipeSchema SOLID_FUEL = new RecipeSchema(
 			new RecipeKey<>(new FuelItemComponent(), "fuel"),
-			new RecipeKey<>(NumberComponent.INT, "time")
+			new RecipeKey<>(new FuelTimeComponent(), "time")
 	);
 
 	public static final RecipeSchema FLUID_FUEL = new RecipeSchema(
 			new RecipeKey<>(new FuelFluidComponent(), "fuel"),
-			new RecipeKey<>(NumberComponent.INT, "time")
+			new RecipeKey<>(new FuelTimeComponent(), "time")
 	);
+
+	private static void writeIngredients(@NotNull JsonObject json, @NotNull JsonObject ingredient) {
+		JsonArray ingredients = new JsonArray();
+		ingredients.add(ingredient);
+		json.add("ingredients", ingredients);
+		json.add("results", new JsonArray());
+	}
+
+	@Nullable
+	private static JsonObject firstIngredient(@NotNull JsonObject json) {
+		if (!json.has("ingredients")) {
+			return null;
+		}
+		JsonElement element = json.get("ingredients");
+		if (!element.isJsonArray() || element.getAsJsonArray().isEmpty()) {
+			return null;
+		}
+		JsonElement first = element.getAsJsonArray().get(0);
+		return first.isJsonObject() ? first.getAsJsonObject() : null;
+	}
 
 	private static void splitItem(@NotNull JsonElement written, @NotNull JsonObject json) {
 		if (written.isJsonObject()) {
@@ -90,15 +115,21 @@ public class BurnerSchema {
 
 		@Override
 		public void writeToJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<InputItem> holder, @NotNull JsonObject json) {
-			splitItem(ItemComponents.INPUT.write(recipe, holder.value), json);
+			JsonObject ingredient = new JsonObject();
+			splitItem(ItemComponents.INPUT.write(recipe, holder.value), ingredient);
+			writeIngredients(json, ingredient);
 		}
 
 		@Override
 		public void readFromJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<InputItem> holder, @NotNull JsonObject json) {
-			if (json.has("item")) {
-				holder.value = read(recipe, json.get("item"));
-			} else if (json.has("tag")) {
-				holder.value = read(recipe, "#" + json.get("tag").getAsString());
+			JsonObject ingredient = firstIngredient(json);
+			if (ingredient == null) {
+				return;
+			}
+			if (ingredient.has("item")) {
+				holder.value = read(recipe, ingredient.get("item"));
+			} else if (ingredient.has("tag")) {
+				holder.value = read(recipe, "#" + ingredient.get("tag").getAsString());
 			}
 		}
 	}
@@ -124,26 +155,62 @@ public class BurnerSchema {
 			return FuelFluid.of(from);
 		}
 
-		/**
-		 * 摊平成配方自己的两个字段之一, 本组件用的 key 名不会进 JSON
-		 */
 		@Override
 		public void writeToJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<FuelFluid> holder, @NotNull JsonObject json) {
 			FuelFluid value = holder.value;
+			JsonObject ingredient = new JsonObject();
 			if (value.isTag()) {
-				json.addProperty("fluidTag", value.getTag().toString());
+				ingredient.addProperty("fluidTag", value.getTag().toString());
 			} else {
-				json.addProperty("fluid", value.getFluid().getId());
+				ingredient.addProperty("fluid", value.getFluid().getId());
 			}
+			ingredient.addProperty("amount", FluidFuelRecipe.FUEL_AMOUNT);
+			writeIngredients(json, ingredient);
 		}
 
 		@Override
 		public void readFromJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<FuelFluid> holder, @NotNull JsonObject json) {
-			if (json.has("fluid")) {
-				holder.value = read(recipe, json.get("fluid"));
-			} else if (json.has("fluidTag")) {
-				holder.value = read(recipe, "#" + json.get("fluidTag").getAsString());
+			JsonObject ingredient = firstIngredient(json);
+			if (ingredient == null) {
+				return;
 			}
+			if (ingredient.has("fluid")) {
+				holder.value = read(recipe, ingredient.get("fluid"));
+			} else if (ingredient.has("fluidTag")) {
+				holder.value = read(recipe, "#" + ingredient.get("fluidTag").getAsString());
+			}
+		}
+	}
+
+	private static class FuelTimeComponent implements RecipeComponent<Integer> {
+		@Override
+		public @NotNull Class<?> componentClass() {
+			return Integer.class;
+		}
+
+		@Override
+		public @NotNull ComponentRole role() {
+			return NumberComponent.INT.role();
+		}
+
+		@Override
+		public @NotNull JsonElement write(@NotNull RecipeJS recipe, @NotNull Integer value) {
+			return new JsonPrimitive(value);
+		}
+
+		@Override
+		public @NotNull Integer read(@NotNull RecipeJS recipe, @NotNull Object from) {
+			return NumberComponent.INT.read(recipe, from);
+		}
+
+		@Override
+		public void writeToJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<Integer> holder, @NotNull JsonObject json) {
+			json.addProperty("processingTime", holder.value);
+		}
+
+		@Override
+		public void readFromJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<Integer> holder, @NotNull JsonObject json) {
+			holder.value = json.has("processingTime") ? json.get("processingTime").getAsInt() : 0;
 		}
 	}
 }

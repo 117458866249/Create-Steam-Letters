@@ -1,7 +1,6 @@
 package dev.celestiacraft.steam_letters.datagen.recipe;
 
 import dev.celestiacraft.steam_letters.api.SlApis;
-import dev.celestiacraft.steam_letters.datagen.recipe.type.SlBurnerFuelRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.vanilla.SlCraftingRecipeGen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -26,6 +25,5 @@ public class SlRecipeProvider extends RecipeProvider {
 	@Override
 	protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
 		SlCraftingRecipeGen.addRecipes(consumer);
-		SlBurnerFuelRecipeGen.addRecipes(consumer);
 	}
 }

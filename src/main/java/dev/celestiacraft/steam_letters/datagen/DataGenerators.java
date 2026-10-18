@@ -5,6 +5,8 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.datagen.language.English;
 import dev.celestiacraft.steam_letters.datagen.recipe.SlRecipeProvider;
+import dev.celestiacraft.steam_letters.datagen.recipe.type.SlFluidFuelRecipeGen;
+import dev.celestiacraft.steam_letters.datagen.recipe.type.SlSolidFuelRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.create.*;
 import dev.celestiacraft.steam_letters.datagen.tags.ItemTagsGen;
 import dev.latvian.mods.kubejs.KubeJS;
@@ -43,6 +45,8 @@ public class DataGenerators {
 			generator.addProvider(server, new SlItemApplicationRecipeGen(output));
 			generator.addProvider(server, new SlSequencedAssemblyRecipeGen(output));
 			generator.addProvider(server, new SlCrushingRecipeGen(output));
+			generator.addProvider(server, new SlFluidFuelRecipeGen(output));
+			generator.addProvider(server, new SlSolidFuelRecipeGen(output));
 
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
 		}

@@ -105,6 +105,10 @@ repositories {
 		name = 'Latvian Mods (KubeJS, Rhino)'
 		url = "https://maven.latvian.dev/releases"
 	}
+	maven {
+		name = "DVS1 Maven FS & TCon"
+		url = "https://dvs1.progwml6.com/files/maven"
+	}
 }
 
 dependencies {
@@ -137,11 +141,15 @@ dependencies {
 	implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
 	implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
 	implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.26")
-	runtimeOnly fg.deobf("curse.maven:probejs-585406:5227399")
+	implementation fg.deobf("curse.maven:probejs-585406:5227399")
 
-	// Oculus and Embeddium
+	// Oculus & Embeddium
 	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
 	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
+
+	// Mantel & Tinkers' Construct
+	implementation fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-1.11.117")
+	implementation fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-3.12.0.220")
 
 	// Lomkok
 	compileOnly("org.projectlombok:lombok:1.18.28")

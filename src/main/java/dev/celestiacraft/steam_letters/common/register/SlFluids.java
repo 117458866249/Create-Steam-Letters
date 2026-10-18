@@ -5,15 +5,15 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.item.SteamBucketItem;
 import dev.celestiacraft.steam_letters.common.fluid.SteamFluid;
+import dev.celestiacraft.steam_letters.common.fluid.SteamFluidFlowing;
 import dev.celestiacraft.steam_letters.common.fluid.SteamFluidSource;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 public class SlFluids {
-	public static final FluidEntry<ForgeFlowingFluid.Flowing> STEAM;
-	public static final FluidEntry<ForgeFlowingFluid.Flowing> SUPERHEATED_STEAM;
+	public static final FluidEntry<SteamFluidFlowing> STEAM;
+	public static final FluidEntry<SteamFluidFlowing> SUPERHEATED_STEAM;
 
 	static {
 		STEAM = SlApis.REGISTRATE.fluid(
@@ -22,7 +22,8 @@ public class SlFluids {
 						SlApis.loadResource("block/fluid/steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
-						}, 0xFFFAFAFA)
+						}, 0xFFFAFAFA),
+						SteamFluidFlowing::new
 				)
 				.tag(SlFluidTags.STEAM)
 				.source(SteamFluidSource::new)
@@ -41,7 +42,8 @@ public class SlFluids {
 						SlApis.loadResource("block/fluid/superheated_steam_flow"),
 						SteamFluid.create(0xFAFAFA, () -> {
 							return 1.0f / 8.0f;
-						}, 0xFFFAFAFA)
+						}, 0xFFFAFAFA),
+						SteamFluidFlowing::new
 				)
 				.tag(SlFluidTags.SUPERHEATED_STEAM)
 				.source(SteamFluidSource::new)
