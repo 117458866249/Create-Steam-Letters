@@ -1,12 +1,13 @@
 {
-	"render_type": "minecraft:cutout_mipped",
+	"format_version": "26.3",
 	"credit": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+	"render_type": "minecraft:cutout_mipped",
 	"textures": {
-		"gearbox_top": "create:block/gearbox_top",
-		"gearbox": "create:block/gearbox",
-		"andesite_casing_short": "create:block/andesite_casing_short",
-		"particle": "create:block/mechanical_saw_top",
-		"mechanical_saw_top": "create:block/mechanical_saw_top"
+		"gearbox_top": "steam_letters:block/mechanical_saw/gearbox_top",
+		"gearbox": "steam_letters:block/mechanical_saw/gearbox",
+		"andesite_casing_short": "steam_letters:block/mechanical_saw/andesite_casing_short",
+		"particle": "steam_letters:block/mechanical_saw/mechanical_saw_top",
+		"mechanical_saw_top": "steam_letters:block/mechanical_saw/mechanical_saw_top"
 	},
 	"elements": [
 		{

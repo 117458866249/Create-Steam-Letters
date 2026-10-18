@@ -3,11 +3,12 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"ambientocclusion": false,
+	"render_type":"cutout",
 	"textures": {
-		"2": "block/spruce_log_top",
-		"4": "create:block/mixer_base_side",
-		"11": "create:block/mechanical_press_top",
-		"particle": "create:block/mixer_base_side"
+		"2": "steam_letters:block/steam_mixer/bronze_underside",
+		"4": "steam_letters:block/steam_mixer/mixer_base_side",
+		"11": "steam_letters:block/steam_mixer/mechanical_press_top",
+		"particle": "steam_letters:block/steam_mixer/mixer_base_side"
 	},
 	"elements": [
 		{
