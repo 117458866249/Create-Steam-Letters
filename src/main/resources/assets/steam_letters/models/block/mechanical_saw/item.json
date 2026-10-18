@@ -1,15 +1,16 @@
 {
-	"render_type": "minecraft:cutout_mipped",
+	"format_version": "26.3",
 	"credit": "Made with Blockbench",
 	"parent": "create:block/block",
+	"render_type": "minecraft:cutout_mipped",
 	"textures": {
-		"slit": "create:block/mechanical_saw_top_no_slot",
+		"slit": "steam_letters:block/mechanical_saw/mechanical_saw_top_no_slot",
 		"stonecutter_saw": "block/stonecutter_saw",
-		"particle": "create:block/gearbox_top",
-		"gearbox_top": "create:block/gearbox_top",
-		"encased_belt": "create:block/encased_chain_drive",
-		"gearbox": "create:block/gearbox",
-		"andesite_casing_short": "create:block/andesite_casing_short"
+		"particle": "steam_letters:block/mechanical_saw/gearbox_top",
+		"gearbox_top": "steam_letters:block/mechanical_saw/gearbox_top",
+		"encased_belt": "steam_letters:block/mechanical_saw/encased_chain_drive",
+		"gearbox": "steam_letters:block/mechanical_saw/gearbox",
+		"andesite_casing_short": "steam_letters:block/mechanical_saw/andesite_casing_short"
 	},
 	"elements": [
 		{
@@ -90,7 +91,7 @@
 	],
 	"display": {
 		"fixed": {
-			"rotation": [0, 180, 0],
+			"rotation": [0, -180, 0],
 			"translation": [0, 0, -1.5],
 			"scale": [0.5, 0.5, 0.5]
 		}

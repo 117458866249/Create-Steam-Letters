@@ -1,10 +1,11 @@
 {
+	"format_version": "26.3",
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"render_type": "minecraft:cutout_mipped",
 	"textures": {
-		"12": "create:block/basin",
-		"particle": "create:block/industrial_iron_block"
+		"12": "steam_letters:block/bronze_basin/basin",
+		"particle": "steam_letters:block/bronze_basin/basin_canal"
 	},
 	"elements": [
 		{
@@ -49,6 +50,7 @@
 		{
 			"name": "Basin",
 			"origin": [8, 8, 8],
+			"scope": 0,
 			"color": 0,
 			"children": []
 		},
