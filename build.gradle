@@ -141,7 +141,7 @@ dependencies {
 	implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
 	implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
 	implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.26")
-	implementation fg.deobf("curse.maven:probejs-585406:5227399")
+	runtimeOnly fg.deobf("curse.maven:probejs-585406:5227399")
 
 	// Oculus & Embeddium
 	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
