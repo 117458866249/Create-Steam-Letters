@@ -14,7 +14,7 @@ import java.util.List;
 
 public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
 	/**
-	 * 一份燃料的流体量, 同时也是配方里 fluid ingredient 的 amount.
+	 * 一份燃料的固定量, 1000mB
 	 */
 	public static final int FUEL_AMOUNT = 1000;
 
