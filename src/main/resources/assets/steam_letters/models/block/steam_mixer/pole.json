@@ -9,10 +9,22 @@
 	},
 	"elements": [
 		{
+			"name": "Pole2Side",
+			"from": [5, 19, 5],
+			"to": [11, 32, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 13, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"east": {"uv": [0, 0, 1, 13], "texture": "#mechanical_press_pole"},
+				"south": {"uv": [0, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"west": {"uv": [5, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"up": {"uv": [10, 5, 16, 6], "rotation": 180, "texture": "#mechanical_press_pole"}
+			}
+		},
+		{
 			"name": "polebase",
 			"from": [5, 7, 5],
 			"to": [11, 9, 11],
-			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 9, 8]},
 			"faces": {
 				"north": {"uv": [10, 6, 16, 8], "texture": "#6"},
@@ -63,38 +75,25 @@
 		{
 			"name": "Pole2Core",
 			"from": [5.995, 19, 6],
-			"to": [10.005, 22, 10],
+			"to": [10.005, 32, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 13, 8]},
 			"faces": {
-				"east": {"uv": [6, 10, 10, 13], "texture": "#mechanical_press_pole"},
-				"west": {"uv": [6, 10, 10, 13], "texture": "#mechanical_press_pole"},
+				"east": {"uv": [6, 0, 10, 13], "texture": "#mechanical_press_pole"},
+				"west": {"uv": [6, 0, 10, 13], "texture": "#mechanical_press_pole"},
 				"up": {"uv": [11, 1, 15, 5], "rotation": 180, "texture": "#mechanical_press_pole"}
 			}
 		},
 		{
 			"name": "Pole2Side",
 			"from": [5, 19, 10],
-			"to": [11, 22, 11],
+			"to": [11, 32, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 13, 8]},
 			"faces": {
-				"north": {"uv": [0, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"east": {"uv": [0, 10, 1, 13], "texture": "#mechanical_press_pole"},
-				"south": {"uv": [0, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"west": {"uv": [5, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"up": {"uv": [10, 5, 16, 6], "rotation": 180, "texture": "#mechanical_press_pole"}
-			}
-		},
-		{
-			"name": "Pole2Side",
-			"from": [5, 19, 5],
-			"to": [11, 22, 6],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 13, 8]},
-			"faces": {
-				"north": {"uv": [0, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"east": {"uv": [0, 10, 1, 13], "texture": "#mechanical_press_pole"},
-				"south": {"uv": [0, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"west": {"uv": [5, 10, 6, 13], "texture": "#mechanical_press_pole"},
-				"up": {"uv": [10, 5, 16, 6], "rotation": 180, "texture": "#mechanical_press_pole"}
+				"north": {"uv": [0, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"east": {"uv": [0, 0, 1, 13], "texture": "#mechanical_press_pole"},
+				"south": {"uv": [0, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"west": {"uv": [5, 0, 6, 13], "texture": "#mechanical_press_pole"},
+				"up": {"uv": [10, 0, 16, 1], "rotation": 180, "texture": "#mechanical_press_pole"}
 			}
 		}
 	]

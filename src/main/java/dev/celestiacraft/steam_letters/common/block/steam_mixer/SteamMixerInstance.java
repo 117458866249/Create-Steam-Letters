@@ -1,6 +1,5 @@
 package dev.celestiacraft.steam_letters.common.block.steam_mixer;
 
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
@@ -21,7 +20,7 @@ public class SteamMixerInstance extends SingleAxisRotatingVisual<SteamMixerBlock
 	private final OrientedInstance mixerPole;
 
 	public SteamMixerInstance(VisualizationContext context, SteamMixerBlockEntity entity, float partialTick) {
-		super(context, entity, partialTick, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL));
+		super(context, entity, partialTick, Models.partial(SlBlockPartialModel.STEAM_MIXER_COGWHEEL));
 
 		mixerHead = instancerProvider().instancer(
 				AllInstanceTypes.ROTATING,

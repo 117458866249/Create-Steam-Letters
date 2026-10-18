@@ -15,11 +15,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -35,7 +39,7 @@ public class SolarBoilerBlock extends Block implements IBE<SolarBoilerBlockEntit
 
 	public SolarBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType) {
 		super(properties);
-		this.spec = SteamEngineSpec.of(configurer);
+		spec = SteamEngineSpec.of(configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}
 
@@ -57,6 +61,22 @@ public class SolarBoilerBlock extends Block implements IBE<SolarBoilerBlockEntit
 	@Override
 	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, BlockHitResult hit) {
 		return BlockFluidInteractions.fillOnly(level, pos, player, hand, hit.getDirection());
+	}
+
+	@Override
+	public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+		return Shapes.or(
+				Block.box(0, 0, 0, 16, 2, 16),
+				Block.box(0, 2, 0, 16, 14, 1),
+				Block.box(0, 2, 15, 16, 14, 16),
+				Block.box(0, 2, 1, 1, 14, 15),
+				Block.box(15, 2, 1, 16, 14, 15),
+				Block.box(0, 14, 0, 16, 16, 2),
+				Block.box(0, 14, 14, 16, 16, 16),
+				Block.box(0, 14, 2, 2, 16, 14),
+				Block.box(14, 14, 2, 16, 16, 14),
+				Block.box(2, 14, 2, 14, 14.05, 14)
+		);
 	}
 
 	public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> genBlockState(String material) {

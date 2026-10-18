@@ -1,7 +1,9 @@
 package dev.celestiacraft.steam_letters.datagen.recipe.type.vanilla;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
+import dev.celestiacraft.steam_letters.common.register.SlItems;
 import dev.celestiacraft.steam_letters.common.register.SlMaterials;
 import dev.celestiacraft.steam_letters.datagen.recipe.SlRecipeProvider;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
@@ -10,7 +12,9 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -24,6 +28,36 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 		addBurner(consumer);
 		addBoiler(consumer);
 		addMaterial(consumer);
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlItems.EMPTY_STEAM_CONTAINER)
+				.pattern(" A ")
+				.pattern("BCB")
+				.pattern(" A ")
+				.define('A', Items.DRIED_KELP)
+				.define('B', SlItemTags.TIN_INGOT)
+				.define('C', Tags.Items.GLASS_PANES)
+				.unlockedBy("dried_kelp", has(Items.DRIED_KELP))
+				.save(consumer, save(SHAPED + "empty_steam_container"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlItems.BRONZE_WHISK)
+				.pattern(" A ")
+				.pattern("CBC")
+				.pattern("CCC")
+				.define('A', Tags.Items.INGOTS_IRON)
+				.define('B', AllItems.WHISK)
+				.define('C', SlItemTags.BRONZE_INGOT)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "bronze_whisk_ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlItems.BRONZE_WHISK)
+				.pattern(" A ")
+				.pattern("CBC")
+				.pattern("CCC")
+				.define('A', Tags.Items.INGOTS_IRON)
+				.define('B', AllItems.WHISK)
+				.define('C', SlItemTags.BRONZE_PLATES)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "bronze_whisk_plate"));
 	}
 
 	private static void addMaterial(Consumer<FinishedRecipe> consumer) {

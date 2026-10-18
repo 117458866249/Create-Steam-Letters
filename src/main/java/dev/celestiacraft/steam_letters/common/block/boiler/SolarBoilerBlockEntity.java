@@ -7,33 +7,104 @@ import dev.celestiacraft.steam_letters.config.common.SolarBoilerConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.util.List;
 import java.util.Locale;
 
 public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements IHaveGoggleInformation {
 	/**
-	 * 内置青铜太阳能锅炉的默认参数: 罐 4000 mB, 晴天满日照下产 36 mB/tick 蒸汽,
+	 * 内置青铜太阳能锅炉的默认参数: 罐 10000 mB, 晴天满日照下产 36 mB/tick 蒸汽,
 	 * 与同材料蒸汽引擎的最高消耗速率相等; 雨天/雷暴/人造光按配置折扣.
 	 */
-	public static final int DEFAULT_CAPACITY = 4000;
+	public static final int DEFAULT_CAPACITY = 10000;
 	public static final double DEFAULT_PRODUCTION = 36.0D;
+	private final SmoothFluid water;
+	private final SmoothFluid steam;
+
+	private double cachedEfficiency = -1.0D;
+
+	/**
+	 * 上一次同步给客户端的两种流体量, 用于让玻璃顶下的液面跟着服务端变化.
+	 */
+	private int syncedInput = -1;
+	private int syncedOutput = -1;
 
 	public SolarBoilerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
+		water = new SmoothFluid(getInputTank());
+		steam = new SmoothFluid(getOutputTank());
 	}
 
-	private double cachedEfficiency = -1.0D;
+	@Override
+	public void tick() {
+		super.tick();
+		if (level != null && level.isClientSide()) {
+			water.tick();
+			steam.tick();
+		}
+	}
+
+	/**
+	 * 渲染用的水面高度 (0..1), 已经在两次 tick 之间做过插值.
+	 */
+	public float getRenderedWaterLevel(float partialTick) {
+		return water.getLevel(partialTick);
+	}
+
+	/**
+	 * 渲染用的蒸汽高度 (0..1), 已经在两次 tick 之间做过插值.
+	 */
+	public float getRenderedSteamLevel(float partialTick) {
+		return steam.getLevel(partialTick);
+	}
+
+	/**
+	 * 最后一次见过的非空水, 用于渲染水体; 不参与序列化.
+	 */
+	public FluidStack getRenderedWater() {
+		return water.getRendered();
+	}
+
+	/**
+	 * 最后一次见过的非空蒸汽, 用于渲染气体; 不参与序列化.
+	 */
+	public FluidStack getRenderedSteam() {
+		return steam.getRendered();
+	}
 
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
 		cachedEfficiency = computeEfficiency();
+		syncFluidsToClient();
+	}
+
+	/**
+	 * {@link FluidTank} 内容变化只会标脏, 不会主动发包; 这里每 lazyTick 比对一次水与蒸汽的量,
+	 * 变了才同步, 否则客户端的两层液面永远停在方块加载时的那一刻.
+	 */
+	private void syncFluidsToClient() {
+		if (level == null || level.isClientSide()) {
+			return;
+		}
+
+		int input = getInputTank().getFluidAmount();
+		int output = getOutputTank().getFluidAmount();
+		if (input == syncedInput && output == syncedOutput) {
+			return;
+		}
+
+		syncedInput = input;
+		syncedOutput = output;
+		sendData();
 	}
 
 	@Override
@@ -127,7 +198,7 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 				.style(ChatFormatting.GRAY)
 				.forGoggles(tooltip);
 
-		double efficiency = getCurrentEfficiency();
+		double efficiency = computeEfficiency();
 		boolean working = efficiency > 0.0D;
 
 		SlLang.translate(working ? SlTranKeys.GOGGLE_SOLAR_BOILER_WORKING : SlTranKeys.GOGGLE_SOLAR_BOILER_IDLE)
@@ -169,5 +240,56 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 			case RAIN, THUNDER, ARTIFICIAL_LIGHT -> ChatFormatting.YELLOW;
 			case NONE -> ChatFormatting.RED;
 		};
+	}
+
+	/**
+	 * 一个储罐的平滑液面: 服务端每 lazyTick 才同步一次内容, 直接用瞬时值会让液面一格一格地跳.
+	 * 这里每 tick 朝目标值指数逼近, 渲染时再按 partialTick 在两次 tick 之间插值.
+	 */
+	private static class SmoothFluid {
+		private static final float SMOOTHING = 0.25F;
+		private static final float EPSILON = 1.0E-3F;
+
+		private final FluidTank tank;
+		private float level;
+		private float previousLevel;
+		private boolean initialised;
+		private FluidStack rendered = FluidStack.EMPTY;
+
+		private SmoothFluid(FluidTank tank) {
+			this.tank = tank;
+		}
+
+		private void tick() {
+			FluidStack fluid = tank.getFluid();
+			int capacity = tank.getCapacity();
+			float target = capacity > 0 ? Mth.clamp(fluid.getAmount() / (float) capacity, 0.0F, 1.0F) : 0.0F;
+
+			if (!fluid.isEmpty() && (rendered.isEmpty() || !rendered.getFluid().isSame(fluid.getFluid()))) {
+				rendered = fluid.copy();
+			}
+
+			if (!initialised) {
+				initialised = true;
+				level = target;
+				previousLevel = target;
+				return;
+			}
+
+			previousLevel = level;
+			level += (target - level) * SMOOTHING;
+
+			if (Math.abs(target - level) < EPSILON) {
+				level = target;
+			}
+		}
+
+		private FluidStack getRendered() {
+			return rendered;
+		}
+
+		private float getLevel(float partialTick) {
+			return initialised ? Mth.lerp(partialTick, previousLevel, level) : 0.0F;
+		}
 	}
 }

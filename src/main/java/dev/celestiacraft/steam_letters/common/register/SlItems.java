@@ -6,12 +6,14 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.client.models.ItemModelGen;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import dev.celestiacraft.steam_letters.common.item.SteamMechanismItem;
+import net.minecraft.world.item.Item;
 
 public class SlItems {
 	public static final ItemEntry<SteamMechanismItem> STEAM_MECHANISM;
 	public static final ItemEntry<SequencedAssemblyItem> INCOMPLETE_STEAM_MECHANISM;
 	public static final ItemEntry<SteamContainerItem> EMPTY_STEAM_CONTAINER;
 	public static final ItemEntry<SteamContainerItem> SEALED_STEAM_CONTAINER;
+	public static final ItemEntry<Item> BRONZE_WHISK;
 
 	static {
 		STEAM_MECHANISM = SlApis.REGISTRATE.item("steam_mechanism", SteamMechanismItem::new)
@@ -32,6 +34,11 @@ public class SlItems {
 		SEALED_STEAM_CONTAINER = SlApis.REGISTRATE.item("sealed_steam_container", properties -> new SteamContainerItem(properties, false))
 				.model(ItemModelGen.generated("item/sealed_steam_container"))
 				.lang("Sealed Steam Container")
+				.register();
+
+		BRONZE_WHISK = SlApis.REGISTRATE.item("bronze_whisk", Item::new)
+				.model(ItemModelGen.generated("item/bronze_whisk"))
+				.lang("Bronze Whisk")
 				.register();
 	}
 

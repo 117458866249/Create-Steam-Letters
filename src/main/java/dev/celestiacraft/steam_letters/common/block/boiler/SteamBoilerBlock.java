@@ -4,9 +4,9 @@ import com.simibubi.create.foundation.block.IBE;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
+import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
 import dev.celestiacraft.steam_letters.utils.BlockFluidInteractions;
 import net.minecraft.core.BlockPos;
@@ -33,7 +33,7 @@ public class SteamBoilerBlock extends Block implements IBE<SteamBoilerBlockEntit
 
 	public SteamBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SteamBoilerBlockEntity>> customBlockEntityType) {
 		super(properties);
-		this.spec = SteamEngineSpec.of(configurer);
+		spec = SteamEngineSpec.of(configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}
 

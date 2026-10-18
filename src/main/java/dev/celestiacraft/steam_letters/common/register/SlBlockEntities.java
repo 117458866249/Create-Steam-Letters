@@ -61,6 +61,7 @@ public class SlBlockEntities {
 				.register();
 
 		SOLAR_BOILER = SlApis.REGISTRATE.blockEntity("solar_boiler", SolarBoilerBlockEntity::new)
+				.renderer(() -> SolarBoilerRenderer::new)
 				.validBlock(SlBlocks.BRONZE_SOLAR_BOILER)
 				.register();
 

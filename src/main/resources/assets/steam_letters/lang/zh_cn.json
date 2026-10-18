@@ -109,14 +109,6 @@
 	"steam_letters.gui.goggles.steam_engine.stress": "应力输出",
 	"steam_letters.jei.fluid_fuel": "流体燃料",
 	"steam_letters.jei.solid_fuel": "固体燃料",
-	"steam_letters.ponder.steam_hammer.header": "蒸汽锻锤",
-	"steam_letters.ponder.steam_hammer.text_1": "蒸汽锻锤是动力冲压机的蒸汽驱动版本",
-	"steam_letters.ponder.steam_hammer.text_2": "和任何动力机器一样, 它需要旋转动力才能运作",
-	"steam_letters.ponder.steam_hammer.text_3": "但仅有转速还不够, 它还需要蒸汽",
-	"steam_letters.ponder.steam_hammer.text_4": "传送带送来的物品会被整组压印",
-	"steam_letters.ponder.steam_hammer.text_5": "一次敲击最多可同时处理 64 个物品",
-	"steam_letters.ponder.steam_hammer.text_6": "每次加工消耗 1000 mB 蒸汽, 耗尽便会停工",
-	"steam_letters.ponder.steam_hammer.text_7": "从任意一面接入管道补充蒸汽, 它就能一直压下去",
 	"steam_letters.tooltip.sealed_steam_container.empty": "可容纳 _%s mB_ 蒸汽",
 	"steam_letters.tooltip.sealed_steam_container.fluid": "%s: _%s_ / %s mB",
 	"steam_letters.tooltip.steam_container.extract": "▸ 右键锅炉, 流体储罐或飞轮引擎以抽取蒸汽",
@@ -136,5 +128,10 @@
 	"item.steam_letters.steam_mechanism": "蒸汽构件",
 	"itemGroup.steam_letters.basic": "机械动力: 来自蒸汽的信",
 	"item.steam_letters.empty_steam_container": "空的密封蒸汽容器",
-	"item.steam_letters.sealed_steam_container": "密封蒸汽容器"
+	"item.steam_letters.sealed_steam_container": "密封蒸汽容器",
+	"block.steam_letters.tin_block": "锡块",
+	"item.steam_letters.bronze_whisk": "青铜搅拌器",
+	"item.steam_letters.tin_ingot": "锡锭",
+	"item.steam_letters.tin_nugget": "锡粒",
+	"item.steam_letters.tin_plate": "锡板"
 }

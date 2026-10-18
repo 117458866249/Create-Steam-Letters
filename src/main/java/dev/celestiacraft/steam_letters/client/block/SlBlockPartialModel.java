@@ -18,6 +18,7 @@ public class SlBlockPartialModel {
 			STEAM_FLYWHEEL_LOWER_SLIDING,
 			STEAM_MIXER_HEAD,
 			STEAM_MIXER_POLE,
+			STEAM_MIXER_COGWHEEL,
 			SPOUT_TOP,
 			SPOUT_MIDDLE,
 			SPOUT_BOTTOM;
@@ -45,6 +46,7 @@ public class SlBlockPartialModel {
 
 		STEAM_MIXER_HEAD = addPartial("steam_mixer/head");
 		STEAM_MIXER_POLE = addPartial("steam_mixer/pole");
+		STEAM_MIXER_COGWHEEL = addPartial("steam_mixer/cogwheel");
 
 		SPOUT_TOP = addPartial("advanced_spout/top");
 		SPOUT_MIDDLE = addPartial("advanced_spout/middle");

@@ -2,7 +2,6 @@ package dev.celestiacraft.steam_letters.common.block.steam_mixer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
@@ -35,7 +34,7 @@ public class SteamMixerRenderer extends KineticBlockEntityRenderer<SteamMixerBlo
 		BlockState blockState = entity.getBlockState();
 		VertexConsumer solidBuffer = source.getBuffer(RenderType.solid());
 
-		SuperByteBuffer cogwheelRender = CachedBuffers.partial(AllPartialModels.SHAFTLESS_COGWHEEL, blockState);
+		SuperByteBuffer cogwheelRender = CachedBuffers.partial(SlBlockPartialModel.STEAM_MIXER_COGWHEEL, blockState);
 		standardKineticRotationTransform(cogwheelRender, entity, light).renderInto(stack, solidBuffer);
 
 		float renderedHeadOffset = entity.getRenderedHeadOffset(partialTicks);
