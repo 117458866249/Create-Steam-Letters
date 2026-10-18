@@ -49,12 +49,7 @@ public class SlRecipeTypes {
 		FLUID_FUEL_INFO = typeInfo(SlApis.loadResource("fluid_fuel"), FLUID_FUEL, FLUID_FUEL_SERIALIZER);
 	}
 
-	/**
-	 * 把注册表里的类型与序列化器包成 Create 的 {@link IRecipeTypeInfo}, 供 {@code ProcessingRecipeGen} 使用.
-	 */
-	private static IRecipeTypeInfo typeInfo(ResourceLocation id,
-			Supplier<? extends RecipeType<?>> type,
-			Supplier<? extends RecipeSerializer<?>> serializer) {
+	private static IRecipeTypeInfo typeInfo(ResourceLocation id, Supplier<? extends RecipeType<?>> type, Supplier<? extends RecipeSerializer<?>> serializer) {
 		return new IRecipeTypeInfo() {
 			@Override
 			public ResourceLocation getId() {
@@ -62,13 +57,11 @@ public class SlRecipeTypes {
 			}
 
 			@Override
-			@SuppressWarnings("unchecked")
 			public <T extends RecipeSerializer<?>> T getSerializer() {
 				return (T) serializer.get();
 			}
 
 			@Override
-			@SuppressWarnings("unchecked")
 			public <T extends RecipeType<?>> T getType() {
 				return (T) type.get();
 			}
