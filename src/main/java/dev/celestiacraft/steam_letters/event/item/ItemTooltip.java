@@ -6,8 +6,8 @@ import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
-import dev.celestiacraft.steam_letters.common.register.SlItems;
 import dev.celestiacraft.steam_letters.config.common.SteamHammerConfig;
+import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -15,8 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
@@ -36,8 +36,7 @@ public class ItemTooltip {
 		if (stack.is(SlBlocks.BRONZE_BASIN.asItem())) {
 			addBronzeBasinTooltip(tooltip);
 		}
-		if (stack.is(SlItems.EMPTY_STEAM_CONTAINER.asItem())
-				|| stack.is(SlItems.SEALED_STEAM_CONTAINER.asItem())) {
+		if (stack.is(SlItemTags.STEAM_CONTAINER)) {
 			addSteamContainerTooltip(tooltip, stack);
 		}
 	}

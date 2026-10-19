@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.client.ponder;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import net.createmod.ponder.api.registration.PonderPlugin;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -29,6 +30,11 @@ public class SlPonderPlugin implements PonderPlugin {
 	@Override
 	public void registerScenes(@NotNull PonderSceneRegistrationHelper<ResourceLocation> helper) {
 		SlPonderScene.register(helper(helper));
+	}
+
+	@Override
+	public void registerTags(@NotNull PonderTagRegistrationHelper<ResourceLocation> helper) {
+		SlPonderTags.register(helper);
 	}
 
 	private static PonderSceneRegistrationHelper<Item> helper(PonderSceneRegistrationHelper<ResourceLocation> helper) {

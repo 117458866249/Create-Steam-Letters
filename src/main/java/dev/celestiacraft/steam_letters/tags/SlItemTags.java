@@ -1,5 +1,6 @@
 package dev.celestiacraft.steam_letters.tags;
 
+import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -7,6 +8,7 @@ import net.minecraft.world.item.Item;
 
 public class SlItemTags {
 	public static final TagKey<Item>
+			STEAM_CONTAINER,
 			ANDESITE_ALLOY_INGOT,
 			BRONZE_INGOT,
 			BRONZE_PLATES,
@@ -17,6 +19,7 @@ public class SlItemTags {
 			TIN_BLOCK;
 
 	static {
+		STEAM_CONTAINER = create(CreateLettersSteam.MODID, "steam_containers");
 		ANDESITE_ALLOY_INGOT = create("forge", "ingots/andesite_alloy");
 		BRONZE_INGOT = create("forge", "ingots/bronze");
 		BRONZE_PLATES = create("forge", "plates/bronze");

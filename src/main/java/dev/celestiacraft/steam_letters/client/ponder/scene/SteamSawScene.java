@@ -22,8 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- * 蒸汽锯的 Ponder 场景.
- * <p>
+ *
  * 结构文件: {@code assets/steam_letters/ponder/steam_saw.nbt}
  */
 public class SteamSawScene {
@@ -135,8 +134,9 @@ public class SteamSawScene {
 				.attachKeyFrame()
 				.text("蒸汽耗尽后, 锯会立刻停机");
 		scene.idle(10);
-		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class,
-				nbt -> nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag()));
+		});
 		scene.world().setKineticSpeed(kinetics, 0);
 		scene.idle(50);
 

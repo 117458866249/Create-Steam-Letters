@@ -90,7 +90,7 @@ public class AdvancedSpoutScene {
 		for (int i = 0; i < 10; i++) {
 			scene.effects().emitParticles(util.vector().topOf(spoutPos.below()),
 					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, .1f)), 1, 1);
+							VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)), 1, 1);
 		}
 		scene.idle(60);
 
@@ -138,7 +138,7 @@ public class AdvancedSpoutScene {
 		scene.effects().indicateSuccess(spoutPos);
 		scene.idle(20);
 		scene.world().removeItemsFromBelt(util.grid().at(2, 1, 2));
-		item = scene.world().createItemOnBelt(util.grid().at(2, 1, 2), Direction.UP, new ItemStack(Items.HONEY_BOTTLE));
+		scene.world().createItemOnBelt(util.grid().at(2, 1, 2), Direction.UP, new ItemStack(Items.HONEY_BOTTLE));
 		scene.idle(40);
 
 		scene.markAsFinished();

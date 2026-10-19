@@ -6,6 +6,7 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.client.models.ItemModelGen;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import dev.celestiacraft.steam_letters.common.item.SteamMechanismItem;
+import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.world.item.Item;
 
 public class SlItems {
@@ -27,11 +28,13 @@ public class SlItems {
 				.register();
 
 		EMPTY_STEAM_CONTAINER = SlApis.REGISTRATE.item("empty_steam_container", properties -> new SteamContainerItem(properties, true))
+				.tag(SlItemTags.STEAM_CONTAINER)
 				.model(ItemModelGen.generated("item/empty_steam_container"))
 				.lang("Empty Sealed Steam Container")
 				.register();
 
 		SEALED_STEAM_CONTAINER = SlApis.REGISTRATE.item("sealed_steam_container", properties -> new SteamContainerItem(properties, false))
+				.tag(SlItemTags.STEAM_CONTAINER)
 				.model(ItemModelGen.generated("item/sealed_steam_container"))
 				.lang("Sealed Steam Container")
 				.register();
