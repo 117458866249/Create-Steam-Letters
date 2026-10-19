@@ -35,7 +35,12 @@ public class SlTranKeys {
 			TOOLTIP_SEALED_CONTAINER_FLUID,
 			TOOLTIP_STEAM_CONTAINER_EXTRACT,
 			TOOLTIP_STEAM_CONTAINER_INSERT,
-			TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE;
+			TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE,
+			TOOLTIP_STEAM_PUMP_SUMMARY,
+			TOOLTIP_STEAM_PUMP_BEHAVIOUR1,
+			TOOLTIP_STEAM_PUMP_BEHAVIOUR2,
+			TOOLTIP_STEAM_PIPE_SUMMARY,
+			TOOLTIP_STEAM_PIPE_BEHAVIOUR;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -75,6 +80,12 @@ public class SlTranKeys {
 		TOOLTIP_STEAM_CONTAINER_EXTRACT = "tooltip.steam_container.extract";
 		TOOLTIP_STEAM_CONTAINER_INSERT = "tooltip.steam_container.insert";
 		TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE = "tooltip.steam_container.extract_more";
+
+		TOOLTIP_STEAM_PUMP_SUMMARY = "tooltip.steam_pump.summary";
+		TOOLTIP_STEAM_PUMP_BEHAVIOUR1 = "tooltip.steam_pump.behaviour1";
+		TOOLTIP_STEAM_PUMP_BEHAVIOUR2 = "tooltip.steam_pump.behaviour2";
+		TOOLTIP_STEAM_PIPE_SUMMARY = "tooltip.steam_pipe.summary";
+		TOOLTIP_STEAM_PIPE_BEHAVIOUR = "tooltip.steam_pipe.behaviour";
 	}
 
 	/**

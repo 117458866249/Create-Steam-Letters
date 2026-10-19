@@ -5,13 +5,13 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
 import dev.celestiacraft.steam_letters.client.particle.SteamParticle;
 import dev.celestiacraft.steam_letters.client.ponder.SlPonderPlugin;
-import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelInstance;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelRenderer;
 import dev.celestiacraft.steam_letters.common.register.SlFluids;
 import dev.celestiacraft.steam_letters.common.register.SlParticles;
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
@@ -45,9 +45,6 @@ public class SlClientSetup {
 		event.registerSpriteSet(SlParticles.STEAM.get(), SteamParticle.Factory::new);
 	}
 
-	/**
-	 * KubeJS 动态注册出来的飞轮带着自己的方块实体类型, 走不到 Registrate 的 visual/renderer 链, 在这里补上.
-	 */
 	@SubscribeEvent
 	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		for (BlockEntityType<SteamFlywheelBlockEntity> type : SteamFlywheelBlockEntity.DYNAMIC_TYPES) {
@@ -55,10 +52,6 @@ public class SlClientSetup {
 		}
 	}
 
-	/**
-	 * Flywheel 的 PartialModel 只在模型烘焙(RegisterAdditional)那一刻已经在 ALL 里的才会被加载,
-	 * KubeJS 注册出来的飞轮材质是运行时才知道的, 所以要在烘焙之前把它们建好, 否则渲染出来是紫黑方块.
-	 */
 	private static void preloadFlywheelModels() {
 		for (Block block : ForgeRegistries.BLOCKS) {
 			if (block instanceof SteamFlywheelBlock flywheel) {

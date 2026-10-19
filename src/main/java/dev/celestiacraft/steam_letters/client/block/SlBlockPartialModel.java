@@ -1,11 +1,15 @@
 package dev.celestiacraft.steam_letters.client.block;
 
+import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes.ComponentPartials;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SlBlockPartialModel {
@@ -54,6 +58,13 @@ public class SlBlockPartialModel {
 	}
 
 	private static final Map<String, PartialModel> FLYWHEEL_PARTS = new HashMap<>();
+
+	/**
+	 * 青铜蒸汽管道的接口模型: 玩家自己看的法兰/接头没法用 Create 的 (那是铜色), 所以整套复制了一份.
+	 * 键是 {@link ComponentPartials} (CONNECTION / RIM_CONNECTOR / RIM / DRAIN), 内层按朝向索引.
+	 */
+	public static final Map<ComponentPartials, Map<Direction, PartialModel>> BRONZE_PIPE_ATTACHMENTS =
+			buildBronzePipeAttachments();
 
 	/**
 	 * 取飞轮的轮盘模型. 内置青铜飞轮直接用模组自带的 {@code bronze_wheel}, 其余材质取
@@ -119,6 +130,25 @@ public class SlBlockPartialModel {
 				ResourceLocation.fromNamespaceAndPath(material.getNamespace(),
 						"block/steam/flywheel/" + material.getPath() + "_" + part)
 		));
+	}
+
+	private static Map<ComponentPartials, Map<Direction, PartialModel>> buildBronzePipeAttachments() {
+		Map<ComponentPartials, Map<Direction, PartialModel>> attachments = new EnumMap<>(ComponentPartials.class);
+
+		for (ComponentPartials part : ComponentPartials.values()) {
+			Map<Direction, PartialModel> byFacing = new EnumMap<>(Direction.class);
+
+			for (Direction direction : Direction.values()) {
+				String path = "bronze_pipe/" + part.name().toLowerCase(Locale.ROOT)
+						+ "/" + direction.getName();
+
+				byFacing.put(direction, addPartial(path));
+			}
+
+			attachments.put(part, byFacing);
+		}
+
+		return attachments;
 	}
 
 	private static PartialModel addPartial(String path) {

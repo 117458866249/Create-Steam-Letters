@@ -30,6 +30,9 @@ public class ItemTooltip {
 		if (stack.is(SlBlocks.STEAM_HAMMER.asItem())) {
 			addSteamHammerTooltip(tooltip);
 		}
+		if (stack.is(SlBlocks.BRONZE_STEAM_PUMP.asItem())) {
+			addSteamPumpTooltip(tooltip);
+		}
 		if (stack.is(SlItems.EMPTY_STEAM_CONTAINER.asItem())
 				|| stack.is(SlItems.SEALED_STEAM_CONTAINER.asItem())) {
 			addSteamContainerTooltip(tooltip, stack);
@@ -81,6 +84,61 @@ public class ItemTooltip {
 	private static void addContainerBehaviour(List<Component> tooltip, String langKey) {
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(
 				SlLang.translateDirect(langKey).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
+	}
+
+	private static void addSteamPumpTooltip(List<Component> tooltip) {
+		SlLang.isShiftDown(tooltip);
+
+		if (!SlLang.isShiftDown()) {
+			return;
+		}
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PUMP_SUMMARY).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR1).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
+	}
+
+	private static void addSteamPipeTooltip(List<Component> tooltip) {
+		SlLang.isShiftDown(tooltip);
+
+		if (!SlLang.isShiftDown()) {
+			return;
+		}
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PIPE_SUMMARY).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PIPE_BEHAVIOUR).getString(),
 				FontHelper.Palette.STANDARD_CREATE.primary(),
 				FontHelper.Palette.STANDARD_CREATE.highlight(),
 				1

@@ -15,6 +15,8 @@ public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
 		addOtherLang(provider);
 		addSteamHammerLang(provider);
+		addSteamPumpLang(provider);
+		addSteamPipeLang(provider);
 		addAdvancedSpoutLang(provider);
 		addGoggleLang(provider);
 		addSteamEngineLang(provider);
@@ -89,6 +91,32 @@ public class English {
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2),
 				"Consumes _%s mB_ of steam per operation"
+		);
+	}
+
+	private static void addSteamPumpLang(RegistrateLangProvider provider) {
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_SUMMARY),
+				"Only ever _moves steam_, and only when it is the _sole_ medium in the pipe"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR1),
+				"Requires _no rotational force_ and consumes _no stress"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2),
+				"Works on its own once a steam pipe is attached"
+		);
+	}
+
+	private static void addSteamPipeLang(RegistrateLangProvider provider) {
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_SUMMARY),
+				"Only _steam_ may flow through this pipe"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_BEHAVIOUR),
+				"Use it together with the _Bronze Steam Pump_"
 		);
 	}
 

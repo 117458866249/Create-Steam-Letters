@@ -28,6 +28,7 @@ import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntit
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_hammer.SteamHammerBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_mixer.SteamMixerBlock;
+import dev.celestiacraft.steam_letters.common.block.steam_pump.BronzeSteamPumpBlock;
 import dev.celestiacraft.steam_letters.common.block.steam_saw.SteamSawBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.SoundType;
@@ -46,6 +47,7 @@ public class SlBlocks {
 	public static final BlockEntry<FluidBurnerBlock> BRONZE_FLUID_BURNER;
 	public static final BlockEntry<SteamFlywheelBlock> BRONZE_STEAM_FLYWHEEL;
 	public static final BlockEntry<SteamEngineBlock> BRONZE_STEAM_ENGINE;
+	public static final BlockEntry<BronzeSteamPumpBlock> BRONZE_STEAM_PUMP;
 	public static final BlockEntry<CasingBlock> BRONZE_CASING;
 
 	static {
@@ -237,6 +239,18 @@ public class SlBlocks {
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
 				.blockstate(SteamEngineBlock.genBlockState("bronze"))
 				.lang("Bronze Steam Engine")
+				.register();
+
+		BRONZE_STEAM_PUMP = SlApis.REGISTRATE.block("bronze_steam_pump", BronzeSteamPumpBlock::new)
+				.item(SteamBlockItem::new)
+				.model(ItemModelGen.withModel("block/bronze_pump/item"))
+				.build()
+				.initialProperties(SharedProperties::softMetal)
+				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+				.tag(BlockTags.NEEDS_STONE_TOOL)
+				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
+				.blockstate(BronzeSteamPumpBlock.genBlockState())
+				.lang("Bronze Steam Pump")
 				.register();
 
 		BRONZE_CASING = SlApis.REGISTRATE.block("bronze_casing", CasingBlock::new)
