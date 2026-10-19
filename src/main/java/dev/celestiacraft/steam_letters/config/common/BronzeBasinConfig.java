@@ -14,6 +14,6 @@ public class BronzeBasinConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		SLOT_CAPACITY = builder.translation(key("slot_capacity"))
-				.defineInRange("slot_capacity", 10 * FluidType.BUCKET_VOLUME, FluidType.BUCKET_VOLUME, 1000000);
+				.defineInRange("slot_capacity", 16 * FluidType.BUCKET_VOLUME, FluidType.BUCKET_VOLUME, 1000000);
 	}
 }

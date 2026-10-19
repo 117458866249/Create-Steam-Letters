@@ -40,7 +40,10 @@ public class SlTranKeys {
 			TOOLTIP_STEAM_PUMP_BEHAVIOUR1,
 			TOOLTIP_STEAM_PUMP_BEHAVIOUR2,
 			TOOLTIP_STEAM_PIPE_SUMMARY,
-			TOOLTIP_STEAM_PIPE_BEHAVIOUR;
+			TOOLTIP_STEAM_PIPE_BEHAVIOUR,
+			TOOLTIP_BRONZE_BASIN_SUMMARY,
+			TOOLTIP_BRONZE_BASIN_BEHAVIOUR1,
+			TOOLTIP_BRONZE_BASIN_BEHAVIOUR2;
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
@@ -86,6 +89,9 @@ public class SlTranKeys {
 		TOOLTIP_STEAM_PUMP_BEHAVIOUR2 = "tooltip.steam_pump.behaviour2";
 		TOOLTIP_STEAM_PIPE_SUMMARY = "tooltip.steam_pipe.summary";
 		TOOLTIP_STEAM_PIPE_BEHAVIOUR = "tooltip.steam_pipe.behaviour";
+		TOOLTIP_BRONZE_BASIN_SUMMARY = "tooltip.bronze_basin.summary";
+		TOOLTIP_BRONZE_BASIN_BEHAVIOUR1 = "tooltip.bronze_basin.behaviour1";
+		TOOLTIP_BRONZE_BASIN_BEHAVIOUR2 = "tooltip.bronze_basin.behaviour2";
 	}
 
 	/**

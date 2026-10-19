@@ -50,10 +50,10 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	public static final double DEFAULT_STRENGTH = 16384.0D;
 	public static final double DEFAULT_SPEED = 32.0D;
 	/**
-	 * 满负荷蒸汽消耗速率 (mB/tick): 与同材料锅炉的最高产汽速率 (36 mB/tick) 相等.
-	 * 预热时长 = consumption / heatup_acceleration, 默认 0.5 时为 72 tick.
+	 * 满负荷蒸汽消耗速率 (mB/tick): 与同材料锅炉的最高产汽速率 (12 mB/tick) 相等.
+	 * 预热时长 = consumption / heatup_acceleration, 默认 0.5 时为 24 tick.
 	 */
-	public static final double DEFAULT_CONSUMPTION = 36.0D;
+	public static final double DEFAULT_CONSUMPTION = 12.0D;
 	public static final int DEFAULT_STORAGE = 32000;
 
 	@Getter

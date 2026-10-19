@@ -27,6 +27,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
+	/**
+	 * 一个注液配方的固定耗时, 短于原版的 20 刻.
+	 */
+	public static final int FILLING_TIME = 5;
+
+	/**
+	 * 真正落注液的倒计时时刻.
+	 * 取 0 而不是 5: 倒计时序列 (5,4,3,2,1,0) 必定经过 0, 而 5 可能被
+	 * 传送带与注液器各自的 tick 顺序跳过, 短周期下会漏注.
+	 */
+	public static final int POUR_TICK = 0;
+
 	public AdvancedSpoutBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
@@ -47,54 +59,26 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 				this,
 				new AdvancedSpoutSpoutValueBox()
 		));
-
-		behaviours.add(new AdvancedSpoutModeScrollValueBehaviour(
-				Component.translatable(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE),
-				this,
-				new AdvancedSpoutModeValueBox()
-		));
 	}
 
 	/**
-	 * 注液时间来自数值板 (由行为持有), 行为缺失时退回原版 20 刻.
-	 * 模式板选「并行」时忽略滑条值, 保持原版 20 刻.
+	 * 固定 5 刻完成一个配方.
 	 */
 	public int getFillingTime() {
-		if (getMode() == AdvancedSpoutModeScrollValueBehaviour.MODE_PARALLEL) {
-			return SpoutBlockEntity.FILLING_TIME;
-		}
-		AdvancedSpoutScrollValueBehaviour behaviour = getBehaviour(AdvancedSpoutScrollValueBehaviour.TYPE);
-		if (behaviour == null) {
-			return SpoutBlockEntity.FILLING_TIME;
-		}
-		return behaviour.getFillingTime();
+		return FILLING_TIME;
 	}
 
 	/**
-	 * 当前模式, 来自顶面的模式板.
-	 */
-	public int getMode() {
-		AdvancedSpoutModeScrollValueBehaviour behaviour = getBehaviour(AdvancedSpoutModeScrollValueBehaviour.TYPE);
-		if (behaviour == null) {
-			return AdvancedSpoutModeScrollValueBehaviour.MODE_SPEED_AND_PARALLEL;
-		}
-		return behaviour.getMode();
-	}
-
-	/**
-	 * 真注液发生在倒计时走到这一时刻: 原版周期固定为 5, 周期短于 6 刻时提前到 cycle-1, 下限 0.
+	 * 落注液时刻.
 	 */
 	public int getPourTick() {
-		return Math.min(5, Math.max(0, getFillingTime() - 1));
+		return POUR_TICK;
 	}
 
 	/**
-	 * 单次注液可处理的物品数量, 同样由数值板决定; 模式板选「速度」时固定为 1.
+	 * 单次注液可处理的物品数量, 由侧面数值板决定.
 	 */
 	public int getParallel() {
-		if (getMode() == AdvancedSpoutModeScrollValueBehaviour.MODE_SPEED) {
-			return 1;
-		}
 		AdvancedSpoutScrollValueBehaviour behaviour = getBehaviour(AdvancedSpoutScrollValueBehaviour.TYPE);
 		if (behaviour == null) {
 			return 1;
@@ -120,7 +104,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 			return BeltProcessingBehaviour.ProcessingResult.HOLD;
 		}
 
-		if (processingTicks != -1 && processingTicks != 5) {
+		if (processingTicks != -1 && processingTicks != POUR_TICK) {
 			return BeltProcessingBehaviour.ProcessingResult.HOLD;
 		}
 		if (level == null || !FillingBySpout.canItemBeFilled(level, transported.stack)) {
@@ -139,7 +123,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 		}
 
 		if (processingTicks == -1) {
-			processingTicks = getFillingTime();
+			processingTicks = FILLING_TIME;
 			notifyUpdate();
 			AllSoundEvents.SPOUTING.playOnServer(
 					level,
@@ -213,7 +197,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 					currentFluidInTank.copy(),
 					true
 			) > 0) {
-				processingTicks = getFillingTime();
+				processingTicks = FILLING_TIME;
 				customProcess = behaviour;
 				notifyUpdate();
 			}
@@ -221,7 +205,7 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 
 		if (processingTicks >= 0) {
 			processingTicks--;
-			if (processingTicks == getPourTick() && customProcess != null) {
+			if (processingTicks == POUR_TICK && customProcess != null) {
 				int fillBlock = customProcess.fillBlock(
 						level,
 						worldPosition.below(2),
@@ -241,8 +225,8 @@ public class AdvancedSpoutBlockEntity extends SpoutBlockEntity {
 			}
 		}
 
-		// 注液时间可短到 1 刻, 滴液阈值必须跟着走, 否则短周期下连粒子都没有
-		int dripThreshold = Math.min(8, Math.max(1, getFillingTime() - 5));
+		// 周期只有 5 刻, 滴液阈值跟着走, 否则短周期下连粒子都没有
+		int dripThreshold = Math.max(1, FILLING_TIME - 3);
 		if (processingTicks >= dripThreshold && level.isClientSide()) {
 			spawnProcessingParticles(getTank().getPrimaryTank().getRenderedFluid());
 		}

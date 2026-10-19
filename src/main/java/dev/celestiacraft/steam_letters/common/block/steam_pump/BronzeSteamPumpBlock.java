@@ -6,10 +6,13 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +26,33 @@ public class BronzeSteamPumpBlock extends PumpBlock {
 	@Override
 	public @NotNull BlockEntityType<? extends PumpBlockEntity> getBlockEntityType() {
 		return SlBlockEntities.BRONZE_STEAM_PUMP.get();
+	}
+
+	/**
+	 * 蒸汽泵不接入动力网络. 覆盖此方法可切断与相邻轴的连接
+	 */
+	@Override
+	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+		return false;
+	}
+
+	/**
+	 * 原版 PumpBlock 默认被当作小齿轮参与啮合传动. 并列放置时会因此进入相邻的齿轮传播链路
+	 * 这里明确排除, 使蒸汽泵完全不参与齿轮传力
+	 */
+	@Override
+	public boolean isSmallCog() {
+		return false;
+	}
+
+	@Override
+	public boolean isLargeCog() {
+		return false;
+	}
+
+	@Override
+	public boolean hideStressImpact() {
+		return true;
 	}
 
 	public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> genBlockState() {

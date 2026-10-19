@@ -21,11 +21,11 @@ import java.util.Locale;
 
 public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements IHaveGoggleInformation {
 	/**
-	 * 内置青铜太阳能锅炉的默认参数: 罐 10000 mB, 晴天满日照下产 36 mB/tick 蒸汽,
-	 * 与同材料蒸汽引擎的最高消耗速率相等; 雨天/雷暴/人造光按配置折扣.
+	 * 内置青铜太阳能锅炉的默认参数: 罐 10000 mB, 晴天满日照下产 12 mB/tick 蒸汽;
+	 * 雨天/雷暴/人造光按配置折扣.
 	 */
 	public static final int DEFAULT_CAPACITY = 10000;
-	public static final double DEFAULT_PRODUCTION = 36.0D;
+	public static final double DEFAULT_PRODUCTION = 12.0D;
 	private final SmoothFluid water;
 	private final SmoothFluid steam;
 

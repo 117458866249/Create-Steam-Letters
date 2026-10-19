@@ -4,7 +4,6 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.client.ponder.SlPonderPlugin;
-import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutModeScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutScrollValueBehaviour;
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.createmod.ponder.api.registration.LangRegistryAccess;
@@ -17,6 +16,7 @@ public class English {
 		addSteamHammerLang(provider);
 		addSteamPumpLang(provider);
 		addSteamPipeLang(provider);
+		addBronzeBasinLang(provider);
 		addAdvancedSpoutLang(provider);
 		addGoggleLang(provider);
 		addSteamEngineLang(provider);
@@ -120,17 +120,23 @@ public class English {
 		);
 	}
 
+	private static void addBronzeBasinLang(RegistrateLangProvider provider) {
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_SUMMARY),
+				"Each fluid slot holds _16 times_ the fluid of a regular basin"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR1),
+				"Accepts _multiple fluids_, used by mixing and compacting recipes"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR2),
+				"Processes more recipes before it needs to be refilled"
+		);
+	}
+
 	private static void addAdvancedSpoutLang(RegistrateLangProvider provider) {
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE, "Mode");
-		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_FILLING_TIME, "Filling time");
 		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_PARALLEL, "Parallel");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_BOTH, "Speed+Parallel");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_SPEED, "Speed");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_PARALLEL, "Parallel");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_BOTH_SHORT, "Both");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_SPEED_SHORT, "Speed");
-		provider.add(AdvancedSpoutModeScrollValueBehaviour.LANG_MODE_PARALLEL_SHORT, "Batch");
-		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_VALUE_SPEED, "%s ticks");
 		provider.add(AdvancedSpoutScrollValueBehaviour.LANG_VALUE_PARALLEL, "x%s");
 	}
 
@@ -249,7 +255,7 @@ public class English {
 						+ "0.5 means it only needs half the steam of a normal-steam run.");
 		provider.add(ConfigModule.commentKey("steam_engine", "heatup_acceleration"),
 				"Steam consumption ramp-up (mB/tick per tick) while the flywheel engine is heating up.\n"
-						+ "0.5 means a 36 mB/tick engine needs 72 ticks to reach full consumption.");
+						+ "0.5 means a 12 mB/tick engine needs 24 ticks to reach full consumption.");
 		provider.add(ConfigModule.commentKey("steam_engine", "superheated_acceleration_multiplier"),
 				"Heat-up acceleration multiplier applied while running on superheated steam.");
 		provider.add(ConfigModule.commentKey("steam_engine", "superheated_output_multiplier"),

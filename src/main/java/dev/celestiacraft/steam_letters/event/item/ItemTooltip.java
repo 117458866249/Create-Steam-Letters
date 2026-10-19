@@ -33,6 +33,9 @@ public class ItemTooltip {
 		if (stack.is(SlBlocks.BRONZE_STEAM_PUMP.asItem())) {
 			addSteamPumpTooltip(tooltip);
 		}
+		if (stack.is(SlBlocks.BRONZE_BASIN.asItem())) {
+			addBronzeBasinTooltip(tooltip);
+		}
 		if (stack.is(SlItems.EMPTY_STEAM_CONTAINER.asItem())
 				|| stack.is(SlItems.SEALED_STEAM_CONTAINER.asItem())) {
 			addSteamContainerTooltip(tooltip, stack);
@@ -115,6 +118,37 @@ public class ItemTooltip {
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(
 				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
+	}
+
+	private static void addBronzeBasinTooltip(List<Component> tooltip) {
+		SlLang.isShiftDown(tooltip);
+
+		if (!SlLang.isShiftDown()) {
+			return;
+		}
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_BRONZE_BASIN_SUMMARY).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR1).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR2).getString(),
 				FontHelper.Palette.STANDARD_CREATE.primary(),
 				FontHelper.Palette.STANDARD_CREATE.highlight(),
 				1

@@ -14,12 +14,12 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class SteamBoilerBlockEntity extends AbstractBoilerBlockEntity {
 	/**
-	 * 内置青铜蒸汽锅炉的默认参数: 两个罐各 10000 mB, 100% 效率时产 36 mB/tick 蒸汽.
+	 * 内置青铜蒸汽锅炉的默认参数: 两个罐各 10000 mB, 100% 效率时产 12 mB/tick 蒸汽.
 	 * <p>
-	 * 最高产汽速率与同材料的蒸汽引擎最高消耗速率 (36 mB/tick) 相等, 一台锅炉刚好喂饱一台引擎.
+	 * 最高产汽速率与同材料的蒸汽引擎最高消耗速率 (12 mB/tick) 相等, 一台锅炉刚好喂饱一台引擎.
 	 */
 	public static final int DEFAULT_CAPACITY = 10000;
-	public static final double DEFAULT_PRODUCTION = 36.0D;
+	public static final double DEFAULT_PRODUCTION = 12.0D;
 
 	private boolean hasValidBurner;
 
