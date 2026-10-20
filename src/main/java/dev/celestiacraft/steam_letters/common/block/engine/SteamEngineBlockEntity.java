@@ -282,13 +282,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		if (state.hasProperty(SteamEngineBlock.LIT) && state.getValue(SteamEngineBlock.LIT) != value) {
 			level.setBlock(worldPosition, state.setValue(SteamEngineBlock.LIT, value), 3);
 		}
-
-		if (value) {
-			level.playSound(null, worldPosition, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 0.4F, 0.9F);
-		}
 	}
-
-	// 绑定
 
 	private void refreshWheel() {
 		BlockPos found = findWheelPos();
