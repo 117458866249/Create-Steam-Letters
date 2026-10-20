@@ -25,7 +25,8 @@ public class SlPonderScene {
 				.addStoryBoard(
 						"steam_hammer",
 						SteamHammerScene::usage,
-						AllCreatePonderTags.KINETIC_APPLIANCES
+						AllCreatePonderTags.KINETIC_APPLIANCES,
+						SlPonderTags.SL
 				);
 	}
 
@@ -34,7 +35,8 @@ public class SlPonderScene {
 				.addStoryBoard(
 						"steam_mixer",
 						SteamMixerScene::usage,
-						AllCreatePonderTags.KINETIC_APPLIANCES
+						AllCreatePonderTags.KINETIC_APPLIANCES,
+						SlPonderTags.SL
 				);
 	}
 
@@ -43,7 +45,8 @@ public class SlPonderScene {
 				.addStoryBoard(
 						"steam_saw",
 						SteamSawScene::usage,
-						AllCreatePonderTags.KINETIC_APPLIANCES
+						AllCreatePonderTags.KINETIC_APPLIANCES,
+						SlPonderTags.SL
 				);
 	}
 
@@ -52,7 +55,8 @@ public class SlPonderScene {
 				.addStoryBoard(
 						"advanced_spout",
 						AdvancedSpoutScene::usage,
-						AllCreatePonderTags.FLUIDS
+						AllCreatePonderTags.FLUIDS,
+						SlPonderTags.SL
 				);
 	}
 
@@ -67,7 +71,8 @@ public class SlPonderScene {
 						"steam_engine",
 						SteamEngineScene::usage,
 						AllCreatePonderTags.FLUIDS,
-						AllCreatePonderTags.KINETIC_SOURCES
+						AllCreatePonderTags.KINETIC_SOURCES,
+						SlPonderTags.SL
 				);
 	}
 }

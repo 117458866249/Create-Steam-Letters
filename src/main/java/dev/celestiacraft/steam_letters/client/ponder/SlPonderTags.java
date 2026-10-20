@@ -8,14 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class SlPonderTags {
-	public static final ResourceLocation MOD;
+	public static final ResourceLocation SL;
 
 	static {
-		MOD = SlApis.loadResource(CreateLettersSteam.MODID);
+		SL = SlApis.loadResource(CreateLettersSteam.MODID);
 	}
 
 	public static void register(@NotNull PonderTagRegistrationHelper<ResourceLocation> helper) {
-		helper.registerTag(MOD)
+		helper.registerTag(SL)
 				.addToIndex()
 				.item(SlBlocks.BRONZE_STEAM_FLYWHEEL, true, false)
 				.title("机械动力: 来自蒸汽的信")
