@@ -115,7 +115,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-		// 本设备不依赖任何 Create 行为组件
 	}
 
 	@Override
@@ -140,8 +139,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 		refreshWheel();
 
-		// 罐里的量也得算进同步条件: 护目镜读的是客户端这边的 tank,
-		// 只同步热机进度和应力的话, 罐里进进出出的蒸汽在客户端永远是旧值.
 		int fluidAmount = tank.getFluidAmount();
 		if (syncedHeatup != heatup || syncedStrength != appliedStrength || syncedFluidAmount != fluidAmount) {
 			syncedHeatup = heatup;
@@ -150,8 +147,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			sendData();
 		}
 	}
-
-	// 服务端逻辑
 
 	private void serverTick() {
 		if (wheelPos == null) {
@@ -180,7 +175,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			int fromSource = remaining > 0 ? drawFromBoiler(remaining) : 0;
 			int drawn = fromTank + fromSource;
 
-			// 以请求量结算: 没抽到的部分不跨 tick 累积, 否则欠账会滚雪球, 应力一路下滑.
 			pending -= request;
 			if (pending < 0.0D) {
 				pending = 0.0D;
@@ -190,7 +184,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 				return;
 			}
 
-			// 应力只按到手蒸汽算: 汽源抽上来的部分只入账 suck_efficiency, 自带罐里的蒸汽全额入账.
 			ratio = Mth.clamp((fromTank + fromSource * getSuckEfficiency()) / request, 0.0D, 1.0D);
 		}
 
@@ -250,8 +243,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			return 0;
 		}
 
-		// 汽源把蒸汽装在哪个罐里由它自己决定 (锅炉的 0 号罐是水, 1 号罐才是蒸汽),
-		// 因此逐个罐找一个装着蒸汽的, 再用那种流体构造抽取请求.
 		FluidStack steamStack = FluidStack.EMPTY;
 		for (int i = 0; i < handler.getTanks(); i++) {
 			FluidStack content = handler.getFluidInTank(i);

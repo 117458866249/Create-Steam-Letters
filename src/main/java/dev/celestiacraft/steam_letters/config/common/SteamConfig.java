@@ -22,10 +22,13 @@ public class SteamConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		SUPERHEATED_STEAM_CONSUMPTION_MULTIPLIER = builder.translation(key("superheated_steam_consumption_multiplier"))
+				.comment("Global steam consumption multiplier for machines running on superheated steam.",
+					"0.25 means such a machine only needs a quarter of the normal steam.")
 				.defineInRange("superheated_steam_consumption_multiplier", 0.25, 0.0, 1.0);
 
 		OUTPUT_STEAM_FLUID = builder.translation(key("output_steam_fluid"))
-				.comment(commentKeyOf("output_steam_fluid"))
+				.comment("Fluid id produced by steam boilers and solar boilers.",
+					"Existing tank contents are never converted when this changes.")
 				.define("output_steam_fluid", "steam_letters:steam");
 	}
 

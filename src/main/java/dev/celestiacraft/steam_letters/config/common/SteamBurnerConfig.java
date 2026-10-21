@@ -21,10 +21,12 @@ public class SteamBurnerConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		HEAT_GAIN_PERCENT_PER_SECOND = builder.translation(key("heat_gain_percent_per_second"))
-				.comment(commentKeyOf("heat_gain_percent_per_second"))
+				.comment("Heat gained per second while burning fuel, "
+					+ "as a percentage of the burner max heat.")
 				.defineInRange("heat_gain_percent_per_second", 0.5D, 0.0D, 100.0D);
 		HEAT_LOSS_PERCENT_PER_SECOND = builder.translation(key("heat_loss_percent_per_second"))
-				.comment(commentKeyOf("heat_loss_percent_per_second"))
+				.comment("Heat lost per second while no fuel is burning, "
+					+ "as a percentage of the burner max heat.")
 				.defineInRange("heat_loss_percent_per_second", 1.0D, 0.0D, 100.0D);
 	}
 }

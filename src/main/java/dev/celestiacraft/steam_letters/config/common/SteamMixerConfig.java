@@ -16,12 +16,16 @@ public class SteamMixerConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		STEAM_MIXER_PARALLEL = builder.translation(key("steam_mixer_parallel"))
+				.comment("Maximum number of recipes a single steam mixer "
+						+ "processes at once.")
 				.defineInRange("steam_mixer_parallel", 16, 1, 64);
 
 		STEAM_CONSUMPTION = builder.translation(key("steam_consumption"))
+				.comment("Steam consumed per finished recipe (mB).")
 				.defineInRange("steam_consumption", 1000, 0, 1000000);
 
 		STEAM_CAPACITY = builder.translation(key("steam_capacity"))
+				.comment("Steam buffer capacity of a steam mixer (mB).")
 				.defineInRange("steam_capacity", 10000, 1000, 1000000);
 	}
 }

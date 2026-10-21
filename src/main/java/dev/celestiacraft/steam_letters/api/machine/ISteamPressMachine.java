@@ -32,14 +32,6 @@ public interface ISteamPressMachine extends PressingBehaviour.PressingBehaviourS
 
 	float getSpeed();
 
-	/**
-	 * 取世界一律走这里：{@code PressingBehaviour#getWorld()} 是机械动力的方法，运行时不参与重命名。
-	 * <p>
-	 * 注意：不要在接口里声明 {@code Level getLevel()}。接口声明的方法名不参与 SRG 重映射，
-	 * 而 {@code BlockEntity#getLevel()} 在运行时叫 {@code m_58904_}，实现类（继承自 BlockEntity）
-	 * 永远满足不了那条抽象声明，调用时抛 {@code AbstractMethodError}
-	 * （见 crash-2026-10-21_13.17.44-server.txt）。
-	 */
 	default Level level() {
 		return getPressingBehaviour().getWorld();
 	}

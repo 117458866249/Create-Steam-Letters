@@ -8,7 +8,6 @@ import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpout
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.createmod.ponder.api.registration.LangRegistryAccess;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraftforge.common.ForgeConfigSpec;
 
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
@@ -199,66 +198,5 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
-
-		addConfigCommentLang(provider);
-	}
-
-	/**
-	 * 配置项的说明文字 (comment) 翻译.
-	 * <p>
-	 * {@link ForgeConfigSpec.Builder#comment(String...)} 只接受纯字符串,
-	 * 没有任何翻译通道, 所以各 ConfigModule 里写的是 {@code .comment(commentKeyOf("xxx"))} ——
-	 * 直接把说明本身写成翻译键, toml 里看到的就是那串键名.
-	 * <p>
-	 * Configured 的 {@code ForgeValue#getComment()} 会拿 {@code <translationKey>.comment} 去查
-	 * {@code I18n.exists}, 命中就渲染这里的翻译, 并把 Forge 自动追加的 {@code "Range: ..."} 拼回末尾;
-	 * 只有在找不到翻译时, 才会把键名原样显示在界面上. 所以每个键都必须在这里 (以及 zh_cn.json) 有值.
-	 */
-	private static void addConfigCommentLang(RegistrateLangProvider provider) {
-		provider.add(ConfigModule.commentKey("general"),
-				"All settings below will only take effect after restarting the server or client.");
-
-		provider.add(ConfigModule.commentKey("steam", "output_steam_fluid"),
-				"Fluid id produced by steam boilers and solar boilers. Existing tank contents are never converted when this changes.");
-
-		provider.add(ConfigModule.commentKey("steam_boiler", "efficiency_threshold_1"),
-				"Lowest heat percentage at which the boiler starts producing steam.");
-		provider.add(ConfigModule.commentKey("steam_boiler", "efficiency_threshold_4"),
-				"Heat percentage required for the boiler to run at full efficiency.");
-
-		provider.add(ConfigModule.commentKey("solar_boiler", "sunlight_efficiency"),
-				"Efficiency multiplier when the boiler has direct sky light (and no weather penalty).");
-		provider.add(ConfigModule.commentKey("solar_boiler", "artificial_light_efficiency"),
-				"Efficiency multiplier when the boiler is lit by block light instead of sky light.");
-		provider.add(ConfigModule.commentKey("solar_boiler", "artificial_light_threshold"),
-				"Minimum block light level for the artificial light path to be usable.");
-		provider.add(ConfigModule.commentKey("solar_boiler", "require_daylight"),
-				"Whether the sky light path additionally requires daytime.\n"
-						+ "Vanilla sky light level stays at 15 during the night, so without this the boiler would produce at full speed in complete darkness.");
-		provider.add(ConfigModule.commentKey("solar_boiler", "rain_efficiency"),
-				"Weather multiplier while it is raining at the boiler.");
-		provider.add(ConfigModule.commentKey("solar_boiler", "thunder_efficiency"),
-				"Weather multiplier while a thunder storm is raging at the boiler (includes snow during thunder).");
-
-		provider.add(ConfigModule.commentKey("steam_burner", "heat_gain_percent_per_second"),
-				"Heat gained per second while burning fuel, as a percentage of the burner max heat.");
-		provider.add(ConfigModule.commentKey("steam_burner", "heat_loss_percent_per_second"),
-				"Heat lost per second while no fuel is burning, as a percentage of the burner max heat.");
-
-		provider.add(ConfigModule.commentKey("steam_engine", "suck_efficiency"),
-				"""
-						Efficiency (0~1) of steam drawn directly from an adjacent boiler.
-						4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine,
-						so a directly fed engine caps out at 75% of its stress output.""");
-		provider.add(ConfigModule.commentKey("steam_engine", "superheated_consumption_multiplier"),
-				"Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n"
-						+ "0.5 means it only needs half the steam of a normal-steam run.");
-		provider.add(ConfigModule.commentKey("steam_engine", "heatup_acceleration"),
-				"Steam consumption ramp-up (mB/tick per tick) while the flywheel engine is heating up.\n"
-						+ "0.5 means a 12 mB/tick engine needs 24 ticks to reach full consumption.");
-		provider.add(ConfigModule.commentKey("steam_engine", "superheated_acceleration_multiplier"),
-				"Heat-up acceleration multiplier applied while running on superheated steam.");
-		provider.add(ConfigModule.commentKey("steam_engine", "superheated_output_multiplier"),
-				"Stress output multiplier applied while running on superheated steam.");
-	}
+}
 }

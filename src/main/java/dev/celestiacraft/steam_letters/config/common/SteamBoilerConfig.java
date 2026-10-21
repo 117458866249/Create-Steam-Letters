@@ -24,23 +24,29 @@ public class SteamBoilerConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		EFFICIENCY_THRESHOLD_1 = builder.translation(key("efficiency_threshold_1"))
-				.comment(commentKeyOf("efficiency_threshold_1"))
+				.comment("Lowest heat percentage at which the boiler starts producing steam.")
 				.defineInRange("efficiency_threshold_1", 25, 0, 100);
 		EFFICIENCY_THRESHOLD_2 = builder.translation(key("efficiency_threshold_2"))
+				.comment("Heat percentage at which the boiler reaches efficiency tier 2.")
 				.defineInRange("efficiency_threshold_2", 50, 0, 100);
 		EFFICIENCY_THRESHOLD_3 = builder.translation(key("efficiency_threshold_3"))
+				.comment("Heat percentage at which the boiler reaches efficiency tier 3.")
 				.defineInRange("efficiency_threshold_3", 75, 0, 100);
 		EFFICIENCY_THRESHOLD_4 = builder.translation(key("efficiency_threshold_4"))
-				.comment(commentKeyOf("efficiency_threshold_4"))
+				.comment("Heat percentage required for the boiler to run at full efficiency.")
 				.defineInRange("efficiency_threshold_4", 100, 0, 100);
 
 		EFFICIENCY_1 = builder.translation(key("efficiency_1"))
+				.comment("Steam output multiplier of efficiency tier 1.")
 				.defineInRange("efficiency_1", 0.25D, 0.0D, 1.0D);
 		EFFICIENCY_2 = builder.translation(key("efficiency_2"))
+				.comment("Steam output multiplier of efficiency tier 2.")
 				.defineInRange("efficiency_2", 0.5D, 0.0D, 1.0D);
 		EFFICIENCY_3 = builder.translation(key("efficiency_3"))
+				.comment("Steam output multiplier of efficiency tier 3.")
 				.defineInRange("efficiency_3", 0.75D, 0.0D, 1.0D);
 		EFFICIENCY_4 = builder.translation(key("efficiency_4"))
+				.comment("Steam output multiplier of efficiency tier 4, i.e. the maximum boiler output.")
 				.defineInRange("efficiency_4", 1.0D, 0.0D, 1.0D);
 	}
 

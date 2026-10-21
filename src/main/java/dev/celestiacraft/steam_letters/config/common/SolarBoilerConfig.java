@@ -29,27 +29,33 @@ public class SolarBoilerConfig extends ConfigModule {
 	@Override
 	protected void addConfigs() {
 		SUNLIGHT_EFFICIENCY = builder.translation(key("sunlight_efficiency"))
-				.comment(commentKeyOf("sunlight_efficiency"))
+				.comment("Efficiency multiplier when the boiler has direct sky light "
+					+ "(and no weather penalty).")
 				.defineInRange("sunlight_efficiency", 1.0D, 0.0D, 1.0D);
 
 		ARTIFICIAL_LIGHT_EFFICIENCY = builder.translation(key("artificial_light_efficiency"))
-				.comment(commentKeyOf("artificial_light_efficiency"))
+				.comment("Efficiency multiplier when the boiler is lit by block light "
+					+ "instead of sky light.")
 				.defineInRange("artificial_light_efficiency", 0.5D, 0.0D, 1.0D);
 
 		ARTIFICIAL_LIGHT_THRESHOLD = builder.translation(key("artificial_light_threshold"))
-				.comment(commentKeyOf("artificial_light_threshold"))
+				.comment("Minimum block light level for the artificial light path "
+					+ "to be usable.")
 				.defineInRange("artificial_light_threshold", 8, 0, 15);
 
 		REQUIRE_DAYLIGHT = builder.translation(key("require_daylight"))
-				.comment(commentKeyOf("require_daylight"))
+				.comment("Whether the sky light path additionally requires daytime.",
+					"Vanilla sky light level stays at 15 at night, so without this "
+							+ "the boiler would produce at full speed in complete darkness.")
 				.define("require_daylight", true);
 
 		RAIN_EFFICIENCY = builder.translation(key("rain_efficiency"))
-				.comment(commentKeyOf("rain_efficiency"))
+				.comment("Weather multiplier while it is raining at the boiler.")
 				.defineInRange("rain_efficiency", 0.5D, 0.0D, 1.0D);
 
 		THUNDER_EFFICIENCY = builder.translation(key("thunder_efficiency"))
-				.comment(commentKeyOf("thunder_efficiency"))
+				.comment("Weather multiplier while a thunder storm is raging at the boiler "
+					+ "(includes snow during thunder).")
 				.defineInRange("thunder_efficiency", 0.25D, 0.0D, 1.0D);
 	}
 

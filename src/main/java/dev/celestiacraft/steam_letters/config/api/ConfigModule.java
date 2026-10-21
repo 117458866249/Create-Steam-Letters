@@ -3,6 +3,22 @@ package dev.celestiacraft.steam_letters.config.api;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+/**
+ * 一个配置模块: 在固定的 path 下注册若干配置项, 并统一它们的翻译键与注释写法.
+ * <p>
+ * 注释契约 —— 三层各管一件事, 不要混:
+ * <ul>
+ * 	<li>{@code .comment(...)} 写英文原文. Forge 没有任何注释翻译通道,
+ * 	{@link ForgeConfigSpec.Builder#comment(String...)} 收到的字面量会被原样写进 toml,
+ * 	所以这里直接写玩家能读懂的英文 —— 这是唯一能改善 toml 可读性的位置.</li>
+ * 	<li>{@code .translation(key("x"))} 是界面翻译键 (选项名), 供 Configured 渲染,
+ * 	与注释互不影响.</li>
+ * 	<li>中文释义放在 lang 文件的 {@code <translationKey>.comment} 键里.
+ * 	Configured 的 {@code ForgeValue#getComment()} 会先查这个键: 命中就用翻译替换掉英文原文,
+ * 	只把 Forge 自动追加的 {@code "Range: ..."} 拼回末尾; 未命中才回退到英文原文.
+ * 	结论是 <b>toml 永远是英文, 游戏内界面才是中文</b>.</li>
+ * </ul>
+ */
 public abstract class ConfigModule {
 	protected final ForgeConfigSpec.Builder builder;
 	protected final String path;
@@ -21,31 +37,11 @@ public abstract class ConfigModule {
 
 	protected abstract void addConfigs();
 
+	/**
+	 * 本模块某个配置项的界面翻译键, 形如 {@code steam_letters.config.<path>.<name>}.
+	 */
 	protected String key(String name) {
 		return translationKey(path, name);
-	}
-
-	/**
-	 * 本模块某个配置项的说明 (comment) 翻译键, 等价于 {@code key(name) + ".comment"}.
-	 * <p>
-	 * {@link ForgeConfigSpec.Builder#comment(String...)} 只接受纯字符串, 没有任何翻译通道;
-	 * 而 Configured 的 {@code ForgeValue#getComment()} 会先查 {@code <translationKey>.comment},
-	 * 命中 {@code I18n.exists} 就渲染翻译. 所以这里直接把注释写成这个键,
-	 * 让 {@code ValueSpec#getComment()} 返回的东西本身就是"可翻译的".
-	 * <p>
-	 * toml 里看到的就是这一串键名 —— 它同时充当"这里有一条待翻译的说明"的标记;
-	 * 游戏内配置界面渲染的是 lang 文件里的内容, 不是这串键名.
-	 */
-	protected String commentKeyOf(String name) {
-		return key(name) + ".comment";
-	}
-
-	/**
-	 * Configured 会先查 {@code <translationKey>.comment} 有没有翻译, 命中就渲染翻译, 否则回退到
-	 * {@link ForgeConfigSpec.Builder#comment(String...)} 写死的英文. 这里生成的就是那个键.
-	 */
-	public static String commentKey(String... path) {
-		return translationKey(path) + ".comment";
 	}
 
 	public static String translationKey(String... path) {
