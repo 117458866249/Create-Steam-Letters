@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -26,6 +25,10 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 	 */
 	public static final int DEFAULT_CAPACITY = 10000;
 	public static final double DEFAULT_PRODUCTION = 12.0D;
+	/**
+	 * 太阳光条件检查的高度 (格): 正上方 1 至 16 格内不能有遮罩方块.
+	 */
+	private static final int SKY_CHECK_HEIGHT = 16;
 	private final SmoothFluid water;
 	private final SmoothFluid steam;
 
@@ -136,18 +139,38 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 		return 0.0D;
 	}
 
+	/**
+	 * 太阳光条件: 正上方 1 至 16 格内没有遮罩方块.
+	 * <p>
+	 * 直接看方块本身, 不看天空光亮度. 亮度只在区块重算时刷新, 客户端进入世界之后就冻住了,
+	 * 整合包里还可能被其它模组改写; 而方块状态两端随时同步, 判定结果始终和玩家看到的一致.
+	 * 玻璃、树叶、单个台阶这类不阻挡天空光的方块按透明处理 (propagatesSkylightDown), 不构成遮罩.
+	 */
 	private boolean hasSkyAccess(BlockPos above) {
-		if (level.dimension().equals(Level.END)) {
-			return hasOpenSky(above);
-		}
-		if (level.getBrightness(LightLayer.SKY, above) < level.getMaxLightLevel()) {
+		// 维度自己就没有天空光 (下界), 太阳光这一关不成立, 只能靠人造光.
+		if (!level.dimensionType().hasSkyLight()) {
 			return false;
 		}
-		return SolarBoilerConfig.isSkyLightUsable(level);
-	}
+		if (!SolarBoilerConfig.isSkyLightUsable(level)) {
+			return false;
+		}
 
-	private boolean hasOpenSky(BlockPos above) {
-		return level.getHeight(Heightmap.Types.MOTION_BLOCKING, above.getX(), above.getZ()) <= above.getY();
+		for (int i = 0; i < SKY_CHECK_HEIGHT; i++) {
+			BlockPos pos = above.above(i);
+			if (pos.getY() >= level.getMaxBuildHeight()) {
+				// 已经探到世界高度上限, 再往上只有天空, 不构成遮罩
+				break;
+			}
+			if (!level.isLoaded(pos)) {
+				// 未加载的区块不能当作无遮挡, 否则区块边缘的锅炉会凭空满效率工作
+				return false;
+			}
+			if (!level.getBlockState(pos).propagatesSkylightDown(level, pos)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private boolean hasArtificialLight(BlockPos above) {
@@ -199,7 +222,9 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 				.forGoggles(tooltip);
 
 		double efficiency = computeEfficiency();
-		boolean working = efficiency > 0.0D;
+		// 满速产出未配置 (0) 时不产汽, 此时即便光照满足也只能算待机.
+		double fullOutput = spec.getProduction();
+		boolean working = efficiency > 0.0D && fullOutput > 0.0D;
 
 		SlLang.translate(working ? SlTranKeys.GOGGLE_SOLAR_BOILER_WORKING : SlTranKeys.GOGGLE_SOLAR_BOILER_IDLE)
 				.style(working ? ChatFormatting.GREEN : ChatFormatting.RED)
@@ -211,14 +236,21 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 				.style(lightSourceColor(source))
 				.forGoggles(tooltip, 1);
 
-		SlLang.translate(SlTranKeys.GOGGLE_SOLAR_BOILER_EFFICIENCY)
+		// 实际产汽速率 = 满速产出 × 当前环境效率; 占满速比例与效率是同一个数, 只是换了说法更直观.
+		double production = fullOutput * efficiency;
+
+		SlLang.translate(SlTranKeys.GOGGLE_SOLAR_BOILER_PRODUCTION)
 				.style(ChatFormatting.GRAY)
 				.text(ChatFormatting.DARK_GRAY, ": ")
-				.add(Component.literal(String.format(
-						Locale.ROOT,
-						"%.0f%%",
-						efficiency * 100.0D
-				)).withStyle(working ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY))
+				.add(Component.literal(String.format(Locale.ROOT, "%.1f", production) + " mB/t")
+						.withStyle(working ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY))
+				.forGoggles(tooltip, 1);
+
+		SlLang.translate(SlTranKeys.GOGGLE_SOLAR_BOILER_RATE)
+				.style(ChatFormatting.GRAY)
+				.text(ChatFormatting.DARK_GRAY, ": ")
+				.add(Component.literal(String.format(Locale.ROOT, "%.0f%%", working ? efficiency * 100.0D : 0.0D))
+						.withStyle(working ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY))
 				.forGoggles(tooltip, 1);
 
 		return true;

@@ -73,12 +73,25 @@ public class SolarBoilerConfig extends ConfigModule {
 	}
 
 	/**
-	 * 天空光路是否可用: 未被遮挡, 并且 (按配置) 处于白天.
+	 * 天空光路是否可用: (按配置) 处于白天. 遮挡与否由调用方检查方块.
 	 * <p>
-	 * 末地没有天空光, 由调用方另行处理, 不走这里.
+	 * 这里用世界时间判断昼夜, 而不是 {@code Level#isDay()}: 后者依赖 Level 内部的 skyDarken,
+	 * 客户端只在进入世界时计算过一次, 之后每 tick 都不刷新, 于是夜里客户端仍然认为自己在白天,
+	 * 护目镜就会显示 100% 而服务端早已停止产汽.
 	 */
 	public static boolean isSkyLightUsable(Level level) {
-		return !REQUIRE_DAYLIGHT.get() || level.isDay();
+		if (!REQUIRE_DAYLIGHT.get()) {
+			return true;
+		}
+
+		// 固定时间的维度 (下界、末地) 没有昼夜循环, 昼夜这一关直接放行, 交给遮挡判定.
+		if (level.dimensionType().hasFixedTime()) {
+			return true;
+		}
+
+		// 一天 24000 tick: 0 是日出, 12000 是日落, 取余后落在前半段即为白天.
+		// dayTime 由服务端每 20 tick 发包同步, 客户端跟着走, 不会像 skyDarken 那样冻住.
+		return level.getDayTime() % 24000L < 12000L;
 	}
 
 	public static double getSunlightEfficiency() {

@@ -8,6 +8,7 @@ import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpout
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.createmod.ponder.api.registration.LangRegistryAccess;
 import net.createmod.ponder.foundation.PonderIndex;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
@@ -52,7 +53,8 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_THUNDER), "Light: Sunlight (Thunder)");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL), "Light: Artificial");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_NONE), "Light: None");
-		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_EFFICIENCY), "Efficiency");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_PRODUCTION), "Steam Production");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_RATE), "Share of Full Output");
 	}
 
 	private static void addSteamEngineLang(RegistrateLangProvider provider) {
@@ -193,10 +195,10 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_engine"), "Steam Engine");
 		provider.add(ConfigModule.translationKey("steam_engine", "suck_efficiency"), "Ratio of steam gained when a flywheel engine draws steam directly from a boiler (0.75 = 25% loss)");
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_consumption_multiplier"), "Steam consumption multiplier of a flywheel engine running on superheated steam");
-		provider.add(ConfigModule.translationKey("steam_engine", "heatup_acceleration"), "Growth of steam consumption during heat-up (mB/tick per tick)");
-		provider.add(ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"), "Heat-up acceleration multiplier when running on superheated steam");
+		provider.add(ConfigModule.translationKey("steam_engine", "heatup_seconds"), "Seconds the engine needs to heat up before outputting its full stress");
+		provider.add(ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"), "Divisor applied to the heat-up time when running on superheated steam");
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
-}
+	}
 }

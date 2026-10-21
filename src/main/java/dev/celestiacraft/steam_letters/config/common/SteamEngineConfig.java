@@ -7,12 +7,13 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * 飞轮引擎配置.
  * <p>
  * 直抽效率对所有引擎统一生效; 其余项为过热蒸汽与预热过程的机制倍率.
+ * 预热时长按秒配置, 与引擎的最高蒸汽消耗量无关.
  */
 public class SteamEngineConfig extends ConfigModule {
 	public static ForgeConfigSpec.DoubleValue
 			SUCK_EFFICIENCY,
 			SUPERHEATED_CONSUMPTION_MULTIPLIER,
-			HEATUP_ACCELERATION,
+			HEATUP_SECONDS,
 			SUPERHEATED_ACCELERATION_MULTIPLIER,
 			SUPERHEATED_OUTPUT_MULTIPLIER;
 
@@ -35,11 +36,11 @@ public class SteamEngineConfig extends ConfigModule {
 					+ "normal-steam run.")
 				.defineInRange("superheated_consumption_multiplier", 0.5D, 0.0D, 1.0D);
 
-		HEATUP_ACCELERATION = builder.translation(key("heatup_acceleration"))
-				.comment("Steam consumption ramp-up (mB/tick per tick) while the flywheel engine "
-					+ "is heating up. 0.5 means a 12 mB/tick engine needs 24 ticks to reach "
-					+ "full consumption.")
-				.defineInRange("heatup_acceleration", 0.5D, 0.1D, 100.0D);
+		HEATUP_SECONDS = builder.translation(key("heatup_seconds"))
+				.comment("Steam consumption multiplier applied while the flywheel engine runs "
+						+ "on superheated steam. 0.5 means it only needs half the steam of a "
+						+ "normal-steam run.")
+				.defineInRange("heatup_seconds", 2.0D, 0.0D, 10000.0D);
 
 		SUPERHEATED_ACCELERATION_MULTIPLIER = builder.translation(key("superheated_acceleration_multiplier"))
 				.comment("Heat-up acceleration multiplier applied while running on "

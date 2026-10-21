@@ -49,15 +49,10 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	private boolean recipeCacheValid;
 
 	/**
-	 * 当前这一轮燃烧的名义总时长 (tick), 用来把 {@link FluidFuelRecipe#FUEL_AMOUNT} 均摊到每 tick;
-	 * 0 表示当前没有进行中的一轮. 需要持久化, 否则读档后速率归零会变成永不消耗.
+	 * 当前这一轮燃烧的名义总时长 (tick);
+	 * 0 表示当前没有进行中的一轮. 需要持久化, 否则读档后本轮剩余时间无从恢复.
 	 */
 	private int burnTotalTime;
-
-	/**
-	 * 已累计但还不足 1 mB 的消耗量, 留到后续 tick 一起扣, 避免整数化把零头丢掉.
-	 */
-	private double drainRemainder;
 
 	private LazyOptional<IFluidHandler> fluidCapability;
 
@@ -110,17 +105,15 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 			return false;
 		}
 
-		if (!consumeOneTick()) {
-			clearRound();
-			return false;
-		}
-
 		burnTime--;
 		return true;
 	}
 
 	/**
-	 * 开启新的一轮燃烧: 找配方, 按罐内现有燃料换算这一轮实际能烧多久.
+	 * 开启新的一轮燃烧: 找配方, 并一次性扣掉一份燃料 ({@link FluidFuelRecipe#FUEL_AMOUNT} mB).
+	 * <p>
+	 * 罐里不足一整份时不开始新一轮, 剩下的燃料原样留在罐里等补满, 不会被提前烧掉.
+	 * 开轮时一次性扣料, 所以一轮的时长完全由配方的 {@code processingTime} 决定.
 	 */
 	private boolean beginRound() {
 		FluidStack stored = fuelTank.getFluid();
@@ -138,51 +131,19 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 			return false;
 		}
 
-		// 罐里的料按比例折算成 tick, 不足一整份时缩短本轮, 烧空自然停下
-		long affordable = (long) stored.getAmount() * total / FluidFuelRecipe.FUEL_AMOUNT;
-		if (affordable <= 0) {
+		if (stored.getAmount() < FluidFuelRecipe.FUEL_AMOUNT) {
+			return false;
+		}
+
+		FluidStack drained = fuelTank.drain(FluidFuelRecipe.FUEL_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
+		if (drained.getAmount() < FluidFuelRecipe.FUEL_AMOUNT) {
 			return false;
 		}
 
 		burnTotalTime = total;
-		burnTime = (int) Math.min(total, affordable);
-		drainRemainder = 0.0D;
+		burnTime = total;
 		setChanged();
 		return true;
-	}
-
-	/**
-	 * 推进一 tick 的燃料消耗.
-	 *
-	 * @return false 表示罐里已经没有可以抽出的燃料, 本轮应当中止
-	 */
-	private boolean consumeOneTick() {
-		if (burnTotalTime <= 0) {
-			return false;
-		}
-
-		drainRemainder += FluidFuelRecipe.FUEL_AMOUNT / (double) burnTotalTime;
-
-		int whole = (int) drainRemainder;
-		if (whole <= 0) {
-			return true;
-		}
-
-		FluidStack drained = fuelTank.drain(whole, IFluidHandler.FluidAction.EXECUTE);
-		drainRemainder -= whole;
-
-		if (drained.getAmount() < whole) {
-			return false;
-		}
-
-		setChanged();
-		return true;
-	}
-
-	private void clearRound() {
-		burnTime = 0;
-		burnTotalTime = 0;
-		drainRemainder = 0.0D;
 	}
 
 	/**

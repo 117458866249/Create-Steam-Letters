@@ -69,6 +69,23 @@ public class SteamFlywheelBlockEntity extends GeneratingKineticBlockEntity {
 	}
 
 	/**
+	 * 立即停机: 清掉转速与容量, 不走 {@link #STOPPING_COOLDOWN} 的平滑缓冲.
+	 * <p>
+	 * 预热与待机必须真的不产应力. 若这里仍走平滑缓冲, 飞轮会保留旧转速与旧应力容量挂在动力网络上,
+	 * 引擎侧明明已经不供汽, 网络上却还能读到上一次的应力 (例如 4096 SU), 表现为引擎停了飞轮仍在转.
+	 */
+	public void stopImmediately() {
+		stoppingCooldown = 0;
+		if (generatedSpeed == 0.0F && generatedCapacity == 0.0F) {
+			return;
+		}
+
+		generatedSpeed = 0.0F;
+		generatedCapacity = 0.0F;
+		updateGeneratedRotation();
+	}
+
+	/**
 	 * 当前是否已经按给定的转速与容量在发电. 引擎用它避免每 tick 重复写入.
 	 */
 	public boolean isGeneratingAt(float speed, float capacity) {

@@ -89,10 +89,17 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 			return;
 		}
 
-		double percentPerSecond = burning
-				? SteamBurnerConfig.HEAT_GAIN_PERCENT_PER_SECOND.get()
-				: SteamBurnerConfig.HEAT_LOSS_PERCENT_PER_SECOND.get();
-		double delta = maxHeat * percentPerSecond / 100.0D / 20.0D;
+		// 配置的是「升到最高热量 / 降回 0 需要多少秒」, 换算成每 tick 的增量, 与实际 maxHeat 数值解耦.
+		double seconds = burning
+				? SteamBurnerConfig.HEATUP_SECONDS.get()
+				: SteamBurnerConfig.COOLDOWN_SECONDS.get();
+		if (seconds <= 0.0D) {
+			// 0 秒视为瞬时完成
+			heat = burning ? maxHeat : 0.0D;
+			return;
+		}
+
+		double delta = maxHeat / (seconds * 20.0D);
 
 		heat = burning ? heat + delta : heat - delta;
 		heat = Mth.clamp(heat, 0.0D, maxHeat);

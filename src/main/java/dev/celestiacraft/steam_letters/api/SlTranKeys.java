@@ -21,7 +21,8 @@ public class SlTranKeys {
 			GOGGLE_SOLAR_BOILER_LIGHT_THUNDER,
 			GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL,
 			GOGGLE_SOLAR_BOILER_LIGHT_NONE,
-			GOGGLE_SOLAR_BOILER_EFFICIENCY,
+			GOGGLE_SOLAR_BOILER_PRODUCTION,
+	GOGGLE_SOLAR_BOILER_RATE,
 			GOGGLE_STEAM_ENGINE,
 			GOGGLE_STEAM_ENGINE_STATUS_IDLE,
 			GOGGLE_STEAM_ENGINE_STATUS_HEATUP,
@@ -65,7 +66,8 @@ public class SlTranKeys {
 		GOGGLE_SOLAR_BOILER_LIGHT_THUNDER = "gui.goggles.solar_boiler.light.thunder";
 		GOGGLE_SOLAR_BOILER_LIGHT_ARTIFICIAL = "gui.goggles.solar_boiler.light.artificial";
 		GOGGLE_SOLAR_BOILER_LIGHT_NONE = "gui.goggles.solar_boiler.light.none";
-		GOGGLE_SOLAR_BOILER_EFFICIENCY = "gui.goggles.solar_boiler.efficiency";
+		GOGGLE_SOLAR_BOILER_PRODUCTION = "gui.goggles.solar_boiler.production";
+		GOGGLE_SOLAR_BOILER_RATE = "gui.goggles.solar_boiler.rate";
 
 		GOGGLE_STEAM_ENGINE = "gui.goggles.steam_engine";
 		GOGGLE_STEAM_ENGINE_STATUS_IDLE = "gui.goggles.steam_engine.status.idle";

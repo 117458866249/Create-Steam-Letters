@@ -44,15 +44,13 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	public static final String NBT_STRENGTH = "AppliedStrength";
 	public static final String NBT_LIT = "Lit";
 	public static final String NBT_WHEEL = "Wheel";
+	public static final String NBT_STAGE = "SupplyStage";
 	public static final int WHEEL_DISTANCE = 2;
 	private static final int STAGES = 4;
+	private static final int STARVE_GRACE_TICKS = 20;
 	private static final double MIN_SUCK_EFFICIENCY = 0.001D;
 	public static final double DEFAULT_STRENGTH = 16384.0D;
 	public static final double DEFAULT_SPEED = 32.0D;
-	/**
-	 * 满负荷蒸汽消耗速率 (mB/tick): 与同材料锅炉的最高产汽速率 (12 mB/tick) 相等.
-	 * 预热时长 = consumption / heatup_acceleration, 默认 0.5 时为 24 tick.
-	 */
 	public static final double DEFAULT_CONSUMPTION = 12.0D;
 	public static final int DEFAULT_STORAGE = 32000;
 
@@ -64,23 +62,16 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 	private LazyOptional<IFluidHandler> fluidCapability;
 
-	/**
-	 * 已经预热的 tick 数, 归零即停机.
-	 */
 	@Getter
 	private int heatup;
 
-	/**
-	 * 小数蒸汽余额, 只有攒够 1 mB 才会真的去抽.
-	 */
 	private double pending;
+	private int supplyStage;
+	private int starvedTicks;
 
 	@Getter
 	private boolean lit;
 
-	/**
-	 * 当前实际写进飞轮的应力.
-	 */
 	@Getter
 	private float appliedStrength;
 
@@ -159,39 +150,58 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			return;
 		}
 
-		double rate = getTargetRate();
-		if (rate <= 0.0D) {
+		int fullDemand = getDemandPerTick();
+		if (fullDemand <= 0) {
 			shutdown();
 			return;
 		}
 
-		pending += rate;
-		int request = (int) Math.floor(pending);
-		double ratio = 1.0D;
+		int demand = Math.max(1, (int) Math.round(fullDemand * getHeatupRatio()));
+		int fromTank = tank.drain(demand, IFluidHandler.FluidAction.EXECUTE).getAmount();
+		int remaining = demand - fromTank;
+		int fromSource = remaining > 0 ? drawFromBoiler(remaining) : 0;
+		int drawn = fromTank + fromSource;
+		pending = 0.0D;
 
-		if (request > 0) {
-			int fromTank = tank.drain(request, IFluidHandler.FluidAction.EXECUTE).getAmount();
-			int remaining = request - fromTank;
-			int fromSource = remaining > 0 ? drawFromBoiler(remaining) : 0;
-			int drawn = fromTank + fromSource;
-
-			pending -= request;
-			if (pending < 0.0D) {
-				pending = 0.0D;
-			}
-			if (drawn <= 0) {
+		if (drawn <= 0) {
+			starvedTicks++;
+			if (starvedTicks >= STARVE_GRACE_TICKS) {
 				shutdown();
 				return;
 			}
-
-			ratio = Mth.clamp((fromTank + fromSource * getSuckEfficiency()) / request, 0.0D, 1.0D);
+			warmup(wheel);
+			return;
 		}
+		starvedTicks = 0;
 
-		if (heatup < (int) Math.ceil(getHeatupTicks())) {
+		// 应力档位只看到手蒸汽占满负荷消耗的比例: 汽源抽上来的部分只入账 suck_efficiency, 自带罐里的蒸汽全额入账.
+		double supplied = fromTank + fromSource * getSuckEfficiency();
+		int stage = getSupplyStage(supplied / fullDemand);
+		supplyStage = stage;
+
+		// 预热进度只看是否还有汽, 与档位无关: 进度走完之前不写应力, 也不让飞轮转起来.
+		int heatupTicks = (int) Math.ceil(getHeatupTicks());
+		if (heatup < heatupTicks) {
 			heatup++;
 		}
 
-		drive(wheel, ratio);
+		// 供应不到满负荷消耗的 25%, 或还没预热完: 不旋转, 也不产生应力.
+		if (stage <= 0 || heatup < heatupTicks) {
+			warmup(wheel);
+			return;
+		}
+
+		drive(wheel, stage / (double) STAGES);
+	}
+
+	private void warmup(SteamFlywheelBlockEntity wheel) {
+		if (appliedStrength == 0.0F && !lit && wheel.isGeneratingAt(0.0F, 0.0F)) {
+			return;
+		}
+
+		appliedStrength = 0.0F;
+		wheel.stopImmediately();
+		updateLitState(false);
 	}
 
 	private void drive(SteamFlywheelBlockEntity wheel, double ratio) {
@@ -202,24 +212,26 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	}
 
 	private void shutdown() {
+		SteamFlywheelBlockEntity wheel = getWheel();
+		boolean wheelStopped = wheel == null || wheel.isGeneratingAt(0.0F, 0.0F);
+
+		if (heatup == 0 && pending == 0.0D && appliedStrength == 0.0F && supplyStage == 0 && !lit && wheelStopped) {
+			return;
+		}
+
 		heatup = 0;
 		pending = 0.0D;
 		appliedStrength = 0.0F;
+		supplyStage = 0;
+		starvedTicks = 0;
 
-		SteamFlywheelBlockEntity wheel = getWheel();
 		if (wheel != null) {
-			wheel.setRotation(0.0F, 0.0F);
+			wheel.stopImmediately();
 		}
 
 		updateLitState(false);
 	}
 
-	/**
-	 * 从背面紧贴的那一格抽取蒸汽.
-	 * <p>
-	 * 抽取量上限与引擎自身的满负荷消耗速率一致, 返回值是实际从汽源抽走的原始蒸汽量;
-	 * 抽上来的蒸汽按 {@code SteamEngineConfig.SUCK_EFFICIENCY} 折算成到手量, 因此贴着锅炉直抽最多跑出额定的 75% 应力.
-	 */
 	private int drawFromBoiler(int needed) {
 		if (level == null || needed <= 0) {
 			return 0;
@@ -297,12 +309,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		sendData();
 	}
 
-	/**
-	 * 找出正前方 {@value #WHEEL_DISTANCE} 格外可以驱动的飞轮.
-	 * <p>
-	 * 一台飞轮只服务一台引擎: 如果它已经连向另一侧的引擎, 而那一侧的引擎仍然在位,
-	 * 本引擎就让步 (反过来, 那一侧失效后本引擎可以接管).
-	 */
 	@Nullable
 	private BlockPos findWheelPos() {
 		if (level == null) {
@@ -333,17 +339,10 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		}
 		return level.getBlockEntity(wheelPos) instanceof SteamFlywheelBlockEntity wheel ? wheel : null;
 	}
-
-	// 参数
-
 	private Direction getFacing() {
 		BlockState state = getBlockState();
 		return state.hasProperty(SteamEngineBlock.FACING) ? state.getValue(SteamEngineBlock.FACING) : Direction.NORTH;
 	}
-
-	/**
-	 * 直抽效率 (0~1): 从汽源抽上来的蒸汽只有这一比例计入引擎.
-	 */
 	private double getSuckEfficiency() {
 		return Mth.clamp(SteamEngineConfig.SUCK_EFFICIENCY.get(), MIN_SUCK_EFFICIENCY, 1.0D);
 	}
@@ -366,45 +365,56 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		return Math.max(consumption, 0.0D);
 	}
 
-	/**
-	 * 预热总时长 (tick): 消耗速率上限除以加速度.
-	 */
 	public double getHeatupTicks() {
-		double consumption = getTargetConsumption();
-		if (consumption <= 0.0D) {
+		double seconds = SteamEngineConfig.HEATUP_SECONDS.get();
+		if (seconds <= 0.0D) {
+			// 0 秒表示无需预热
 			return 0.0D;
 		}
 
-		double acceleration = SteamEngineConfig.HEATUP_ACCELERATION.get();
+		double ticks = seconds * 20.0D;
 		if (isSuperheated()) {
-			acceleration *= SteamEngineConfig.SUPERHEATED_ACCELERATION_MULTIPLIER.get();
+			double multiplier = SteamEngineConfig.SUPERHEATED_ACCELERATION_MULTIPLIER.get();
+			if (multiplier > 0.0D) {
+				ticks /= multiplier;
+			}
 		}
-		return acceleration <= 0.0D ? 0.0D : consumption / acceleration;
+		return ticks;
 	}
 
-	/**
-	 * 预热进度 (0~1). 刚通电时也保证非零, 否则速率恒为 0 会让预热永远启动不了.
-	 */
-	private double getHeatupProgress() {
+	public double getHeatupRatio() {
 		double ticks = getHeatupTicks();
-		if (ticks <= 0.0D) {
+		if (ticks <= 0.0D || heatup >= ticks) {
 			return 1.0D;
 		}
-		return Mth.clamp((heatup + 1) / ticks, 0.0D, 1.0D);
+
+		double segment = ticks / STAGES;
+		int step = (int) Math.floor(heatup / segment);
+		return Mth.clamp((step + 1) / (double) STAGES, 1.0D / STAGES, 1.0D);
 	}
 
-	/**
-	 * 本 tick 的蒸汽需求 (mB/tick), 从 0 起步线性爬升到消耗速率上限.
-	 */
-	public double getTargetRate() {
-		return getTargetConsumption() * getHeatupProgress();
+	public int getDemandPerTick() {
+		double consumption = getTargetConsumption();
+		if (consumption <= 0.0D) {
+			return 0;
+		}
+		return Math.max(1, (int) Math.round(consumption));
 	}
 
-	/**
-	 * 应力阶梯 (1~4), 对应额定的 25% / 50% / 75% / 100%.
-	 */
-	public int getStressStage() {
-		return Mth.clamp((int) Math.ceil(getHeatupProgress() * STAGES), 1, STAGES);
+	public static int getSupplyStage(double supplyRatio) {
+		if (supplyRatio < 0.25D) {
+			return 0;
+		}
+		if (supplyRatio < 0.50D) {
+			return 1;
+		}
+		if (supplyRatio < 0.75D) {
+			return 2;
+		}
+		if (supplyRatio < 1.00D) {
+			return 3;
+		}
+		return STAGES;
 	}
 
 	public double getTargetStrength() {
@@ -413,34 +423,15 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			strength = DEFAULT_STRENGTH;
 		}
 
-		double value = strength * getStressStage() / STAGES;
 		if (isSuperheated()) {
-			value *= SteamEngineConfig.SUPERHEATED_OUTPUT_MULTIPLIER.get();
+			strength *= SteamEngineConfig.SUPERHEATED_OUTPUT_MULTIPLIER.get();
 		}
-		return value;
+		return strength;
 	}
 
-	// 客户端表现
-
-	/**
-	 * 排气阀在死点前多少度打开. 活塞走到行程末端之前阀门就开了, 这是蒸汽机的提前排气.
-	 */
 	private static final float EXHAUST_LEAD = 25.0F;
-
-	/**
-	 * 排气过程在曲轴角上占多宽: 死点前 25 度打开, 过死点 15 度后关闭.
-	 */
 	private static final float EXHAUST_SPAN = 40.0F;
-
-	/**
-	 * 排气最猛的一段: 阀门刚打开的前三分之一窗口, 一次喷三颗, 之后每次一颗.
-	 */
 	private static final float EXHAUST_BURST = EXHAUST_SPAN / 3.0F;
-
-	/**
-	 * 上一次排气窗口的序号 ((飞轮角度 + 提前量) / 180 取整). 取整跳一次就是排气阀打开一次,
-	 * 飞轮每一转跳两次: 活塞走到最内与最外两端前后各排气一次.
-	 */
 	private int lastExhaustWindow = Integer.MIN_VALUE;
 
 	private void clientTick() {
@@ -458,7 +449,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		int window = Mth.floor((angle + EXHAUST_LEAD) / 180.0F);
 
 		if (window != lastExhaustWindow) {
-			// 刚进入加载范围时只记下位置, 不补放一次
 			boolean first = lastExhaustWindow == Integer.MIN_VALUE;
 			lastExhaustWindow = window;
 
@@ -468,41 +458,23 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		}
 
 		if (isInExhaustWindow(angle)) {
-			// 阀门刚打开时缸压最高, 喷得最猛, 之后随着压力下降变稀
 			spawnExhaustParticles(exhaustProgress(angle) < EXHAUST_BURST ? 3 : 1);
 		}
 	}
 
-	/**
-	 * 当前曲轴角是否落在排气窗口里. 窗口每半转重复一次, 所以按半转取余判断.
-	 */
 	private static boolean isInExhaustWindow(float angle) {
 		return exhaustProgress(angle) <= EXHAUST_SPAN;
 	}
 
-	/**
-	 * 当前曲轴角距离最近一次排气阀打开过去了多少度, 取值落在 [0, 180).
-	 */
 	private static float exhaustProgress(float angle) {
 		return Mth.positiveModulo(angle + EXHAUST_LEAD, 180.0F);
 	}
 
-	/**
-	 * 客户端认为引擎在运转时返回 true.
-	 * <p>
-	 * 读方块状态的 LIT 而不是同名字段: 状态随方块更新同步到客户端, 字段要走 {@code sendData},
-	 * 两者不同步时会出现停转已久的引擎还在冒汽.
-	 */
 	private boolean isRunningOnClient() {
 		BlockState state = getBlockState();
 		return state.hasProperty(SteamEngineBlock.LIT) && state.getValue(SteamEngineBlock.LIT);
 	}
 
-	/**
-	 * 排气阀打开的那一 tick 放一次声音. 音效与 SteamPowered 的蒸汽引擎一致
-	 * ({@link SoundEvents#FIRE_EXTINGUISH}, 音量与音高都是 0.25), 区别只在于触发时机由固定间隔
-	 * 改成活塞行程末端的排气窗口, 因此频率跟着转速走, 每一转两次.
-	 */
 	private void playExhaustSound() {
 		Direction front = getFacing();
 		level.playLocalSound(
@@ -565,7 +537,8 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		).withStyle(heatup > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_ENGINE_STRESS, Component.literal(
-				formatNumber(appliedStrength) + " SU"
+				formatNumber(appliedStrength) + " / " + formatNumber(getTargetStrength()) + " SU ("
+						+ (supplyStage * 100 / STAGES) + "%)"
 		).withStyle(appliedStrength > 0.0F ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_ENGINE_STEAM, Component.literal(
@@ -576,20 +549,20 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	}
 
 	private String getStatusKey() {
-		if (heatup <= 0 || appliedStrength <= 0.0F) {
-			return SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_IDLE;
+		if (appliedStrength > 0.0F) {
+			return SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_RUNNING;
 		}
-		if (heatup < (int) Math.ceil(getHeatupTicks())) {
+		if (heatup > 0) {
 			return SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_HEATUP;
 		}
-		return SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_RUNNING;
+		return SlTranKeys.GOGGLE_STEAM_ENGINE_STATUS_IDLE;
 	}
 
 	private ChatFormatting getStatusColor() {
-		if (heatup <= 0 || appliedStrength <= 0.0F) {
-			return ChatFormatting.RED;
+		if (appliedStrength > 0.0F) {
+			return ChatFormatting.GREEN;
 		}
-		return heatup < (int) Math.ceil(getHeatupTicks()) ? ChatFormatting.YELLOW : ChatFormatting.GREEN;
+		return heatup > 0 ? ChatFormatting.YELLOW : ChatFormatting.RED;
 	}
 
 	private static void addGoggleLine(List<Component> tooltip, String langKey, Component value) {
@@ -617,7 +590,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			return true;
 		}
 
-		// 锅炉产出的蒸汽流体可以在配置里换成其他模组的蒸汽, 那种流体同样要能灌进引擎.
 		Fluid configured = SteamConfig.getOutputSteamFluid();
 		return configured != null && fluid.isSame(configured);
 	}
@@ -649,6 +621,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		tag.putInt(NBT_HEATUP, heatup);
 		tag.putDouble(NBT_PENDING, pending);
 		tag.putFloat(NBT_STRENGTH, appliedStrength);
+		tag.putInt(NBT_STAGE, supplyStage);
 		tag.putBoolean(NBT_LIT, lit);
 		if (wheelPos != null) {
 			tag.putLong(NBT_WHEEL, wheelPos.asLong());
@@ -664,6 +637,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		heatup = tag.getInt(NBT_HEATUP);
 		pending = tag.getDouble(NBT_PENDING);
 		appliedStrength = tag.getFloat(NBT_STRENGTH);
+		supplyStage = tag.getInt(NBT_STAGE);
 		lit = tag.getBoolean(NBT_LIT);
 		wheelPos = tag.contains(NBT_WHEEL) ? BlockPos.of(tag.getLong(NBT_WHEEL)) : null;
 	}
