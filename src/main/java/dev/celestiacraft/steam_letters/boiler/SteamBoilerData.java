@@ -12,5 +12,5 @@ public interface SteamBoilerData {
 	 * @param level  普通蒸汽为 9, 过热蒸汽为 18
 	 * @param amount 本次调用接受的蒸汽流体量(mB)
 	 */
-	void csa$notifySteamInput(int level, int amount);
+	void sl$notifySteamInput(int level, int amount);
 }

@@ -1,0 +1,28 @@
+package dev.celestiacraft.steam_letters.common.fluid;
+
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import java.util.function.Predicate;
+
+public class BlockEntityFluidTank extends FluidTank {
+	private final BlockEntity owner;
+	private final Predicate<FluidStack> validator;
+
+	public BlockEntityFluidTank(BlockEntity owner, int capacity, Predicate<FluidStack> validator) {
+		super(capacity);
+		this.owner = owner;
+		this.validator = validator;
+	}
+
+	@Override
+	protected void onContentsChanged() {
+		owner.setChanged();
+	}
+
+	@Override
+	public boolean isFluidValid(FluidStack stack) {
+		return validator.test(stack);
+	}
+}

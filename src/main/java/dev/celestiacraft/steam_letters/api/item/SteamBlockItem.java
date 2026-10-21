@@ -14,12 +14,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * 放置逻辑对齐原版 {@code AssemblyOperatorBlockItem}: 点击传送带、工作盆、物流底盘或投掷器的顶面时,
+ * 放置逻辑对齐原版 {@code AssemblyOperatorBlockItem}: 点击传送带, 工作盆, 物流底盘或投掷器的顶面时,
  * 落点抬到该方块正上方第二格.
  * <p>
- * 目标格被占用时直接放置失败, 不退回正上方第一格. 退回会让锻锤压住带面、搅拌机压住盆口,
+ * 目标格被占用时直接放置失败, 不退回正上方第一格. 退回会让锻锤压住带面, 搅拌机压住盆口,
  * 而这类机器的方块实体都在读取 {@code below(2)} 处的承载物, 贴着一格反而工作不了.
  */
 public class SteamBlockItem extends BlockItem {
@@ -28,7 +29,7 @@ public class SteamBlockItem extends BlockItem {
 	}
 
 	@Override
-	public InteractionResult place(BlockPlaceContext context) {
+	public @NotNull InteractionResult place(BlockPlaceContext context) {
 		BlockPos placedOnPos = context.getClickedPos().relative(context.getClickedFace().getOpposite());
 		Level level = context.getLevel();
 		BlockState placedOnState = level.getBlockState(placedOnPos);

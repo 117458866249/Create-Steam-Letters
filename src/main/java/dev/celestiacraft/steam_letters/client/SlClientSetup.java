@@ -30,11 +30,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class SlClientSetup {
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		SlPonderPlugin.register();
-		registerDynamicFlywheelVisuals();
-		preloadFlywheelModels();
-
 		event.enqueueWork(() -> {
+			SlPonderPlugin.register();
+			registerDynamicFlywheelVisuals();
+			preloadFlywheelModels();
+
 			applyTranslucentLayer(SlFluids.STEAM);
 			applyTranslucentLayer(SlFluids.SUPERHEATED_STEAM);
 		});

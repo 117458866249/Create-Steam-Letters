@@ -24,9 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * 流体燃烧室: 烧流体, 升温方式与固体燃烧室完全一致, 只有燃料来源不同.
- */
 public class FluidBurnerBlock extends AbstractBurnerBlock implements IBE<FluidBurnerBlockEntity> {
 	private final Supplier<BlockEntityType<? extends FluidBurnerBlockEntity>> customBlockEntityType;
 

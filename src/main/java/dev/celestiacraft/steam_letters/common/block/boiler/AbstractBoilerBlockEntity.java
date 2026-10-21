@@ -10,7 +10,6 @@ import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +19,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -37,9 +35,9 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	@Getter
 	protected final SteamEngineSpec spec;
 	@Getter
-	private final FluidTank inputTank;
+	private final BoilerFluidTank inputTank;
 	@Getter
-	private final FluidTank outputTank;
+	private final BoilerFluidTank outputTank;
 	private LazyOptional<IFluidHandler> fluidCapability;
 
 	private double pending;
@@ -49,29 +47,8 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 		spec = ((ISteamEngineBlock) state.getBlock()).getEngineSpec();
 		int capacity = spec.getCapacity();
 
-		inputTank = new FluidTank(capacity) {
-			@Override
-			protected void onContentsChanged() {
-				setChanged();
-			}
-
-			@Override
-			public boolean isFluidValid(FluidStack stack) {
-				return !stack.isEmpty() && stack.getFluid().is(FluidTags.WATER);
-			}
-		};
-
-		outputTank = new FluidTank(capacity) {
-			@Override
-			protected void onContentsChanged() {
-				setChanged();
-			}
-
-			@Override
-			public boolean isFluidValid(FluidStack stack) {
-				return isOutputSteam(stack);
-			}
-		};
+		inputTank = new BoilerFluidTank(this, capacity, BoilerFluidTank::isWater);
+		outputTank = new BoilerFluidTank(this, capacity, this::isOutputSteam);
 
 		fluidCapability = LazyOptional.of(this::createFluidHandler);
 	}

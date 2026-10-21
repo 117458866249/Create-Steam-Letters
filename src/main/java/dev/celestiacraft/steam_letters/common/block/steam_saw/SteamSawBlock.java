@@ -30,18 +30,18 @@ public class SteamSawBlock extends SawBlock {
 
 			provider.getVariantBuilder(context.get())
 					.forAllStates((state) -> {
-						Direction facing = state.getValue(BlockStateProperties.FACING);
-						boolean vertical = facing.getAxis() == Direction.Axis.Y;
+						Direction direction = state.getValue(BlockStateProperties.FACING);
+						boolean vertical = direction.getAxis() == Direction.Axis.Y;
 						boolean axisAlongFirst = state.getValue(DirectionalAxisKineticBlock.AXIS_ALONG_FIRST_COORDINATE);
 						boolean flipped = state.getValue(SawBlock.FLIPPED);
 
 						int y = vertical
 								? (axisAlongFirst ? (flipped ? 90 : 270) : (flipped ? 180 : 0))
-								: (int) facing.toYRot();
+								: (int) direction.toYRot();
 
 						return ConfiguredModel.builder()
 								.modelFile(models.getExistingFile(provider.modLoc("block/mechanical_saw/" + (vertical ? "vertical" : "horizontal"))))
-								.rotationX(facing == Direction.DOWN ? 180 : 0)
+								.rotationX(direction == Direction.DOWN ? 180 : 0)
 								.rotationY(y)
 								.build();
 					});

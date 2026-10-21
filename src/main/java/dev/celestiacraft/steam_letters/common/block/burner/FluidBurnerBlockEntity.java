@@ -12,7 +12,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -38,7 +37,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	private static final String NBT_BURN_TOTAL = "BurnTotal";
 
 	@Getter
-	private final FluidTank fuelTank;
+	private final FuelFluidTank fuelTank;
 
 	/**
 	 * 配方查找缓存, 以罐内流体为键.
@@ -64,19 +63,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 			capacity = DEFAULT_CAPACITY;
 		}
 
-		fuelTank = new FluidTank(capacity) {
-			@Override
-			protected void onContentsChanged() {
-				// 配方只取决于流体种类, 缓存命中用 isFluidEqual 比对,
-				// 量的变化不需要清缓存, 否则持续消耗时每 tick 都要重扫一遍配方表
-				setChanged();
-			}
-
-			@Override
-			public boolean isFluidValid(FluidStack stack) {
-				return isFuel(stack);
-			}
-		};
+		fuelTank = new FuelFluidTank(this, capacity, this::isFuel);
 
 		fluidCapability = LazyOptional.of(() -> fuelTank);
 	}

@@ -35,7 +35,7 @@ public class SteamBoilerFluidHandler extends BoilerData.BoilerFluidHandler {
 		if (filled > 0 && action.execute()
 				&& isSteam(stack)
 				&& owner instanceof SteamBoilerData steamBoiler)
-			steamBoiler.csa$notifySteamInput(steamHeatLevel(stack), filled);
+			steamBoiler.sl$notifySteamInput(steamHeatLevel(stack), filled);
 		return filled;
 	}
 

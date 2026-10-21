@@ -46,7 +46,7 @@ import java.util.function.IntSupplier;
  * 例如 {@code boilerBuilder.material(...).production(...)} 也能正常补全.
  * <p>
  * 注意不要用「子类覆盖 material/model 返回自身类型」的办法做同样的事: 协变返回会在字节码里生成
- * synthetic bridge 方法, Rhino 那一侧就会出现同名同参、只有返回类型不同的两个方法, 没有必要冒这个险.
+ * synthetic bridge 方法, Rhino 那一侧就会出现同名同参, 只有返回类型不同的两个方法, 没有必要冒这个险.
  * 子类若要在材质/模型变化时做额外动作, 覆盖 {@link #onAppearanceChanged()} 钩子即可.
  */
 public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF extends DeviceBuilder<B, E, SELF>> extends BuilderBase<Block> {

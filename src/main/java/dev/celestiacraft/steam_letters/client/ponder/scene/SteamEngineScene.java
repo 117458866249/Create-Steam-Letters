@@ -71,7 +71,7 @@ public class SteamEngineScene {
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽锅炉与燃烧室、蒸汽引擎、蒸汽飞轮共同组成一台蒸汽动力机组");
+				.text("蒸汽锅炉与燃烧室, 蒸汽引擎, 蒸汽飞轮共同组成一台蒸汽动力机组");
 		scene.idle(90);
 
 		scene.overlay().showText(70)
@@ -89,7 +89,7 @@ public class SteamEngineScene {
 				.text("投入煤炭之类的固体燃料后, 热量会逐渐上升");
 		scene.idle(20);
 		setHeat(scene, burner, 100.0D, 400);
-		puff(scene, util.vector().centerOf(burnerPos), 10, .2f, random);
+		puff(scene, util.vector().centerOf(burnerPos), 10, 0.2f, random);
 		scene.idle(50);
 
 		scene.overlay().showText(60)
@@ -110,7 +110,7 @@ public class SteamEngineScene {
 		scene.world().setBlock(burnerPos, SlBlocks.BRONZE_FLUID_BURNER.getDefaultState()
 				.setValue(AbstractBurnerBlock.FACING, Direction.SOUTH), true);
 		setHeat(scene, burner, 100.0D, 400);
-		puff(scene, util.vector().centerOf(burnerPos), 10, .2f, random);
+		puff(scene, util.vector().centerOf(burnerPos), 10, 0.2f, random);
 		scene.idle(60);
 
 		scene.world().showSection(tank, Direction.DOWN);
@@ -124,9 +124,11 @@ public class SteamEngineScene {
 				.attachKeyFrame()
 				.text("用管道把水送进锅炉, 水被加热后就会变成蒸汽");
 		scene.idle(20);
-		scene.world().modifyBlockEntityNBT(boiler, AbstractBoilerBlockEntity.class,
-				nbt -> nbt.put("InputTank", new FluidStack(Fluids.WATER, 4000).writeToNBT(new CompoundTag())));
-		puff(scene, util.vector().topOf(boilerPos), 10, .15f, random);
+		scene.world().modifyBlockEntityNBT(boiler, AbstractBoilerBlockEntity.class, (nbt) -> {
+			nbt.put("InputTank", new FluidStack(Fluids.WATER, 4000)
+					.writeToNBT(new CompoundTag()));
+		});
+		puff(scene, util.vector().topOf(boilerPos), 10, 0.15f, random);
 		scene.idle(60);
 
 		scene.overlay().showText(70)

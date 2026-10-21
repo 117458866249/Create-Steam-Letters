@@ -84,7 +84,7 @@ public class SolarBoilerConfig extends ConfigModule {
 			return true;
 		}
 
-		// 固定时间的维度 (下界、末地) 没有昼夜循环, 昼夜这一关直接放行, 交给遮挡判定.
+		// 固定时间的维度 (下界, 末地) 没有昼夜循环, 昼夜这一关直接放行, 交给遮挡判定.
 		if (level.dimensionType().hasFixedTime()) {
 			return true;
 		}

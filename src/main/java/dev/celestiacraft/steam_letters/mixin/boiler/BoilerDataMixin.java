@@ -36,7 +36,7 @@ public class BoilerDataMixin implements SteamBoilerData {
 	@Unique
 	private int csa$steamHeatLevel;
 	@Unique
-	private int csa$steamGathered;
+	private int sl$steamGathered;
 
 	/**
 	 * 蒸汽输入速率(mB/t), 以与原版水供应相同的方式进行采样
@@ -119,12 +119,12 @@ public class BoilerDataMixin implements SteamBoilerData {
 			remap = false
 	)
 	private void csa$sampleSteamSupply(FluidTankBlockEntity entity, CallbackInfo info) {
-		if (csa$steamGathered == 0 && csa$steamHeatLevel != 0) {
+		if (sl$steamGathered == 0 && csa$steamHeatLevel != 0) {
 			csa$steamHeatLevel = 0;
 			needsHeatLevelUpdate = true;
 		}
 
-		csa$steamSupplyOverTime[csa$steamSupplyIndex] = csa$steamGathered / (float) SAMPLE_RATE;
+		csa$steamSupplyOverTime[csa$steamSupplyIndex] = sl$steamGathered / (float) SAMPLE_RATE;
 		csa$steamSupply = Math.max(csa$steamSupply, csa$steamSupplyOverTime[csa$steamSupplyIndex]);
 		csa$steamSupplyIndex = (csa$steamSupplyIndex + 1) % csa$steamSupplyOverTime.length;
 
@@ -136,7 +136,7 @@ public class BoilerDataMixin implements SteamBoilerData {
 			}
 		}
 
-		csa$steamGathered = 0;
+		sl$steamGathered = 0;
 	}
 
 	/*
@@ -198,11 +198,11 @@ public class BoilerDataMixin implements SteamBoilerData {
 	*/
 
 	@Override
-	public void csa$notifySteamInput(int level, int amount) {
+	public void sl$notifySteamInput(int level, int amount) {
 		if (level > csa$steamHeatLevel) {
 			csa$steamHeatLevel = level;
 			needsHeatLevelUpdate = true;
 		}
-		csa$steamGathered += amount;
+		sl$steamGathered += amount;
 	}
 }

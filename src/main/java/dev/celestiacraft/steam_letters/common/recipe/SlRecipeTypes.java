@@ -50,22 +50,7 @@ public class SlRecipeTypes {
 	}
 
 	private static IRecipeTypeInfo typeInfo(ResourceLocation id, Supplier<? extends RecipeType<?>> type, Supplier<? extends RecipeSerializer<?>> serializer) {
-		return new IRecipeTypeInfo() {
-			@Override
-			public ResourceLocation getId() {
-				return id;
-			}
-
-			@Override
-			public <T extends RecipeSerializer<?>> T getSerializer() {
-				return (T) serializer.get();
-			}
-
-			@Override
-			public <T extends RecipeType<?>> T getType() {
-				return (T) type.get();
-			}
-		};
+		return new SimpleRecipeTypeInfo(id, type, serializer);
 	}
 
 	public static void init(IEventBus bus) {

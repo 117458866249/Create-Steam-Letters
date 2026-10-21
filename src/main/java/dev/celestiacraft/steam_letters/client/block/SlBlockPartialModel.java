@@ -69,7 +69,7 @@ public class SlBlockPartialModel {
 	/**
 	 * 取飞轮的轮盘模型. 内置青铜飞轮直接用模组自带的 {@code bronze_wheel}, 其余材质取
 	 * {@code <材质命名空间>:block/steam/flywheel/<材质>_wheel} —— 这些模型由 KubeJS 注册器在注册阶段
-	 * 内联青铜造型、只换贴图生成.
+	 * 内联青铜造型, 只换贴图生成.
 	 */
 	public static PartialModel flywheelWheel(ResourceLocation material) {
 		if (isBuiltinBronze(material)) {

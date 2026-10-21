@@ -91,12 +91,13 @@ public class SteamMixerScene {
 				.text("它同样需要蒸汽, 运转时会不断消耗内部的蒸汽");
 		scene.idle(20);
 
-		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class,
-				nbt -> nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000).writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000).writeToNBT(new CompoundTag()));
+		});
 		for (int i = 0; i < 8; i++) {
 			scene.effects().emitParticles(util.vector().topOf(mixerPos),
 					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, .1f)), 1, 1);
+							VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)), 1, 1);
 		}
 		scene.idle(60);
 
@@ -136,8 +137,9 @@ public class SteamMixerScene {
 				.attachKeyFrame()
 				.text("蒸汽耗尽后, 搅拌机会立刻停机");
 		scene.idle(10);
-		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class,
-				nbt -> nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag()));
+		});
 		scene.world().setKineticSpeed(kinetics.add(shaft), 0);
 		scene.idle(50);
 

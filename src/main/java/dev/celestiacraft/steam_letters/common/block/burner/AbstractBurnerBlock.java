@@ -30,7 +30,7 @@ public abstract class AbstractBurnerBlock extends Block implements ISteamEngineB
 
 	protected AbstractBurnerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
 		super(properties);
-		this.spec = SteamEngineSpec.of(configurer);
+		spec = SteamEngineSpec.of(configurer);
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH)
 				.setValue(LIT, false));

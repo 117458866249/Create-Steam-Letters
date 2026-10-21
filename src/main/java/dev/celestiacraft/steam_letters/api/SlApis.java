@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
+import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -34,6 +35,10 @@ public class SlApis {
 
 	public static ResourceLocation laodForge(String path) {
 		return ResourceLocation.fromNamespaceAndPath("forge", path);
+	}
+
+	public static int getFuelAmount() {
+		return FluidFuelRecipe.FUEL_AMOUNT;
 	}
 
 	public static void require(ProcessingRecipeBuilder<?> builder, TagKey<Item> tag, int count) {

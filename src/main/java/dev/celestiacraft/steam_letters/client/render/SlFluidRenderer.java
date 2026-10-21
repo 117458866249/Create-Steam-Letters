@@ -21,10 +21,7 @@ import org.joml.Matrix4f;
  * 对自定义流体(动画贴图 / 气体)会渲不出来或者采样越界, 所以这里改用原版的
  * {@link RenderType#translucent()} 手写六个面, 每个面正反各画一次, 免得被背面剔除。
  */
-public final class SlFluidRenderer {
-	private SlFluidRenderer() {
-	}
-
+public class SlFluidRenderer {
 	public static void renderFluidBox(FluidStack stack, float x1, float y1, float z1, float x2, float y2, float z2, MultiBufferSource buffer, PoseStack ms, int light, float alpha) {
 		if (stack.isEmpty()) {
 			return;
@@ -69,25 +66,25 @@ public final class SlFluidRenderer {
 		quad(vc, pose, normal, x2, y1, z2, x2, y2, z2, x2, y2, z1, x2, y1, z1, 1.0F, 0.0F, 0.0F, u0, u1, v0, v1, r, g, b, a, light);
 	}
 
-	private static void quad(VertexConsumer vc, Matrix4f pose, Matrix3f normal, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz, float nx, float ny, float nz, float u0, float u1, float v0, float v1, float r, float g, float b, float a, int light) {
-		vertex(vc, pose, normal, bx, by, bz, u1, v1, nx, ny, nz, r, g, b, a, light);
-		vertex(vc, pose, normal, ax, ay, az, u0, v1, nx, ny, nz, r, g, b, a, light);
-		vertex(vc, pose, normal, dx, dy, dz, u0, v0, nx, ny, nz, r, g, b, a, light);
-		vertex(vc, pose, normal, cx, cy, cz, u1, v0, nx, ny, nz, r, g, b, a, light);
+	private static void quad(VertexConsumer consumer, Matrix4f matrix4f, Matrix3f matrix3f, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz, float nx, float ny, float nz, float u0, float u1, float v0, float v1, float r, float g, float b, float a, int light) {
+		vertex(consumer, matrix4f, matrix3f, bx, by, bz, u1, v1, nx, ny, nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, ax, ay, az, u0, v1, nx, ny, nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, dx, dy, dz, u0, v0, nx, ny, nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, cx, cy, cz, u1, v0, nx, ny, nz, r, g, b, a, light);
 
 		// 反向再来一遍, 免得开了背面剔除之后从里面看不见
-		vertex(vc, pose, normal, cx, cy, cz, u1, v0, -nx, -ny, -nz, r, g, b, a, light);
-		vertex(vc, pose, normal, dx, dy, dz, u0, v0, -nx, -ny, -nz, r, g, b, a, light);
-		vertex(vc, pose, normal, ax, ay, az, u0, v1, -nx, -ny, -nz, r, g, b, a, light);
-		vertex(vc, pose, normal, bx, by, bz, u1, v1, -nx, -ny, -nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, cx, cy, cz, u1, v0, -nx, -ny, -nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, dx, dy, dz, u0, v0, -nx, -ny, -nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, ax, ay, az, u0, v1, -nx, -ny, -nz, r, g, b, a, light);
+		vertex(consumer, matrix4f, matrix3f, bx, by, bz, u1, v1, -nx, -ny, -nz, r, g, b, a, light);
 	}
 
-	private static void vertex(VertexConsumer vc, Matrix4f pose, Matrix3f normal, float x, float y, float z, float u, float v, float nx, float ny, float nz, float r, float g, float b, float a, int light) {
-		vc.vertex(pose, x, y, z)
+	private static void vertex(VertexConsumer consumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, float u, float v, float nx, float ny, float nz, float r, float g, float b, float a, int light) {
+		consumer.vertex(matrix4f, x, y, z)
 				.color(r, g, b, a)
 				.uv(u, v)
 				.uv2(light)
-				.normal(normal, nx, ny, nz)
+				.normal(matrix3f, nx, ny, nz)
 				.endVertex();
 	}
 }

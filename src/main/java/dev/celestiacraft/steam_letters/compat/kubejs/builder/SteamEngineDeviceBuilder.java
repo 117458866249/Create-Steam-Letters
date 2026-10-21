@@ -86,11 +86,12 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
 		 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
 		 */
-		return new SteamEngineBlock(properties, (builder) -> builder
-				.strength(strength)
-				.speed(speed)
-				.consumption(consumption)
-				.storage(storage), () -> blockEntityType);
+		return new SteamEngineBlock(properties, (builder) -> {
+			builder.strength(strength)
+					.speed(speed)
+					.consumption(consumption)
+					.storage(storage);
+		}, () -> blockEntityType);
 	}
 
 	@Override

@@ -92,12 +92,14 @@ public class SteamSawScene {
 				.text("它还需要蒸汽, 运转时会不断消耗内部的蒸汽");
 		scene.idle(20);
 
-		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class,
-				nbt -> nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000).writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000)
+					.writeToNBT(new CompoundTag()));
+		});
 		for (int i = 0; i < 8; i++) {
 			scene.effects().emitParticles(util.vector().topOf(sawPos),
 					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, .1f)), 1, 1);
+							VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)), 1, 1);
 		}
 		scene.idle(60);
 

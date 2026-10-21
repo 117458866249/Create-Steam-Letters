@@ -47,7 +47,8 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 		super(properties);
 		this.customBlockEntityType = customBlockEntityType;
 		this.material = material;
-		registerDefaultState(defaultBlockState().setValue(CONNECTION, ConnectionState.NONE));
+		registerDefaultState(defaultBlockState()
+				.setValue(CONNECTION, ConnectionState.NONE));
 	}
 
 	@Override
@@ -59,9 +60,11 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		Direction preferred = getPreferredHorizontalFacing(context);
 		if (preferred != null) {
-			return defaultBlockState().setValue(HORIZONTAL_FACING, preferred.getOpposite());
+			return defaultBlockState()
+					.setValue(HORIZONTAL_FACING, preferred.getOpposite());
 		}
-		return defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
+		return defaultBlockState()
+				.setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
 	}
 
 	/**
@@ -75,13 +78,13 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 	 * 返回引擎所在的水平方向, 未配对时为 null.
 	 */
 	public static Direction getConnection(BlockState state) {
-		Direction facing = state.getValue(HORIZONTAL_FACING);
+		Direction direction = state.getValue(HORIZONTAL_FACING);
 		ConnectionState connection = state.getValue(CONNECTION);
 		if (connection == ConnectionState.LEFT) {
-			return facing.getCounterClockWise();
+			return direction.getCounterClockWise();
 		}
 		if (connection == ConnectionState.RIGHT) {
-			return facing.getClockWise();
+			return direction.getClockWise();
 		}
 		return null;
 	}

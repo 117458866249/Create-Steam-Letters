@@ -12,7 +12,7 @@ import java.util.function.BooleanSupplier;
  * <p>
  * 用途见 {@code SteamFlywheelRenderer}: Create 的 rotating 实例类型自带一套自定义顶点程序,
  * 在光影下可能被光影的着色器接管并整批丢弃, 这时需要让方块实体渲染器继续兜底,
- * 否则玩家看到的就是"方块还在、轮盘整个不见".
+ * 否则玩家看到的就是"方块还在, 轮盘整个不见".
  */
 public class ShaderCompat {
 	private static final BooleanSupplier SHADER_PACK_IN_USE = resolve();

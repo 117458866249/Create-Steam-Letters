@@ -9,7 +9,6 @@ import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
 import dev.celestiacraft.steam_letters.common.register.SlFluids;
-import dev.celestiacraft.steam_letters.config.common.SteamConfig;
 import dev.celestiacraft.steam_letters.config.common.SteamEngineConfig;
 import lombok.Getter;
 import net.minecraft.ChatFormatting;
@@ -24,13 +23,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +55,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	private final SteamEngineDriveSpec driveSpec;
 
 	@Getter
-	private final FluidTank tank;
+	private final SteamEngineFluidTank tank;
 
 	private LazyOptional<IFluidHandler> fluidCapability;
 
@@ -89,17 +86,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		int configured = driveSpec.getStorage();
 		int capacity = Math.max(configured > 0 ? configured : DEFAULT_STORAGE, 1);
 
-		tank = new FluidTank(capacity) {
-			@Override
-			protected void onContentsChanged() {
-				setChanged();
-			}
-
-			@Override
-			public boolean isFluidValid(FluidStack stack) {
-				return isSteamFluid(stack);
-			}
-		};
+		tank = new SteamEngineFluidTank(this, capacity);
 
 		fluidCapability = LazyOptional.of(() -> new SteamEngineFluidHandler(tank));
 	}
@@ -258,7 +245,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		FluidStack steamStack = FluidStack.EMPTY;
 		for (int i = 0; i < handler.getTanks(); i++) {
 			FluidStack content = handler.getFluidInTank(i);
-			if (!content.isEmpty() && isSteamFluid(content)) {
+			if (!content.isEmpty() && SteamEngineFluidTank.isSteamFluid(content)) {
 				steamStack = content;
 				break;
 			}
@@ -579,19 +566,6 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 	private static String formatSeconds(int ticks) {
 		return String.format(Locale.ROOT, "%.1f", ticks / 20.0D) + "s";
-	}
-
-	private static boolean isSteamFluid(FluidStack stack) {
-		if (stack.isEmpty()) {
-			return false;
-		}
-		Fluid fluid = stack.getFluid();
-		if (fluid.isSame(SlFluids.STEAM.get()) || fluid.isSame(SlFluids.SUPERHEATED_STEAM.get())) {
-			return true;
-		}
-
-		Fluid configured = SteamConfig.getOutputSteamFluid();
-		return configured != null && fluid.isSame(configured);
 	}
 
 	@Override

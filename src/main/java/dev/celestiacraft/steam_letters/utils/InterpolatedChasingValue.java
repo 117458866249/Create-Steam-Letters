@@ -43,8 +43,8 @@ public class InterpolatedChasingValue {
 	}
 
 	public InterpolatedChasingValue start(float value) {
-		this.lastValue = this.value = value;
-		this.target = value;
+		lastValue = this.value = value;
+		target = value;
 		return this;
 	}
 }

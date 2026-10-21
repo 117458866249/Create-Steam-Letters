@@ -28,10 +28,10 @@ public class SolarBoilerBuilder extends BoilerDeviceBuilder<SolarBoilerBlock, So
 
 	@Override
 	protected SolarBoilerBlock createBlock(BlockBehaviour.Properties properties) {
-		return new SolarBoilerBlock(properties, (builder) -> builder
-				.capacity(capacityOr(() -> SolarBoilerBlockEntity.DEFAULT_CAPACITY))
-				.production(productionOr(() -> SolarBoilerBlockEntity.DEFAULT_PRODUCTION)),
-				() -> blockEntityType);
+		return new SolarBoilerBlock(properties, (builder) -> {
+			builder.capacity(capacityOr(() -> SolarBoilerBlockEntity.DEFAULT_CAPACITY))
+					.production(productionOr(() -> SolarBoilerBlockEntity.DEFAULT_PRODUCTION));
+		}, () -> blockEntityType);
 	}
 
 	@Override

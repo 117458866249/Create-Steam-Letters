@@ -8,7 +8,6 @@ import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpout
 import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.createmod.ponder.api.registration.LangRegistryAccess;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraftforge.common.ForgeConfigSpec;
 
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {

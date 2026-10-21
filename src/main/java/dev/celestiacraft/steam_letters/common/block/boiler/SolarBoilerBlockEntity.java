@@ -144,7 +144,7 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 	 * <p>
 	 * 直接看方块本身, 不看天空光亮度. 亮度只在区块重算时刷新, 客户端进入世界之后就冻住了,
 	 * 整合包里还可能被其它模组改写; 而方块状态两端随时同步, 判定结果始终和玩家看到的一致.
-	 * 玻璃、树叶、单个台阶这类不阻挡天空光的方块按透明处理 (propagatesSkylightDown), 不构成遮罩.
+	 * 玻璃, 树叶, 单个台阶这类不阻挡天空光的方块按透明处理 (propagatesSkylightDown), 不构成遮罩.
 	 */
 	private boolean hasSkyAccess(BlockPos above) {
 		// 维度自己就没有天空光 (下界), 太阳光这一关不成立, 只能靠人造光.

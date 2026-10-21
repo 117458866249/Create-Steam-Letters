@@ -24,10 +24,10 @@ public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBo
 
 	@Override
 	protected SteamBoilerBlock createBlock(BlockBehaviour.Properties properties) {
-		return new SteamBoilerBlock(properties, (builder) -> builder
-				.capacity(capacityOr(() -> SteamBoilerBlockEntity.DEFAULT_CAPACITY))
-				.production(productionOr(() -> SteamBoilerBlockEntity.DEFAULT_PRODUCTION)),
-				() -> blockEntityType);
+		return new SteamBoilerBlock(properties, (builder) -> {
+			builder.capacity(capacityOr(() -> SteamBoilerBlockEntity.DEFAULT_CAPACITY))
+					.production(productionOr(() -> SteamBoilerBlockEntity.DEFAULT_PRODUCTION));
+		}, () -> blockEntityType);
 	}
 
 	@Override

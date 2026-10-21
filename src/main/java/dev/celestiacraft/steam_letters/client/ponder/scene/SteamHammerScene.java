@@ -91,12 +91,13 @@ public class SteamHammerScene {
 				.text("它还需要蒸汽: 锻锤内部的蒸汽会在运转时被不断消耗");
 		scene.idle(20);
 
-		scene.world().modifyBlockEntityNBT(hammer, SteamHammerBlockEntity.class,
-				nbt -> nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000).writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(hammer, SteamHammerBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", new FluidStack(SlFluids.STEAM.get(), 1000).writeToNBT(new CompoundTag()));
+		});
 		for (int i = 0; i < 8; i++) {
 			scene.effects().emitParticles(util.vector().topOf(hammerPos),
 					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, .1f)), 1, 1);
+							VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)), 1, 1);
 		}
 		scene.idle(60);
 
@@ -117,11 +118,11 @@ public class SteamHammerScene {
 		for (int i = 0; i < 6; i++) {
 			scene.effects().emitParticles(util.vector().topOf(util.grid().at(2, 1, 2)),
 					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, .15f)), 1, 1);
+							VecHelper.offsetRandomly(Vec3.ZERO, random, 0.15f)), 1, 1);
 		}
 		scene.idle(15);
 		scene.world().removeItemsFromBelt(util.grid().at(2, 1, 2));
-		item = scene.world().createItemOnBelt(util.grid().at(2, 1, 2), Direction.UP, AllItems.COPPER_SHEET.asStack());
+		scene.world().createItemOnBelt(util.grid().at(2, 1, 2), Direction.UP, AllItems.COPPER_SHEET.asStack());
 		scene.idle(35);
 
 		scene.overlay().showText(60)
@@ -130,8 +131,7 @@ public class SteamHammerScene {
 				.attachKeyFrame()
 				.text("蒸汽充足时, 一次可以并行压制整叠物品");
 		scene.idle(15);
-		scene.world().createItemOnBelt(util.grid().at(0, 1, 2), Direction.SOUTH,
-				new ItemStack(Items.COPPER_INGOT, 16));
+		scene.world().createItemOnBelt(util.grid().at(0, 1, 2), Direction.SOUTH, new ItemStack(Items.COPPER_INGOT, 16));
 		scene.idle(50);
 
 		scene.overlay().showText(60)
@@ -140,8 +140,9 @@ public class SteamHammerScene {
 				.attachKeyFrame()
 				.text("蒸汽耗尽后, 锻锤会立刻停机");
 		scene.idle(10);
-		scene.world().modifyBlockEntityNBT(hammer, SteamHammerBlockEntity.class,
-				nbt -> nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag())));
+		scene.world().modifyBlockEntityNBT(hammer, SteamHammerBlockEntity.class, (nbt) -> {
+			nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag()));
+		});
 		scene.world().setKineticSpeed(kinetics, 0);
 		scene.idle(50);
 

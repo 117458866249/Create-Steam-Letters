@@ -1,11 +1,5 @@
 package dev.celestiacraft.steam_letters.common.block.steam_pump;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pump.PumpBlock;
@@ -23,6 +17,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 public class BronzeSteamPumpBlockEntity extends PumpBlockEntity {
 	private static final float DEFAULT_PUMP_SPEED = 256.0F;
@@ -314,7 +310,7 @@ public class BronzeSteamPumpBlockEntity extends PumpBlockEntity {
 				|| stack.getFluid().is(SlFluidTags.SUPERHEATED_STEAM);
 	}
 
-	private static final class ScanNode {
+	private static class ScanNode {
 		private final BlockPos pos;
 		private final Direction cameFrom;
 		private final int distance;

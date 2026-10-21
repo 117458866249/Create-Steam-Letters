@@ -72,7 +72,9 @@ public class SteamFlywheelInstance extends ShaftVisual<SteamFlywheelBlockEntity>
 	 * 轮盘与四根传动杆都跟随方块自己的材质.
 	 */
 	private ResourceLocation material() {
-		return blockState.getBlock() instanceof SteamFlywheelBlock flywheel ? flywheel.getMaterial() : SlApis.loadResource("bronze");
+		return blockState.getBlock() instanceof SteamFlywheelBlock flywheel
+				? flywheel.getMaterial()
+				: SlApis.loadResource("bronze");
 	}
 
 	private TransformedInstance createConnector(PartialModel model) {

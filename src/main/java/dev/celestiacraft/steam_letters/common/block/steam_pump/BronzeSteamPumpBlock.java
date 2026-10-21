@@ -47,7 +47,7 @@ public class BronzeSteamPumpBlock extends PumpBlock {
 
 	@Override
 	public boolean isLargeCog() {
-		return false;
+		return super.isLargeCog();
 	}
 
 	@Override
