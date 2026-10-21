@@ -128,7 +128,7 @@
 	"steam_letters.ponder.steam_hammer.text_5": "蒸汽充足时, 一次可以并行压制整叠物品",
 	"steam_letters.ponder.steam_hammer.text_6": "蒸汽耗尽后, 锻锤会立刻停机",
 	"steam_letters.ponder.steam_mixer.header": "蒸汽搅拌机",
-	"steam_letters.ponder.steam_mixer.text_1": "蒸汽搅拌机需要架在青铜工作盆的正上方",
+	"steam_letters.ponder.steam_mixer.text_1": "蒸汽搅拌机需要架在任意工作盆的正上方",
 	"steam_letters.ponder.steam_mixer.text_2": "它需要旋转动力才能运转",
 	"steam_letters.ponder.steam_mixer.text_3": "它同样需要蒸汽, 运转时会不断消耗内部的蒸汽",
 	"steam_letters.ponder.steam_mixer.text_4": "投进工作盆的物品会被同时搅拌",

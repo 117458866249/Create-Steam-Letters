@@ -13,3 +13,4 @@ build
 /.graphflow
 /.manual-compile
 /libs
+/clear
