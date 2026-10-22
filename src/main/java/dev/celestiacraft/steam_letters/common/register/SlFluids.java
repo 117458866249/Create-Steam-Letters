@@ -8,7 +8,6 @@ import dev.celestiacraft.steam_letters.common.fluid.SteamFluid;
 import dev.celestiacraft.steam_letters.common.fluid.SteamFluidFlowing;
 import dev.celestiacraft.steam_letters.common.fluid.SteamFluidSource;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 
 public class SlFluids {
@@ -28,8 +27,8 @@ public class SlFluids {
 				.tag(SlFluidTags.STEAM)
 				.source(SteamFluidSource::new)
 				.bucket(SteamBucketItem::new)
-				.tag(ItemTags.create(ResourceLocation.parse("forge:buckets/steam")))
-				.tag(ItemTags.create(ResourceLocation.parse("forge:buckets")))
+				.tag(ItemTags.create(SlApis.loadForge("buckets/steam")))
+				.tag(ItemTags.create(SlApis.loadForge("buckets")))
 				.model(NonNullBiConsumer.noop())
 				.build()
 				.lang("Steam")
@@ -49,8 +48,8 @@ public class SlFluids {
 				.source(SteamFluidSource::new)
 				.bucket(SteamBucketItem::new)
 				.model(NonNullBiConsumer.noop())
-				.tag(ItemTags.create(ResourceLocation.parse("forge:buckets/superheated_steam")))
-				.tag(ItemTags.create(ResourceLocation.parse("forge:buckets")))
+				.tag(ItemTags.create(SlApis.loadForge("buckets/superheated_steam")))
+				.tag(ItemTags.create(SlApis.loadForge("buckets")))
 				.build()
 				.lang("Superheated Steam")
 				.noBlock()

@@ -33,7 +33,7 @@ public class SlApis {
 		return CreateDieselGenerators.rl(path);
 	}
 
-	public static ResourceLocation laodForge(String path) {
+	public static ResourceLocation loadForge(String path) {
 		return ResourceLocation.fromNamespaceAndPath("forge", path);
 	}
 

@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  * 一整份烧完的时间与配方声明的时长完全一致.
  * <p>
  * 罐里不足一整份时按同样速率继续烧, <b>有多少烧多少</b>, 烧空即停; 因此不存在
- * 「凑不满一份就永远点不着」的死角.
+ * 凑不满一份就永远点不着的情况.
  */
 public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	/**
