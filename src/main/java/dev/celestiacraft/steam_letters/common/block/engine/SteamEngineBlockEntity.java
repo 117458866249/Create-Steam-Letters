@@ -83,7 +83,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		super(type, pos, state);
 		driveSpec = ((SteamEngineBlock) state.getBlock()).getDriveSpec();
 
-		int configured = driveSpec.getStorage();
+		int configured = driveSpec.getCapacity();
 		int capacity = Math.max(configured > 0 ? configured : DEFAULT_STORAGE, 1);
 
 		tank = new SteamEngineFluidTank(this, capacity);

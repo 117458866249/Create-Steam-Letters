@@ -48,6 +48,9 @@ import java.util.function.IntSupplier;
  * 注意不要用「子类覆盖 material/model 返回自身类型」的办法做同样的事: 协变返回会在字节码里生成
  * synthetic bridge 方法, Rhino 那一侧就会出现同名同参, 只有返回类型不同的两个方法, 没有必要冒这个险.
  * 子类若要在材质/模型变化时做额外动作, 覆盖 {@link #onAppearanceChanged()} 钩子即可.
+ * <p>
+ * 标签同理: 想给物品打标签用 {@link #itemTag(ResourceLocation)}, 打方块用 {@link #blockTag(ResourceLocation)},
+ * 两边都要用 {@link #tagBoth(ResourceLocation)}. 基类自带的 {@code tag(...)} 只作用于方块.
  */
 public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF extends DeviceBuilder<B, E, SELF>> extends BuilderBase<Block> {
 	protected static final String MACHINE_BOTTOM = "steam_letters:block/steam/down";
@@ -56,16 +59,28 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 	protected Item item;
 	protected BlockEntityType<E> blockEntityType;
 
+	/**
+	 * 方块物品自己的 builder. 物品标签必须记在它身上: KubeJS 的标签收集是按「builder 所属注册表」分流的,
+	 * 记在方块 builder 上的标签只会写进 {@code tags/blocks}, 不会自动复制到物品.
+	 */
+	protected final DeviceItemBuilder itemBuilder;
+
 	protected ResourceLocation material = SlApis.loadResource("bronze");
 	protected ResourceLocation model;
+	/**
+	 * 内部罐容量, 单位 mB. 脚本不写时保持 {@code null}, 由各设备自己决定回退到哪个默认值.
+	 */
 	protected Integer capacity;
 	protected double strength;
 	protected double speed;
 	protected double consumption;
-	protected int storage;
 
 	protected DeviceBuilder(ResourceLocation id) {
 		super(id);
+
+		// 提前建好: 子类可以在构造器里直接 itemTag(...), 不必等 createAdditionalObjects 的注册阶段
+		itemBuilder = new DeviceItemBuilder(id, this::buildItem);
+
 		tag(BlockTags.MINEABLE_WITH_PICKAXE.location());
 		tag(BlockTags.NEEDS_STONE_TOOL.location());
 		tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag.location());
@@ -90,7 +105,38 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 	@Override
 	public void createAdditionalObjects() {
 		RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(new DeviceBlockEntityTypeBuilder(id, this::buildBlockEntityType));
-		RegistryInfo.ITEM.addBuilder(new DeviceItemBuilder(id, this::buildItem));
+		RegistryInfo.ITEM.addBuilder(itemBuilder);
+	}
+
+	/**
+	 * 只给方块加标签, 写进 {@code data/<ns>/tags/blocks/}.
+	 * <p>
+	 * 不直接覆盖基类的 {@link BuilderBase#tag(ResourceLocation)} 做「方块+物品一起打」的原因见类文档:
+	 * 协变覆盖会在 Rhino 上留下同名同参的重载, 所以这里换个名字.
+	 */
+	@Info("Tags the block only (data/<ns>/tags/blocks)")
+	public SELF blockTag(ResourceLocation tag) {
+		tag(tag);
+		return self();
+	}
+
+	/**
+	 * 只给方块物品加标签, 写进 {@code data/<ns>/tags/items/}.
+	 */
+	@Info("Tags the block item only (data/<ns>/tags/items)")
+	public SELF itemTag(ResourceLocation tag) {
+		itemBuilder.tag(tag);
+		return self();
+	}
+
+	/**
+	 * 同一个标签同时打给方块和方块物品.
+	 */
+	@Info("Tags both the block and the block item")
+	public SELF tagBoth(ResourceLocation tag) {
+		tag(tag);
+		itemBuilder.tag(tag);
+		return self();
 	}
 
 	/**
@@ -137,7 +183,7 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 	protected void onAppearanceChanged() {
 	}
 
-	@Info("Internal fluid capacity in mB")
+	@Info("Internal tank capacity in mB. When omitted the device default is used")
 	public SELF capacity(int capacity) {
 		this.capacity = capacity;
 		return self();
@@ -260,9 +306,6 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 		}
 	}
 
-	/**
-	 * 先在类路径里找, 找不到再问模组文件, 保证开发环境与打包后都能读到骨架模型.
-	 */
 	private static InputStream openTemplateModel(String path, String template) throws IOException {
 		InputStream stream = DeviceBuilder.class.getResourceAsStream(path);
 

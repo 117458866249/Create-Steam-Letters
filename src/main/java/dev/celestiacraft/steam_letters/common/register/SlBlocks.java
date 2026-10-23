@@ -32,7 +32,6 @@ import dev.celestiacraft.steam_letters.common.block.steam_pump.BronzeSteamPumpBl
 import dev.celestiacraft.steam_letters.common.block.steam_saw.SteamSawBlock;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.Tags;
 
 public class SlBlocks {
@@ -107,9 +106,6 @@ public class SlBlocks {
 				.tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag)
 				.build()
 				.initialProperties(SharedProperties::stone)
-				.properties((properties) -> {
-					return properties.mapColor(MapColor.PODZOL);
-				})
 				.transform(SlStress.setImpact(16))
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
@@ -151,8 +147,7 @@ public class SlBlocks {
 				.build()
 				.initialProperties(SharedProperties::softMetal)
 				.properties((properties) -> {
-					return properties.noOcclusion()
-							.sound(SoundType.LANTERN);
+					return properties.sound(SoundType.LANTERN);
 				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
@@ -171,8 +166,7 @@ public class SlBlocks {
 				.build()
 				.initialProperties(SharedProperties::softMetal)
 				.properties((properties) -> {
-					return properties.noOcclusion()
-							.sound(SoundType.LANTERN);
+					return properties.sound(SoundType.LANTERN);
 				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
@@ -192,8 +186,7 @@ public class SlBlocks {
 				.build()
 				.initialProperties(SharedProperties::softMetal)
 				.properties((properties) -> {
-					return properties.noOcclusion()
-							.sound(SoundType.LANTERN);
+					return properties.sound(SoundType.LANTERN);
 				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
@@ -208,8 +201,7 @@ public class SlBlocks {
 				.build()
 				.initialProperties(SharedProperties::softMetal)
 				.properties((properties) -> {
-					return properties.noOcclusion()
-							.sound(SoundType.LANTERN);
+					return properties.sound(SoundType.LANTERN);
 				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)
@@ -223,7 +215,7 @@ public class SlBlocks {
 						builder.strength(SteamEngineBlockEntity.DEFAULT_STRENGTH)
 								.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
 								.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
-								.storage(SteamEngineBlockEntity.DEFAULT_STORAGE);
+								.capacity(SteamEngineBlockEntity.DEFAULT_STORAGE);
 					});
 				})
 				.item(SteamBlockItem::new)
@@ -231,8 +223,7 @@ public class SlBlocks {
 				.build()
 				.initialProperties(SharedProperties::softMetal)
 				.properties((properties) -> {
-					return properties.noOcclusion()
-							.sound(SoundType.LANTERN);
+					return properties.sound(SoundType.LANTERN);
 				})
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(BlockTags.NEEDS_STONE_TOOL)

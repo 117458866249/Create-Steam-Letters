@@ -44,7 +44,7 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 	}
 
 	public SteamFlywheelBlock(Properties properties, Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType, ResourceLocation material) {
-		super(properties);
+		super(properties.noOcclusion());
 		this.customBlockEntityType = customBlockEntityType;
 		this.material = material;
 		registerDefaultState(defaultBlockState()

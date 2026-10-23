@@ -38,7 +38,7 @@ public class SolarBoilerBlock extends Block implements IBE<SolarBoilerBlockEntit
 	}
 
 	public SolarBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType) {
-		super(properties);
+		super(properties.noOcclusion());
 		spec = SteamEngineSpec.of(configurer);
 		this.customBlockEntityType = customBlockEntityType;
 	}

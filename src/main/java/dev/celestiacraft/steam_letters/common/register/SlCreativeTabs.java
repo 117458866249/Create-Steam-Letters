@@ -1,11 +1,12 @@
 package dev.celestiacraft.steam_letters.common.register;
 
+import com.tterrag.registrate.util.entry.ItemEntry;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
+import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +15,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.*;
 
 public class SlCreativeTabs {
 	public static final DeferredRegister<CreativeModeTab> TABS;
@@ -28,37 +31,77 @@ public class SlCreativeTabs {
 					.icon(SlBlocks.STEAM_HAMMER::asStack)
 					.title(Component.translatable(SlTranKeys.BASIC_TAB))
 					.displayItems((parameters, output) -> {
-						ForgeRegistries.ITEMS.getEntries().forEach((entry) -> {
-							ResourceKey<Item> key = entry.getKey();
-							Item item = entry.getValue();
+						Set<Item> added = new HashSet<>();
 
-							if (!key.location().getNamespace().equals(CreateLettersSteam.MODID)) {
-								return;
-							}
+						// 蒸汽生产: 锅炉, 燃料, 引擎与飞轮
+						output.accept(SlBlocks.BRONZE_BOILER);
+						output.accept(SlBlocks.BRONZE_SOLID_BURNER);
+						output.accept(SlBlocks.BRONZE_FLUID_BURNER);
+						output.accept(SlBlocks.BRONZE_SOLAR_BOILER);
+						output.accept(SlBlocks.BRONZE_STEAM_ENGINE);
+						output.accept(SlBlocks.BRONZE_STEAM_FLYWHEEL);
 
-							if (item instanceof SteamContainerItem container && !container.isEmptied()) {
-								ItemStack steam = item.getDefaultInstance();
-								SteamContainerItem.writeFluid(steam, new FluidStack(
-										SlFluids.STEAM.get(),
-										SteamContainerItem.CAPACITY
-								));
-								output.accept(steam);
+						// 机械
+						output.accept(SlBlocks.STEAM_HAMMER);
+						output.accept(SlBlocks.STEAM_MIXER);
+						output.accept(SlBlocks.STEAM_SAW);
+						output.accept(SlBlocks.BRONZE_STEAM_PUMP);
 
-								ItemStack superheatedSteam = item.getDefaultInstance();
-								SteamContainerItem.writeFluid(superheatedSteam, new FluidStack(
-										SlFluids.SUPERHEATED_STEAM.get(),
-										SteamContainerItem.CAPACITY
-								));
-								output.accept(superheatedSteam);
+						// 基础设施
+						output.accept(SlBlocks.BRONZE_BASIN);
+						output.accept(SlBlocks.ADVANCED_SPOUT);
 
-								return;
-							}
+						// 材料
+						output.accept(SlMaterials.BRONZE_INGOT);
+						output.accept(SlMaterials.BRONZE_PLATE);
+						output.accept(SlMaterials.BRONZE_BLOCK);
+						output.accept(SlMaterials.TIN_INGOT);
+						output.accept(SlMaterials.TIN_PLATE);
+						output.accept(SlMaterials.TIN_NUGGET);
+						output.accept(SlMaterials.TIN_BLOCK);
 
-							output.accept(item);
-						});
+						// 零件
+						output.accept(SlItems.STEAM_MECHANISM);
+						output.accept(SlItems.INCOMPLETE_STEAM_MECHANISM);
+						output.accept(SlItems.BRONZE_WHISK);
+
+						// 蒸汽容器: 空罐一个, 密封罐按装填物各给一个
+						output.accept(SlItems.EMPTY_STEAM_CONTAINER);
+						addFilledContainers(output, added, SlItems.SEALED_STEAM_CONTAINER);
+						addDynamicDevices(output, added);
 					})
 					.build();
 		});
+	}
+
+	private static void addFilledContainers(CreativeModeTab.Output output, Set<Item> added, ItemEntry<SteamContainerItem> entry) {
+		ItemStack steam = entry.asStack();
+		SteamContainerItem.writeFluid(steam, new FluidStack(SlFluids.STEAM.get(), SteamContainerItem.CAPACITY));
+		added.add(steam.getItem());
+		output.accept(steam);
+
+		ItemStack superheated = entry.asStack();
+		SteamContainerItem.writeFluid(superheated, new FluidStack(SlFluids.SUPERHEATED_STEAM.get(), SteamContainerItem.CAPACITY));
+		added.add(superheated.getItem());
+		output.accept(superheated);
+	}
+
+	private static void addDynamicDevices(CreativeModeTab.Output output, Set<Item> added) {
+		List<Item> devices = new ArrayList<>();
+
+		ForgeRegistries.ITEMS.forEach((item) -> {
+			if (item instanceof SteamBlockItem && !added.contains(item)) {
+				devices.add(item);
+			}
+		});
+
+		devices.sort(Comparator.comparing((item) -> {
+			return ForgeRegistries.ITEMS.getKey(item).toString();
+		}));
+
+		for (Item item : devices) {
+			output.accept(item);
+		}
 	}
 
 	public static void init(IEventBus bus) {

@@ -40,7 +40,7 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 	private final Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType;
 
 	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer) {
-		this(properties, configurer, null);
+		this(properties.noOcclusion(), configurer, null);
 	}
 
 	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer, Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType) {

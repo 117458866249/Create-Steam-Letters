@@ -5,6 +5,7 @@ import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
+import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
@@ -18,22 +19,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * 蒸汽引擎 + 蒸汽飞轮的 KubeJS 注册器.
- * <p>
- * 一次 {@code event.create(id, "steam_letters:steam_engine")} 只产出两个方块: 脚本 id 本身就是引擎方块
- * (脚本 id 为 {@code steel_engine} 时注册 {@code kubejs:steel_engine}), 飞轮由构造器追加注册, id 是把
- * 脚本 id 末尾的 {@code _engine} 换成 {@code _flywheel} ({@code kubejs:steel_flywheel}).
- * <p>
- * 五个参数全部挂在引擎一侧: 飞轮不决定任何数值, 它只把引擎给出的转速与应力送进 Create 的动力网络.
- * <p>
- * {@code material(...)} / {@code model(...)} 由基类提供, 这里通过 {@link #onAppearanceChanged()} 钩子
- * 把材质与模型同时同步给配对的飞轮, 而不用覆盖那两个方法 —— 覆盖会生成 bridge 方法, Rhino 上会留下
- * 同名同参的重载.
- */
 public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, SteamEngineBlockEntity, SteamEngineDeviceBuilder> {
-	public static final String FLYWHEEL_SUFFIX = "_flywheel";
-	public static final String ENGINE_SUFFIX = "_engine";
+	public static final String ENGINE_SUFFIX = "_steam_engine";
+	public static final String FLYWHEEL_SUFFIX = "_steam_flywheel";
 
 	private final FlywheelBuilder flywheel;
 	private boolean engineObjectsCreated;
@@ -45,11 +33,11 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		flywheel = new FlywheelBuilder(flywheelId(id));
 
 		RegistryInfo.BLOCK.addBuilder(flywheel);
+
+		itemTag(SlItemTags.STEAM_ENGINE.location());
+		flywheel.itemTag(SlItemTags.STEAM_FLYWHEEL.location());
 	}
 
-	/**
-	 * {@code steel_engine} 的飞轮叫 {@code steel_flywheel}, 其余 id 直接追加后缀.
-	 */
 	private static ResourceLocation flywheelId(ResourceLocation id) {
 		String path = id.getPath();
 
@@ -58,6 +46,16 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		}
 
 		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path + FLYWHEEL_SUFFIX);
+	}
+
+	public static ResourceLocation engineIdOf(ResourceLocation id) {
+		String path = id.getPath();
+
+		if (path.endsWith(ENGINE_SUFFIX) && path.length() > ENGINE_SUFFIX.length()) {
+			return id;
+		}
+
+		return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path + ENGINE_SUFFIX);
 	}
 
 	@Override
@@ -90,7 +88,7 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 			builder.strength(strength)
 					.speed(speed)
 					.consumption(consumption)
-					.storage(storage);
+					.capacity(capacityOr(() -> 0));
 		}, () -> blockEntityType);
 	}
 
@@ -170,12 +168,6 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 	@Info("Steam consumption at full load (mB/tick). When omitted the engine class default is used")
 	public SteamEngineDeviceBuilder consumption(double consumption) {
 		this.consumption = consumption;
-		return this;
-	}
-
-	@Info("Built-in engine steam tank capacity (mB). Defaults to 32000")
-	public SteamEngineDeviceBuilder storage(int storage) {
-		this.storage = storage;
 		return this;
 	}
 

@@ -8,13 +8,13 @@ public class SteamEngineDriveSpec {
 	private final DoubleSupplier strength;
 	private final DoubleSupplier speed;
 	private final DoubleSupplier consumption;
-	private final IntSupplier storage;
+	private final IntSupplier capacity;
 
-	private SteamEngineDriveSpec(DoubleSupplier strength, DoubleSupplier speed, DoubleSupplier consumption, IntSupplier storage) {
+	private SteamEngineDriveSpec(DoubleSupplier strength, DoubleSupplier speed, DoubleSupplier consumption, IntSupplier capacity) {
 		this.strength = strength;
 		this.speed = speed;
 		this.consumption = consumption;
-		this.storage = storage;
+		this.capacity = capacity;
 	}
 
 	/**
@@ -41,8 +41,8 @@ public class SteamEngineDriveSpec {
 	/**
 	 * 引擎自带蒸汽罐的容量 (mB).
 	 */
-	public int getStorage() {
-		return storage.getAsInt();
+	public int getCapacity() {
+		return capacity.getAsInt();
 	}
 
 	public static Builder builder() {
@@ -62,7 +62,7 @@ public class SteamEngineDriveSpec {
 		private DoubleSupplier strength = () -> 0.0D;
 		private DoubleSupplier speed = () -> 0.0D;
 		private DoubleSupplier consumption = () -> 0.0D;
-		private IntSupplier storage = () -> 0;
+		private IntSupplier capacity = () -> 0;
 
 		public Builder strength(double value) {
 			return strength(() -> value);
@@ -73,8 +73,8 @@ public class SteamEngineDriveSpec {
 			return this;
 		}
 
-		public Builder speed(double value) {
-			return speed(() -> value);
+		public Builder speed(double speed) {
+			return speed(() -> speed);
 		}
 
 		public Builder speed(DoubleSupplier supplier) {
@@ -82,8 +82,8 @@ public class SteamEngineDriveSpec {
 			return this;
 		}
 
-		public Builder consumption(double value) {
-			return consumption(() -> value);
+		public Builder consumption(double consumption) {
+			return consumption(() -> consumption);
 		}
 
 		public Builder consumption(DoubleSupplier supplier) {
@@ -91,17 +91,17 @@ public class SteamEngineDriveSpec {
 			return this;
 		}
 
-		public Builder storage(int value) {
-			return storage(() -> value);
+		public Builder capacity(int capacity) {
+			return capacity(() -> capacity);
 		}
 
-		public Builder storage(IntSupplier supplier) {
-			storage = supplier;
+		public Builder capacity(IntSupplier supplier) {
+			capacity = supplier;
 			return this;
 		}
 
 		public SteamEngineDriveSpec build() {
-			return new SteamEngineDriveSpec(strength, speed, consumption, storage);
+			return new SteamEngineDriveSpec(strength, speed, consumption, capacity);
 		}
 	}
 }
