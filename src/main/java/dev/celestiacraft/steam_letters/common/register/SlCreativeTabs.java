@@ -76,12 +76,18 @@ public class SlCreativeTabs {
 
 	private static void addFilledContainers(CreativeModeTab.Output output, Set<Item> added, ItemEntry<SteamContainerItem> entry) {
 		ItemStack steam = entry.asStack();
-		SteamContainerItem.writeFluid(steam, new FluidStack(SlFluids.STEAM.get(), SteamContainerItem.CAPACITY));
+		SteamContainerItem.writeFluid(steam, new FluidStack(
+				SlFluids.STEAM.get(),
+				SteamContainerItem.CAPACITY
+		));
 		added.add(steam.getItem());
 		output.accept(steam);
 
 		ItemStack superheated = entry.asStack();
-		SteamContainerItem.writeFluid(superheated, new FluidStack(SlFluids.SUPERHEATED_STEAM.get(), SteamContainerItem.CAPACITY));
+		SteamContainerItem.writeFluid(superheated, new FluidStack(
+				SlFluids.SUPERHEATED_STEAM.get(),
+				SteamContainerItem.CAPACITY
+		));
 		added.add(superheated.getItem());
 		output.accept(superheated);
 	}
