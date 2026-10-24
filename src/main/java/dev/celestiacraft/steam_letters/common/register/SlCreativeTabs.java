@@ -50,6 +50,7 @@ public class SlCreativeTabs {
 						// 基础设施
 						output.accept(SlBlocks.BRONZE_BASIN);
 						output.accept(SlBlocks.ADVANCED_SPOUT);
+						output.accept(SlBlocks.BRONZE_CASING);
 
 						// 材料
 						output.accept(SlMaterials.BRONZE_INGOT);
