@@ -4,6 +4,7 @@ import com.simibubi.create.AllItems;
 import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 public class ItemTagsGen {
@@ -48,5 +49,10 @@ public class ItemTagsGen {
 		// 蒸汽飞轮
 		provider.addTag(SlItemTags.STEAM_FLYWHEEL)
 				.add(SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem());
+
+		// 深板岩
+		provider.addTag(SlItemTags.DEEPSLATE)
+				.add(Items.DEEPSLATE)
+				.add(Items.COBBLED_DEEPSLATE);
 	}
 }

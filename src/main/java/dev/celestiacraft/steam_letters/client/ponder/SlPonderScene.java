@@ -79,7 +79,7 @@ public class SlPonderScene {
 		helper.forComponents(SlBlocks.BRONZE_SOLAR_BOILER.asItem())
 				.addStoryBoard(
 						"solar_boiler",
-						SolarBoiler::usage,
+						SolarBoilerScene::usage,
 						AllCreatePonderTags.FLUIDS,
 						SlPonderTags.SL
 				);

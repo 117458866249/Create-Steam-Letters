@@ -2,8 +2,8 @@ package dev.celestiacraft.steam_letters.mixin.boiler;
 
 import com.simibubi.create.content.fluids.tank.BoilerData;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
-import dev.celestiacraft.steam_letters.boiler.SteamBoilerData;
-import dev.celestiacraft.steam_letters.boiler.SteamBoilerFluidHandler;
+import dev.celestiacraft.steam_letters.common.boiler.SteamBoilerData;
+import dev.celestiacraft.steam_letters.common.boiler.SteamBoilerFluidHandler;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
