@@ -28,6 +28,9 @@ public class SlItemTags {
 			TIN_PLATES,
 			TIN_BLOCK;
 
+	public static final TagKey<Item>
+			DEEPSLATE;
+
 	static {
 		STEAM_FLYWHEEL = addMod("steam_flywheel");
 		STEAM_ENGINE = addMod("steam_engine");
@@ -47,6 +50,8 @@ public class SlItemTags {
 		TIN_NUGGET = addForge("nuggets/tin");
 		TIN_PLATES = addForge("plates/tin");
 		TIN_BLOCK = addForge("storage_blocks/tin");
+
+		DEEPSLATE = addForge("deepslate");
 	}
 
 	private static TagKey<Item> add(String namespace, String name) {
