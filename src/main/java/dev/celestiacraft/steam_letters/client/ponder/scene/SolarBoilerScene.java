@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/solar_boiler.nbt}
  */
-public class SolarBoiler {
+public class SolarBoilerScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -58,18 +58,18 @@ public class SolarBoiler {
 		scene.idle(80);
 
 		scene.world().showSection(water, Direction.WEST);
-		scene.world().modifyBlockEntityNBT(waterTank, FluidTankBlockEntity.class, tag -> {
+		scene.world().modifyBlockEntityNBT(waterTank, FluidTankBlockEntity.class, (nbt) -> {
 			FluidTank tank = new FluidTank(16000);
 			tank.setFluid(new FluidStack(Fluids.WATER, 16000));
-			tag.put("TankContent", tank.writeToNBT(new CompoundTag()));
+			nbt.put("TankContent", tank.writeToNBT(new CompoundTag()));
 		});
-		scene.world().modifyBlockEntityNBT(pump, PumpBlockEntity.class, tag -> {
-			tag.putFloat("Speed", -16.0F);
+		scene.world().modifyBlockEntityNBT(pump, PumpBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
 		});
-		scene.world().modifyBlockEntityNBT(boilerSelectionForNbt, SolarBoilerBlockEntity.class, tag -> {
+		scene.world().modifyBlockEntityNBT(boilerSelectionForNbt, SolarBoilerBlockEntity.class, (nbt) -> {
 			FluidTank tank = new FluidTank(16000);
 			tank.setFluid(new FluidStack(Fluids.WATER, 20000));
-			tag.put("InputTank", tank.writeToNBT(new CompoundTag()));
+			nbt.put("InputTank", tank.writeToNBT(new CompoundTag()));
 		});
 
 		scene.idle(10);
@@ -84,7 +84,7 @@ public class SolarBoiler {
 		scene.overlay().showText(60)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("当光照充足时（光照强度越大越好）...");
+				.text("当光照充足时...(光照强度越大越好)");
 		scene.idle(70);
 
 		scene.world().showSection(clock, Direction.DOWN);
@@ -97,13 +97,13 @@ public class SolarBoiler {
 				.text("...最好是真正的日光");
 		scene.idle(90);
 
-		scene.world().modifyBlockEntityNBT(boilerSelectionForNbt, SolarBoilerBlockEntity.class, tag -> {
+		scene.world().modifyBlockEntityNBT(boilerSelectionForNbt, SolarBoilerBlockEntity.class, (nbt) -> {
 			FluidTank inputTank = new FluidTank(16000);
 			inputTank.setFluid(new FluidStack(Fluids.WATER, 0));
 			FluidTank outputTank = new FluidTank(16000);
 			outputTank.setFluid(new FluidStack(SlFluids.STEAM.get(), 20000));
-			tag.put("InputTank", inputTank.writeToNBT(new CompoundTag()));
-			tag.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
+			nbt.put("InputTank", inputTank.writeToNBT(new CompoundTag()));
+			nbt.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
 		});
 
 		scene.idle(30);
@@ -115,8 +115,8 @@ public class SolarBoiler {
 		scene.idle(80);
 
 		scene.world().showSection(engineAndFlywheel, Direction.NORTH);
-		scene.world().modifyBlockEntityNBT(flywheelSelectionForNbt, KineticBlockEntity.class, tag -> {
-			tag.putFloat("Speed", -16.0F);
+		scene.world().modifyBlockEntityNBT(flywheelSelectionForNbt, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
 		});
 
 		scene.idle(10);

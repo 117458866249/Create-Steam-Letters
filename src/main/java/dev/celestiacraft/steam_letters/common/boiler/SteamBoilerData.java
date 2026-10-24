@@ -1,4 +1,4 @@
-package dev.celestiacraft.steam_letters.boiler;
+package dev.celestiacraft.steam_letters.common.boiler;
 
 import dev.celestiacraft.steam_letters.mixin.boiler.BoilerDataMixin;
 
