@@ -76,9 +76,7 @@ public class SlPonderScene {
 	}
 
 	private static void solarBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(
-						SlBlocks.BRONZE_SOLAR_BOILER.asItem()
-				)
+		helper.forComponents(SlBlocks.BRONZE_SOLAR_BOILER.asItem())
 				.addStoryBoard(
 						"solar_boiler",
 						SolarBoiler::usage,
@@ -88,9 +86,7 @@ public class SlPonderScene {
 	}
 
 	private static void bronzeSteamPump(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(
-						SlBlocks.BRONZE_STEAM_PUMP.asItem()
-				)
+		helper.forComponents(SlBlocks.BRONZE_STEAM_PUMP.asItem())
 				.addStoryBoard(
 						"bronze_steam_pump",
 						BronzeSteamPump::usage,
