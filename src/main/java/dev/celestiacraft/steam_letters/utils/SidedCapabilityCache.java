@@ -26,22 +26,22 @@ public class SidedCapabilityCache<T> {
 		this.capability = capability;
 	}
 
-	public T get(Level level, BlockPos targetPos, Direction side) {
-		LazyOptional<T> cache = caches.get(side);
+	public T get(Level level, BlockPos targetPos, Direction direction) {
+		LazyOptional<T> cache = caches.get(direction);
 		if (cache == null || !cache.isPresent()) {
 			BlockEntity blockEntity = level.getBlockEntity(targetPos);
 			if (blockEntity == null) {
-				caches.remove(side);
+				caches.remove(direction);
 				return null;
 			}
-			LazyOptional<T> resolved = blockEntity.getCapability(capability, side.getOpposite());
+			LazyOptional<T> resolved = blockEntity.getCapability(capability, direction.getOpposite());
 			if (!resolved.isPresent()) {
-				caches.remove(side);
+				caches.remove(direction);
 				return null;
 			}
-			caches.put(side, resolved);
+			caches.put(direction, resolved);
 			resolved.addListener((lazy) -> {
-				caches.remove(side, resolved);
+				caches.remove(direction, resolved);
 			});
 			cache = resolved;
 		}
