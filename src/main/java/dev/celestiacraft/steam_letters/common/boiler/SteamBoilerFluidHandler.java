@@ -1,4 +1,4 @@
-package dev.celestiacraft.steam_letters.boiler;
+package dev.celestiacraft.steam_letters.common.boiler;
 
 import com.simibubi.create.content.fluids.tank.BoilerData;
 

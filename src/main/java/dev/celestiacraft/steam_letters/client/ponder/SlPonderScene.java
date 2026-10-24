@@ -81,7 +81,7 @@ public class SlPonderScene {
 				)
 				.addStoryBoard(
 						"solar_boiler",
-						SolarBoiler::usage,
+						SolarBoilerScene::usage,
 						AllCreatePonderTags.FLUIDS,
 						SlPonderTags.SL
 				);
