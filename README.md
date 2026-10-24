@@ -164,20 +164,10 @@ Create 的应力网络, 传送带, 漏斗, 工作盆, 护目镜信息与 Ponder 
 
 这套流程不触碰本文任何章节 -- **README 描述的是结构与机制, 不是库存清单.**
 
-### 7.4 构建
-
-```bash
-./gradlew build        # 构建 jar
-./gradlew runClient    # 启动客户端
-./gradlew runServer    # 启动服务端
-./gradlew runData      # 重新生成资源与数据
-```
-
 ---
 
-## 八. 文档与许可
+## 八. 许可
 
-- 逐设备的机制规范与设计稿: [`docs/蒸汽训练词.md`](docs/蒸汽训练词.md).
 - 许可证: GNU LGPL 3.0 (见 [`gradle.properties`](gradle.properties) 与 `META-INF/mods.toml`).
 
 ---
