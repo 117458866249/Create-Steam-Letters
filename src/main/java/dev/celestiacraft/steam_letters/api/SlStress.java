@@ -93,7 +93,9 @@ public class SlStress extends ConfigBase {
 
 	private static void assertFromCreateD2D(BlockBuilder<?, ?> builder) {
 		if (!builder.getOwner().getModid().equals(CreateLettersSteam.MODID)) {
-			throw new IllegalStateException("Non-CMI blocks cannot be added to CMI config.");
+			String name = CreateLettersSteam.CLASS_NAME;
+			throw new IllegalStateException("Non-%s blocks cannot be added to %s config."
+					.formatted(name, name));
 		}
 	}
 

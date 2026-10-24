@@ -17,6 +17,7 @@
 | ----------------------------------------------------------------------------------- | ---------------------------------------- |
 | [KubeJS 集成](https://github.com/Qi-Month/Create-Steam-Letters/wiki/KubeJS)         | 以脚本注册蒸汽设备, 贴图, 数值, 燃料配方 |
 | [KubeJS API 参考](https://github.com/Qi-Month/Create-Steam-Letters/wiki/KubeJS-API) | 类型, 方法, 参数, 贴图与标签清单         |
+| [Java 集成](https://github.com/Qi-Month/Create-Steam-Letters/wiki/Java)             | 以 Java 接入蒸汽存储, 并行加工与热源     |
 | [Wiki 首页](https://github.com/Qi-Month/Create-Steam-Letters/wiki)                  | 文档导航与入门顺序                       |
 
 ---

@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 public class CreateLettersSteam {
 	public static final String MODID = "steam_letters";
 	public static final String NAME = "Create: Letter's in Steam";
+	public static final String CLASS_NAME = CreateLettersSteam.class.getSimpleName();
 	public static final Logger LOGGER = LogManager.getLogger(NAME);
 	private static SlStress STRESS_VALUES;
 	private static ForgeConfigSpec STRESS_VALUES_SPEC;
