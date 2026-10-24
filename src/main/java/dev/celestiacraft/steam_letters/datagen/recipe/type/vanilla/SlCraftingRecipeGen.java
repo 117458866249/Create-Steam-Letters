@@ -150,12 +150,34 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 
 	private static void addBronzeBasin(Consumer<FinishedRecipe> consumer) {
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BASIN)
-				.pattern("ABA")
+				.pattern("A A")
 				.pattern("AAA")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "bronze_basin_ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BASIN)
+				.pattern("A A")
+				.pattern("AAA")
+				.define('A', SlItemTags.BRONZE_PLATES)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "bronze_basin_plate"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BASIN)
+				.pattern("ABA")
+				.pattern(" A ")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.define('B', AllBlocks.BASIN)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "bronze_basin_ingot_update"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_BASIN)
+				.pattern("ABA")
+				.pattern(" A ")
 				.define('A', SlItemTags.BRONZE_PLATES)
 				.define('B', AllBlocks.BASIN)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
-				.save(consumer, save(SHAPED + "bronze_basin"));
+				.save(consumer, save(SHAPED + "bronze_basin_plate_update"));
 	}
 
 	private static void addBurner(Consumer<FinishedRecipe> consumer) {
