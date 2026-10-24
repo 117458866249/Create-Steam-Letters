@@ -15,6 +15,7 @@ public class SlPonderScene {
 		advancedSpout(helper);
 		steamEngine(helper);
 		solarBoiler(helper);
+		bronzeSteamPump(helper);
 	}
 
 	private static void steamHammer(@NotNull PonderSceneRegistrationHelper<Item> helper) {
@@ -75,14 +76,21 @@ public class SlPonderScene {
 	}
 
 	private static void solarBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(
-						SlBlocks.BRONZE_SOLAR_BOILER.asItem()
-				)
+		helper.forComponents(SlBlocks.BRONZE_SOLAR_BOILER.asItem())
 				.addStoryBoard(
 						"solar_boiler",
 						SolarBoilerScene::usage,
 						AllCreatePonderTags.FLUIDS,
-						AllCreatePonderTags.KINETIC_SOURCES,
+						SlPonderTags.SL
+				);
+	}
+
+	private static void bronzeSteamPump(@NotNull PonderSceneRegistrationHelper<Item> helper) {
+		helper.forComponents(SlBlocks.BRONZE_STEAM_PUMP.asItem())
+				.addStoryBoard(
+						"bronze_steam_pump",
+						BronzeSteamPump::usage,
+						AllCreatePonderTags.FLUIDS,
 						SlPonderTags.SL
 				);
 	}
