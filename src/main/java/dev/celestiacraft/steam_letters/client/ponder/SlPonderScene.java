@@ -1,11 +1,7 @@
 package dev.celestiacraft.steam_letters.client.ponder;
 
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
-import dev.celestiacraft.steam_letters.client.ponder.scene.AdvancedSpoutScene;
-import dev.celestiacraft.steam_letters.client.ponder.scene.SteamEngineScene;
-import dev.celestiacraft.steam_letters.client.ponder.scene.SteamHammerScene;
-import dev.celestiacraft.steam_letters.client.ponder.scene.SteamMixerScene;
-import dev.celestiacraft.steam_letters.client.ponder.scene.SteamSawScene;
+import dev.celestiacraft.steam_letters.client.ponder.scene.*;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.world.item.Item;
@@ -18,6 +14,7 @@ public class SlPonderScene {
 		steamSaw(helper);
 		advancedSpout(helper);
 		steamEngine(helper);
+		solarBoiler(helper);
 	}
 
 	private static void steamHammer(@NotNull PonderSceneRegistrationHelper<Item> helper) {
@@ -65,11 +62,25 @@ public class SlPonderScene {
 						SlBlocks.BRONZE_BOILER.asItem(),
 						SlBlocks.BRONZE_SOLID_BURNER.asItem(),
 						SlBlocks.BRONZE_FLUID_BURNER.asItem(),
-						SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem()
+						SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem(),
+						SlBlocks.BRONZE_STEAM_ENGINE.asItem()
 				)
 				.addStoryBoard(
 						"steam_engine",
 						SteamEngineScene::usage,
+						AllCreatePonderTags.FLUIDS,
+						AllCreatePonderTags.KINETIC_SOURCES,
+						SlPonderTags.SL
+				);
+	}
+
+	private static void solarBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
+		helper.forComponents(
+						SlBlocks.BRONZE_SOLAR_BOILER.asItem()
+				)
+				.addStoryBoard(
+						"solar_boiler",
+						SolarBoiler::usage,
 						AllCreatePonderTags.FLUIDS,
 						AllCreatePonderTags.KINETIC_SOURCES,
 						SlPonderTags.SL
