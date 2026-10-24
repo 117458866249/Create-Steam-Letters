@@ -9,6 +9,8 @@ import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
+import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.util.HideFromJS;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -21,26 +23,31 @@ public class SlApis {
 						.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
 			});
 
-	public static ResourceLocation loadResource(String path) {
-		return ResourceLocation.fromNamespaceAndPath(CreateLettersSteam.MODID, path);
-	}
-
-	public static ResourceLocation loadCreate(String path) {
-		return Create.asResource(path);
-	}
-
-	public static ResourceLocation loadCDG(String path) {
-		return CreateDieselGenerators.rl(path);
-	}
-
-	public static ResourceLocation loadForge(String path) {
-		return ResourceLocation.fromNamespaceAndPath("forge", path);
-	}
-
+	@Info("1000mB")
 	public static int getFuelAmount() {
 		return FluidFuelRecipe.FUEL_AMOUNT;
 	}
 
+	public static ResourceLocation loadResource(String path) {
+		return ResourceLocation.fromNamespaceAndPath(CreateLettersSteam.MODID, path);
+	}
+
+	@HideFromJS
+	public static ResourceLocation loadCreate(String path) {
+		return Create.asResource(path);
+	}
+
+	@HideFromJS
+	public static ResourceLocation loadCDG(String path) {
+		return CreateDieselGenerators.rl(path);
+	}
+
+	@HideFromJS
+	public static ResourceLocation loadForge(String path) {
+		return ResourceLocation.fromNamespaceAndPath("forge", path);
+	}
+
+	@HideFromJS
 	public static void require(ProcessingRecipeBuilder<?> builder, TagKey<Item> tag, int count) {
 		for (int i = 0; i < count; i++) {
 			builder.require(tag);
