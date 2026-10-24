@@ -89,7 +89,7 @@ public class SlPonderScene {
 		helper.forComponents(SlBlocks.BRONZE_STEAM_PUMP.asItem())
 				.addStoryBoard(
 						"bronze_steam_pump",
-						BronzeSteamPump::usage,
+						BronzeSteamPumpScene::usage,
 						AllCreatePonderTags.FLUIDS,
 						SlPonderTags.SL
 				);

@@ -124,7 +124,7 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(1, 2, 3))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("放上与其它锅炉一样的飞轮结构，便能输出应力");
+				.text("放上与其它锅炉一样的飞轮结构, 便能输出应力");
 		scene.idle(80);
 	}
 }

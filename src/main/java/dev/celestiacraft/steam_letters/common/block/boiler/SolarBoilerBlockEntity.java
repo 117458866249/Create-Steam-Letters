@@ -7,7 +7,6 @@ import dev.celestiacraft.steam_letters.config.common.SolarBoilerConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,8 +28,8 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 	 * 太阳光条件检查的高度 (格): 正上方 1 至 16 格内不能有遮罩方块.
 	 */
 	private static final int SKY_CHECK_HEIGHT = 16;
-	private final SmoothFluid water;
-	private final SmoothFluid steam;
+	private final SolarBoilerSmoothFluid water;
+	private final SolarBoilerSmoothFluid steam;
 
 	private double cachedEfficiency = -1.0D;
 
@@ -42,8 +41,8 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 
 	public SolarBoilerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-		water = new SmoothFluid(getInputTank());
-		steam = new SmoothFluid(getOutputTank());
+		water = new SolarBoilerSmoothFluid(getInputTank());
+		steam = new SolarBoilerSmoothFluid(getOutputTank());
 	}
 
 	@Override
@@ -272,56 +271,5 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 			case RAIN, THUNDER, ARTIFICIAL_LIGHT -> ChatFormatting.YELLOW;
 			case NONE -> ChatFormatting.RED;
 		};
-	}
-
-	/**
-	 * 一个储罐的平滑液面: 服务端每 lazyTick 才同步一次内容, 直接用瞬时值会让液面一格一格地跳.
-	 * 这里每 tick 朝目标值指数逼近, 渲染时再按 partialTick 在两次 tick 之间插值.
-	 */
-	private static class SmoothFluid {
-		private static final float SMOOTHING = 0.25F;
-		private static final float EPSILON = 1.0E-3F;
-
-		private final FluidTank tank;
-		private float level;
-		private float previousLevel;
-		private boolean initialised;
-		private FluidStack rendered = FluidStack.EMPTY;
-
-		private SmoothFluid(FluidTank tank) {
-			this.tank = tank;
-		}
-
-		private void tick() {
-			FluidStack fluid = tank.getFluid();
-			int capacity = tank.getCapacity();
-			float target = capacity > 0 ? Mth.clamp(fluid.getAmount() / (float) capacity, 0.0F, 1.0F) : 0.0F;
-
-			if (!fluid.isEmpty() && (rendered.isEmpty() || !rendered.getFluid().isSame(fluid.getFluid()))) {
-				rendered = fluid.copy();
-			}
-
-			if (!initialised) {
-				initialised = true;
-				level = target;
-				previousLevel = target;
-				return;
-			}
-
-			previousLevel = level;
-			level += (target - level) * SMOOTHING;
-
-			if (Math.abs(target - level) < EPSILON) {
-				level = target;
-			}
-		}
-
-		private FluidStack getRendered() {
-			return rendered;
-		}
-
-		private float getLevel(float partialTick) {
-			return initialised ? Mth.lerp(partialTick, previousLevel, level) : 0.0F;
-		}
 	}
 }

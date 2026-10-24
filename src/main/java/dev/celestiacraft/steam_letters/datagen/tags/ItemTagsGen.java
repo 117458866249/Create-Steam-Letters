@@ -1,6 +1,7 @@
 package dev.celestiacraft.steam_letters.datagen.tags;
 
 import com.simibubi.create.AllItems;
+import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
@@ -51,8 +52,7 @@ public class ItemTagsGen {
 				.add(SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem());
 
 		// 深板岩
-		provider.addTag(SlItemTags.DEEPSLATE)
-				.add(Items.DEEPSLATE)
+		provider.addTag(AllPaletteStoneTypes.DEEPSLATE.materialTag)
 				.add(Items.COBBLED_DEEPSLATE);
 	}
 }

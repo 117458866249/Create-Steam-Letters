@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "steam_letters:block/bronze_depot/block"
+    },
+    "waterlogged=true": {
+      "model": "steam_letters:block/bronze_depot/block"
+    }
+  }
+}

@@ -5,6 +5,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "steam_letters.refmap.json",
 	"mixins": [
+		"basin.BasinBlockEntityMixin",
 		"boiler.BoilerDataMixin"
 	],
 	"client": [

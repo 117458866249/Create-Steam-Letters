@@ -9,6 +9,7 @@ import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
 import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
@@ -19,6 +20,7 @@ import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlockEntit
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.bronze_basin.BronzeBasinBlock;
+import dev.celestiacraft.steam_letters.common.block.bronze_depot.BronzeDepotBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
@@ -36,6 +38,7 @@ import net.minecraftforge.common.Tags;
 
 public class SlBlocks {
 	public static final BlockEntry<BronzeBasinBlock> BRONZE_BASIN;
+	public static final BlockEntry<BronzeDepotBlock> BRONZE_DEPOT;
 	public static final BlockEntry<AdvancedSpoutBlock> ADVANCED_SPOUT;
 	public static final BlockEntry<SteamHammerBlock> STEAM_HAMMER;
 	public static final BlockEntry<SteamMixerBlock> STEAM_MIXER;
@@ -61,6 +64,18 @@ public class SlBlocks {
 				.blockstate(BronzeBasinBlock.genBlockState())
 				.onRegister(MovementBehaviour.movementBehaviour(new BasinMovementBehaviour()))
 				.lang("Bronze Basin")
+				.register();
+
+		BRONZE_DEPOT = SlApis.REGISTRATE.block("bronze_depot", BronzeDepotBlock::new)
+				.item()
+				.model(ItemModelGen.withModel("block/bronze_depot/block"))
+				.build()
+				.initialProperties(SharedProperties::stone)
+				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+				.tag(Tags.Blocks.NEEDS_WOOD_TOOL)
+				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
+				.blockstate(NonNullBiConsumer.noop())
+				.lang("Bronze Depot")
 				.register();
 
 		ADVANCED_SPOUT = SlApis.REGISTRATE.block("advanced_spout", AdvancedSpoutBlock::new)

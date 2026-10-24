@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class BronzeBasinBlockEntity extends BasinBlockEntity {
+	public static final int INPUT_SLOT_COUNT = 16;
+
 	public BronzeBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}

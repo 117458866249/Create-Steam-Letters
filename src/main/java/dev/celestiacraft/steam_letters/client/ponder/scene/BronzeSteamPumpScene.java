@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/bronze_steam_pump.nbt}
  */
-public class BronzeSteamPump {
+public class BronzeSteamPumpScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
@@ -62,13 +62,13 @@ public class BronzeSteamPump {
 				.pointAt(util.vector().centerOf(engineIText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("如果将引擎和锅炉紧贴在一起，将会降低效率");
+				.text("如果将引擎和锅炉紧贴在一起, 将会降低效率");
 		scene.idle(80);
 
 		scene.overlay().showText(50)
 				.pointAt(util.vector().centerOf(engineIText2))
 				.placeNearTarget()
-				.text("在这里外接一个引擎又太麻烦，该怎么做呢");
+				.text("在这里外接一个引擎又太麻烦, 该怎么做呢");
 		scene.idle(55);
 
 		scene.world().hideIndependentSection(engineILink, Direction.UP);
@@ -88,13 +88,13 @@ public class BronzeSteamPump {
 		scene.idle(10);
 
 		scene.world().showSection(engineII, Direction.NORTH);
-		scene.world().modifyBlockEntityNBT(flyWheelII, KineticBlockEntity.class, tag -> {
-			tag.putFloat("Speed", -16.0F);
+		scene.world().modifyBlockEntityNBT(flyWheelII, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
 		});
-		scene.world().modifyBlockEntityNBT(boilerII, SolarBoilerBlockEntity.class, tag -> {
+		scene.world().modifyBlockEntityNBT(boilerII, SolarBoilerBlockEntity.class, (nbt) -> {
 			FluidTank outputTank = new FluidTank(16000);
 			outputTank.setFluid(new FluidStack(SlFluids.STEAM.get(), 20000));
-			tag.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
+			nbt.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
 		});
 
 		scene.idle(10);
@@ -124,7 +124,7 @@ public class BronzeSteamPump {
 				.pointAt(util.vector().centerOf(whatCostText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("那代价是什么呢？除了蒸汽什么都运输不了");
+				.text("那代价是什么呢? 除了蒸汽什么都运输不了");
 		scene.idle(80);
 
 		scene.world().hideIndependentSection(whatCostShowLink, Direction.SOUTH);

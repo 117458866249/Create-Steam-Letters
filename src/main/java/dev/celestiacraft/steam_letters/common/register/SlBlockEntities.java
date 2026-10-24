@@ -11,6 +11,8 @@ import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerRenderer;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.bronze_basin.BronzeBasinBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.bronze_basin.BronzeBasinRenderer;
+import dev.celestiacraft.steam_letters.common.block.bronze_depot.BronzeDepotBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.bronze_depot.BronzeDepotRenderer;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
@@ -28,6 +30,7 @@ import dev.celestiacraft.steam_letters.common.block.steam_saw.SteamSawBlockEntit
 
 public class SlBlockEntities {
 	public static final BlockEntityEntry<BronzeBasinBlockEntity> BRONZE_BASIN;
+	public static final BlockEntityEntry<BronzeDepotBlockEntity> BRONZE_DEPOT;
 	public static final BlockEntityEntry<AdvancedSpoutBlockEntity> ADVANCED_SPOUT;
 	public static final BlockEntityEntry<SteamHammerBlockEntity> STEAM_HAMMER;
 	public static final BlockEntityEntry<SteamMixerBlockEntity> STEAM_MIXER;
@@ -44,6 +47,11 @@ public class SlBlockEntities {
 		BRONZE_BASIN = SlApis.REGISTRATE.blockEntity("bronze_basin", BronzeBasinBlockEntity::new)
 				.validBlock(SlBlocks.BRONZE_BASIN)
 				.renderer(() -> BronzeBasinRenderer::new)
+				.register();
+
+		BRONZE_DEPOT = SlApis.REGISTRATE.blockEntity("bronze_depot", BronzeDepotBlockEntity::new)
+				.validBlock(SlBlocks.BRONZE_DEPOT)
+				.renderer(() -> BronzeDepotRenderer::new)
 				.register();
 
 		ADVANCED_SPOUT = SlApis.REGISTRATE.blockEntity("advanced_spout", AdvancedSpoutBlockEntity::new)

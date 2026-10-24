@@ -47,6 +47,7 @@ public class DataGenerators {
 			generator.addProvider(server, new SlCrushingRecipeGen(output));
 			generator.addProvider(server, new SlFluidFuelRecipeGen(output));
 			generator.addProvider(server, new SlSolidFuelRecipeGen(output));
+			generator.addProvider(server, new SlMillingRecipeGen(output));
 
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
 		}

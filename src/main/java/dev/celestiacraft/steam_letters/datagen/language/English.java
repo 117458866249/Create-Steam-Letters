@@ -133,6 +133,8 @@ public class English {
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR2),
 				"Processes more recipes before it needs to be refilled"
 		);
+
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BRONZE_DEPOT_CONTENTS), "Bronze Depot Contents");
 	}
 
 	private static void addAdvancedSpoutLang(RegistrateLangProvider provider) {

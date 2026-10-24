@@ -34,7 +34,7 @@ public class BoilerDataMixin implements SteamBoilerData {
 	 * 18 = 过热蒸汽
 	 */
 	@Unique
-	private int csa$steamHeatLevel;
+	private int sl$steamHeatLevel;
 	@Unique
 	private int sl$steamGathered;
 
@@ -42,11 +42,11 @@ public class BoilerDataMixin implements SteamBoilerData {
 	 * 蒸汽输入速率(mB/t), 以与原版水供应相同的方式进行采样
 	 */
 	@Unique
-	private float csa$steamSupply;
+	private float sl$steamSupply;
 	@Unique
-	private float[] csa$steamSupplyOverTime = new float[10];
+	private float[] sl$steamSupplyOverTime = new float[10];
 	@Unique
-	private int csa$steamSupplyIndex;
+	private int sl$steamSupplyIndex;
 
 	@Shadow(remap = false)
 	public boolean needsHeatLevelUpdate;
@@ -87,14 +87,14 @@ public class BoilerDataMixin implements SteamBoilerData {
 	 * @param returnable
 	 */
 	@Inject(method = "updateTemperature", at = @At("RETURN"), remap = false, cancellable = true)
-	private void csa$applySteamHeat(FluidTankBlockEntity entity, CallbackInfoReturnable<Boolean> returnable) {
-		if (csa$steamHeatLevel <= 0) {
+	private void sl$applySteamHeat(FluidTankBlockEntity entity, CallbackInfoReturnable<Boolean> returnable) {
+		if (sl$steamHeatLevel <= 0) {
 			return;
 		}
 
 		int prevActive = activeHeat;
 		boolean prevPassive = passiveHeat;
-		activeHeat = csa$steamHeatLevel;
+		activeHeat = sl$steamHeatLevel;
 		passiveHeat = false;
 
 		if (prevActive != activeHeat || prevPassive != passiveHeat) {
@@ -118,21 +118,21 @@ public class BoilerDataMixin implements SteamBoilerData {
 			),
 			remap = false
 	)
-	private void csa$sampleSteamSupply(FluidTankBlockEntity entity, CallbackInfo info) {
-		if (sl$steamGathered == 0 && csa$steamHeatLevel != 0) {
-			csa$steamHeatLevel = 0;
+	private void sl$sampleSteamSupply(FluidTankBlockEntity entity, CallbackInfo info) {
+		if (sl$steamGathered == 0 && sl$steamHeatLevel != 0) {
+			sl$steamHeatLevel = 0;
 			needsHeatLevelUpdate = true;
 		}
 
-		csa$steamSupplyOverTime[csa$steamSupplyIndex] = sl$steamGathered / (float) SAMPLE_RATE;
-		csa$steamSupply = Math.max(csa$steamSupply, csa$steamSupplyOverTime[csa$steamSupplyIndex]);
-		csa$steamSupplyIndex = (csa$steamSupplyIndex + 1) % csa$steamSupplyOverTime.length;
+		sl$steamSupplyOverTime[sl$steamSupplyIndex] = sl$steamGathered / (float) SAMPLE_RATE;
+		sl$steamSupply = Math.max(sl$steamSupply, sl$steamSupplyOverTime[sl$steamSupplyIndex]);
+		sl$steamSupplyIndex = (sl$steamSupplyIndex + 1) % sl$steamSupplyOverTime.length;
 
-		if (csa$steamSupplyIndex == 0) {
-			csa$steamSupply = 0;
+		if (sl$steamSupplyIndex == 0) {
+			sl$steamSupply = 0;
 
-			for (float sample : csa$steamSupplyOverTime) {
-				csa$steamSupply = Math.max(sample, csa$steamSupply);
+			for (float sample : sl$steamSupplyOverTime) {
+				sl$steamSupply = Math.max(sample, sl$steamSupply);
 			}
 		}
 
@@ -141,13 +141,13 @@ public class BoilerDataMixin implements SteamBoilerData {
 
 	/*
 	@Inject(method = "addToGoggleTooltip", at = @At("RETURN"), remap = false)
-	private void csa$addSteamTooltip(
+	private void sl$addSteamTooltip(
 			List<Component> tooltip,
 			boolean isPlayerSneaking,
 			int boilerSize,
 			CallbackInfoReturnable<Boolean> returnable
 	) {
-		if (csa$steamHeatLevel <= 0) {
+		if (sl$steamHeatLevel <= 0) {
 			return;
 		}
 
@@ -158,7 +158,7 @@ public class BoilerDataMixin implements SteamBoilerData {
 				.add(Component.translatable("steam_letters.boiler.steam_input_rate")
 						.withStyle(ChatFormatting.GRAY))
 				.forGoggles(tooltip);
-		CreateLang.number(csa$steamSupply)
+		CreateLang.number(sl$steamSupply)
 				.style(ChatFormatting.BLUE)
 				.add(CreateLang.translate("generic.unit.millibuckets"))
 				.add(CreateLang.text(" / ")
@@ -169,7 +169,7 @@ public class BoilerDataMixin implements SteamBoilerData {
 						.style(ChatFormatting.DARK_GRAY))
 				.forGoggles(tooltip, 1);
 
-		int actualLevel = Math.min(csa$steamHeatLevel, Math.min(maxHeatForWater, maxHeatForSize));
+		int actualLevel = Math.min(sl$steamHeatLevel, Math.min(maxHeatForWater, maxHeatForSize));
 		CreateLang.builder()
 				.add(Component.translatable("steam_letters.boiler.steam_level")
 						.withStyle(ChatFormatting.GRAY))
@@ -184,23 +184,23 @@ public class BoilerDataMixin implements SteamBoilerData {
 	}
 
 	@Inject(method = "write", at = @At("RETURN"), remap = false)
-	private void csa$writeSteam(CallbackInfoReturnable<CompoundTag> returnable) {
+	private void sl$writeSteam(CallbackInfoReturnable<CompoundTag> returnable) {
 		CompoundTag nbt = returnable.getReturnValue();
-		nbt.putInt("SL_SteamHeat", csa$steamHeatLevel);
-		nbt.putFloat("SL_SteamSupply", csa$steamSupply);
+		nbt.putInt("SL_SteamHeat", sl$steamHeatLevel);
+		nbt.putFloat("SL_SteamSupply", sl$steamSupply);
 	}
 
 	@Inject(method = "read", at = @At("RETURN"), remap = false)
-	private void csa$readSteam(CompoundTag nbt, int boilerSize, CallbackInfo info) {
-		csa$steamHeatLevel = nbt.getInt("SL_SteamHeat");
-		csa$steamSupply = nbt.getFloat("SL_SteamSupply");
+	private void sl$readSteam(CompoundTag nbt, int boilerSize, CallbackInfo info) {
+		sl$steamHeatLevel = nbt.getInt("SL_SteamHeat");
+		sl$steamSupply = nbt.getFloat("SL_SteamSupply");
 	}
 	*/
 
 	@Override
 	public void sl$notifySteamInput(int level, int amount) {
-		if (level > csa$steamHeatLevel) {
-			csa$steamHeatLevel = level;
+		if (level > sl$steamHeatLevel) {
+			sl$steamHeatLevel = level;
 			needsHeatLevelUpdate = true;
 		}
 		sl$steamGathered += amount;

@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
@@ -18,7 +17,6 @@ import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 public class BronzeBasinBlock extends BasinBlock {
 	public BronzeBasinBlock(Properties properties) {
 		super(properties.noCollission()
-				.mapColor(MapColor.COLOR_GRAY)
 				.sound(SoundType.LANTERN));
 	}
 

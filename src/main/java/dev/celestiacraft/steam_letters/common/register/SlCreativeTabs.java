@@ -49,17 +49,9 @@ public class SlCreativeTabs {
 
 						// 基础设施
 						output.accept(SlBlocks.BRONZE_BASIN);
+						output.accept(SlBlocks.BRONZE_DEPOT);
 						output.accept(SlBlocks.ADVANCED_SPOUT);
 						output.accept(SlBlocks.BRONZE_CASING);
-
-						// 材料
-						output.accept(SlMaterials.BRONZE_INGOT);
-						output.accept(SlMaterials.BRONZE_PLATE);
-						output.accept(SlMaterials.BRONZE_BLOCK);
-						output.accept(SlMaterials.TIN_INGOT);
-						output.accept(SlMaterials.TIN_PLATE);
-						output.accept(SlMaterials.TIN_NUGGET);
-						output.accept(SlMaterials.TIN_BLOCK);
 
 						// 零件
 						output.accept(SlItems.STEAM_MECHANISM);
@@ -70,6 +62,15 @@ public class SlCreativeTabs {
 						output.accept(SlItems.EMPTY_STEAM_CONTAINER);
 						addFilledContainers(output, added, SlItems.SEALED_STEAM_CONTAINER);
 						addDynamicDevices(output, added);
+
+						// 材料
+						output.accept(SlMaterials.BRONZE_INGOT);
+						output.accept(SlMaterials.BRONZE_PLATE);
+						output.accept(SlMaterials.BRONZE_BLOCK);
+						output.accept(SlMaterials.TIN_INGOT);
+						output.accept(SlMaterials.TIN_PLATE);
+						output.accept(SlMaterials.TIN_NUGGET);
+						output.accept(SlMaterials.TIN_BLOCK);
 					})
 					.build();
 		});
