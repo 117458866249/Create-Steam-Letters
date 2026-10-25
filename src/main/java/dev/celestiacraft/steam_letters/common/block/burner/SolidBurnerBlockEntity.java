@@ -6,6 +6,7 @@ import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -157,8 +158,6 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		return true;
 	}
 
-	// ------------------------------------------------------------------ 能力
-
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction) {
 		if (capability == ForgeCapabilities.ITEM_HANDLER) {
@@ -179,8 +178,6 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		itemCapability = LazyOptional.of(() -> new FuelItemHandler(this));
 	}
 
-	// ------------------------------------------------------------------ 持久化
-
 	@Override
 	protected void write(CompoundTag tag, boolean clientPacket) {
 		super.write(tag, clientPacket);
@@ -193,5 +190,17 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	protected void read(CompoundTag tag, boolean clientPacket) {
 		super.read(tag, clientPacket);
 		fuel = tag.contains(NBT_FUEL) ? ItemStack.of(tag.getCompound(NBT_FUEL)) : ItemStack.EMPTY;
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		if (level == null || fuel.isEmpty()) {
+			return;
+		}
+
+		ItemStack dropped = fuel;
+		fuel = ItemStack.EMPTY;
+		Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), dropped);
 	}
 }
