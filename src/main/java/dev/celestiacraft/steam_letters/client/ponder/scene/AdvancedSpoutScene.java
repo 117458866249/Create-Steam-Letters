@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
  * 高级注液器的 Ponder 场景.
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/advanced_spout.nbt}
+ * 等待重写
  */
 public class AdvancedSpoutScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {

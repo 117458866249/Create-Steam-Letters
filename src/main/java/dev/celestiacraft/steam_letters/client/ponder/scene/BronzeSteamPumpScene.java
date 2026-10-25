@@ -48,13 +48,13 @@ public class BronzeSteamPumpScene {
 		scene.idle(5);
 
 		ElementLink<WorldSectionElement> engineILink = scene.world().showIndependentSection(engineI, Direction.EAST);
-		scene.world().modifyBlockEntityNBT(flyWheelI, KineticBlockEntity.class, tag -> {
-			tag.putFloat("Speed", -16.0F);
+		scene.world().modifyBlockEntityNBT(flyWheelI, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
 		});
-		scene.world().modifyBlockEntityNBT(boilerI, SolarBoilerBlockEntity.class, tag -> {
+		scene.world().modifyBlockEntityNBT(boilerI, SolarBoilerBlockEntity.class, (nbt) -> {
 			FluidTank outputTank = new FluidTank(16000);
 			outputTank.setFluid(new FluidStack(SlFluids.STEAM.get(), 20000));
-			tag.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
+			nbt.put("OutputTank", outputTank.writeToNBT(new CompoundTag()));
 		});
 
 		scene.idle(10);
@@ -68,7 +68,7 @@ public class BronzeSteamPumpScene {
 		scene.overlay().showText(50)
 				.pointAt(util.vector().centerOf(engineIText2))
 				.placeNearTarget()
-				.text("在这里外接一个引擎又太麻烦, 该怎么做呢");
+				.text("在这里外接一个动力泵又太麻烦, 该怎么做呢");
 		scene.idle(55);
 
 		scene.world().hideIndependentSection(engineILink, Direction.UP);
@@ -129,5 +129,7 @@ public class BronzeSteamPumpScene {
 
 		scene.world().hideIndependentSection(whatCostShowLink, Direction.SOUTH);
 		scene.idle(20);
+
+		scene.markAsFinished();
 	}
 }
