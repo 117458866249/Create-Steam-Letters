@@ -27,13 +27,17 @@ public class SlItems {
 				.lang("Incomplete Steam Mechanism")
 				.register();
 
-		EMPTY_STEAM_CONTAINER = SlApis.REGISTRATE.item("empty_steam_container", properties -> new SteamContainerItem(properties, true))
+		EMPTY_STEAM_CONTAINER = SlApis.REGISTRATE.item("empty_steam_container", (properties) -> {
+					return new SteamContainerItem(properties, true);
+				})
 				.tag(SlItemTags.STEAM_CONTAINER)
 				.model(ItemModelGen.generated("item/empty_steam_container"))
 				.lang("Empty Sealed Steam Container")
 				.register();
 
-		SEALED_STEAM_CONTAINER = SlApis.REGISTRATE.item("sealed_steam_container", properties -> new SteamContainerItem(properties, false))
+		SEALED_STEAM_CONTAINER = SlApis.REGISTRATE.item("sealed_steam_container", (properties) -> {
+					return new SteamContainerItem(properties, false);
+				})
 				.tag(SlItemTags.STEAM_CONTAINER)
 				.model(ItemModelGen.generated("item/sealed_steam_container"))
 				.lang("Sealed Steam Container")

@@ -53,16 +53,10 @@ public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage
 		return SteamSawConfig.STEAM_SAW_PARALLEL.get();
 	}
 
-	/**
-	 * 无蒸汽时不开工; 蒸汽不足时 {@code tick()} 每刻都会重试调用本方法, 补满蒸汽后自动开始.
-	 * <p>
-	 * 开工后按 {@link #getProcessingTimeMultiplier()} 缩放切割耗时, 配置 0.25 即耗时只有原版机械锯的四分之一.
-	 *
-	 * @param stack
-	 */
 	@Override
 	public void start(@NotNull ItemStack stack) {
 		if (!hasEnoughSteam()) {
+			keepIdle();
 			return;
 		}
 
@@ -75,17 +69,12 @@ public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage
 		}
 	}
 
-	/**
-	 * 父类 {@code applyRecipe()} 是私有方法, 无法覆写
-	 * <p>
-	 * 因此用 {@code appliedRecipe} 的 false 和 true 变化来捕捉 一次切割完成 的时机并扣减蒸汽.
-	 * <p>
-	 * 注意: 空手右键取出物品会清空库存并把 {@code appliedRecipe} 复位, 同一刻 {@code remainingTime} 被清成 0,
-	 * 于是下一游戏刻父类会空跑一次 {@code applyRecipe()} 又把它置为 true. 所以还要确认这一轮真的产出了东西,
-	 * 否则右键取出会白扣一次蒸汽.
-	 */
 	@Override
 	public void tick() {
+		if (!level.isClientSide()) {
+			keepIdle();
+		}
+
 		boolean applied = inventory.appliedRecipe;
 		super.tick();
 
@@ -98,9 +87,16 @@ public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage
 		}
 	}
 
-	/**
-	 * 输出槽(1 号之后的槽位)里是否有产物, 用于区分 真的切了一刀 和 空跑了一次 {@code applyRecipe()}.
-	 */
+	private void keepIdle() {
+		if (inventory.appliedRecipe) {
+			return;
+		}
+
+		if (inventory.remainingTime <= 0 || !hasEnoughSteam()) {
+			inventory.remainingTime = -1;
+		}
+	}
+
 	private boolean producedOutput() {
 		for (int slot = 1; slot < inventory.getSlots(); slot++) {
 			if (!inventory.getStackInSlot(slot).isEmpty()) {
