@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
  * 蒸汽搅拌机的 Ponder 场景.
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/steam_mixer.nbt}
+ * 等待重写
  */
 public class SteamMixerScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {

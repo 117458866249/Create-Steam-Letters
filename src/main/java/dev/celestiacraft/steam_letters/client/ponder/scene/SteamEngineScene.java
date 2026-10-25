@@ -20,9 +20,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- * 蒸汽动力机组的 Ponder 场景: 蒸汽锅炉 / 固体燃烧室 / 流体燃烧室 / 蒸汽飞轮 共用.
+ * 蒸汽动力机组的 Ponder 场景: 蒸汽锅炉 / 固体燃烧室 / 流体燃烧室 / 蒸汽飞轮 / 飞轮引擎 共用.
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/steam_engine.nbt}
+ * 等待重写
  */
 public class SteamEngineScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {
