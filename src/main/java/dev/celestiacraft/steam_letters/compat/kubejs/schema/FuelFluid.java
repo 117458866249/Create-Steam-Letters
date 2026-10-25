@@ -3,17 +3,20 @@ package dev.celestiacraft.steam_letters.compat.kubejs.schema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@AllArgsConstructor
 @Getter
 public class FuelFluid {
 	private final FluidStackJS fluid;
 	private final ResourceLocation tag;
+
+	private FuelFluid(FluidStackJS fluid, ResourceLocation tag) {
+		this.fluid = fluid;
+		this.tag = tag;
+	}
 
 	public static @NotNull FuelFluid of(@Nullable Object from) {
 		if (from instanceof FuelFluid fuel) {
