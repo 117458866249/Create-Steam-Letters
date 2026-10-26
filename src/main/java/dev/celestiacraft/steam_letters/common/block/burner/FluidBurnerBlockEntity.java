@@ -80,8 +80,6 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		invalidateRecipeCache();
 	}
 
-	// ------------------------------------------------------------------ 燃料
-
 	@Override
 	protected boolean tickFuel() {
 		if (level == null) {

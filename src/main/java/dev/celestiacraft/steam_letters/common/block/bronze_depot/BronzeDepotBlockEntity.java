@@ -5,18 +5,15 @@ import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 import com.simibubi.create.content.logistics.depot.DepotBlockEntity;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.item.SmartInventory;
 import lombok.Getter;
-import java.security.SecureRandom;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,26 +26,37 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 public class BronzeDepotBlockEntity extends DepotBlockEntity {
 	public static final int SLOT_COUNT = 16;
+	public static final int INVENTORY_SLOTS = SLOT_COUNT - 1;
 	public static final int STACK_SIZE = 64;
 
 	@Getter
-	private final SmartInventory inventory;
+	private final BronzeDepotItemStackHandler inventory;
 	private LazyOptional<IItemHandler> itemCapability;
 	private int[] renderAngles;
 	private long[] renderSeeds;
+	private final Random renderRandom = new Random();
 
 	public BronzeDepotBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 
-		inventory = new SmartInventory(SLOT_COUNT, this, STACK_SIZE, false);
+		inventory = new BronzeDepotItemStackHandler(INVENTORY_SLOTS, this);
 	}
 
 	public int getRenderAngle(int slot) {
 		ensureRenderRandom();
 
 		return renderAngles[Mth.positiveModulo(slot, renderAngles.length)];
+	}
+
+	public Random getRenderRandom(int slot) {
+		renderRandom.setSeed(getRenderSeed(slot));
+
+		return renderRandom;
 	}
 
 	public long getRenderSeed(int slot) {
@@ -120,7 +128,7 @@ public class BronzeDepotBlockEntity extends DepotBlockEntity {
 		if (capability == ForgeCapabilities.ITEM_HANDLER) {
 			LazyOptional<IItemHandler> existing = itemCapability;
 			if (existing == null) {
-				existing = LazyOptional.of(this::createItemHandler);
+				existing = LazyOptional.of(this::createInventoryHandler);
 				itemCapability = existing;
 			}
 
@@ -130,7 +138,7 @@ public class BronzeDepotBlockEntity extends DepotBlockEntity {
 		return super.getCapability(capability, side);
 	}
 
-	private IItemHandler createItemHandler() {
+	private IItemHandler createInventoryHandler() {
 		DepotBehaviour depot = getBehaviour(DepotBehaviour.TYPE);
 		IItemHandler surface = depot == null ? new ItemStackHandler(0)
 				: depot.getItemCapability(ForgeCapabilities.ITEM_HANDLER, null)
@@ -164,7 +172,9 @@ public class BronzeDepotBlockEntity extends DepotBlockEntity {
 			return;
 		}
 
+		inventory.setSuppressUpdates(true);
 		inventory.deserializeNBT(compound.getCompound("Inventory"));
+		inventory.setSuppressUpdates(false);
 	}
 
 	public InteractionResult use(Player player, InteractionHand hand, BlockHitResult ray) {
@@ -182,7 +192,11 @@ public class BronzeDepotBlockEntity extends DepotBlockEntity {
 
 		if (emptyHanded) {
 			boolean extracted = takeFromSurface(player);
-			extracted |= takeFromInventory(player, player.isShiftKeyDown());
+
+			if (!extracted || player.isShiftKeyDown()) {
+				extracted |= takeFromInventory(player, player.isShiftKeyDown());
+			}
+
 			if (!extracted) {
 				return InteractionResult.PASS;
 			}
@@ -253,50 +267,5 @@ public class BronzeDepotBlockEntity extends DepotBlockEntity {
 		notifyUpdate();
 
 		return InteractionResult.SUCCESS;
-	}
-
-	/**
-	 * 把输入栏与台面上的那一栈合并成一个容器集合, 供 Jade 一类读取容器内容的工具显示完整数量。
-	 */
-	private static class SurfaceAwareItemHandler implements IItemHandler {
-		private final IItemHandler inventory;
-		private final IItemHandler surface;
-
-		private SurfaceAwareItemHandler(IItemHandler inventory, IItemHandler surface) {
-			this.inventory = inventory;
-			this.surface = surface;
-		}
-
-		@Override
-		public int getSlots() {
-			return inventory.getSlots() + surface.getSlots();
-		}
-
-		@Override
-		public @NotNull ItemStack getStackInSlot(int slot) {
-			return slot < inventory.getSlots() ? inventory.getStackInSlot(slot) : surface.getStackInSlot(slot - inventory.getSlots());
-		}
-
-		@Override
-		public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-			return slot < inventory.getSlots() ? inventory.insertItem(slot, stack, simulate)
-					: surface.insertItem(slot - inventory.getSlots(), stack, simulate);
-		}
-
-		@Override
-		public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-			return slot < inventory.getSlots() ? inventory.extractItem(slot, amount, simulate)
-					: surface.extractItem(slot - inventory.getSlots(), amount, simulate);
-		}
-
-		@Override
-		public int getSlotLimit(int slot) {
-			return slot < inventory.getSlots() ? inventory.getSlotLimit(slot) : surface.getSlotLimit(slot - inventory.getSlots());
-		}
-
-		@Override
-		public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-			return slot < inventory.getSlots() ? inventory.isItemValid(slot, stack) : surface.isItemValid(slot - inventory.getSlots(), stack);
-		}
 	}
 }

@@ -9,7 +9,6 @@ import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
 import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
@@ -74,7 +73,7 @@ public class SlBlocks {
 				.tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.tag(Tags.Blocks.NEEDS_WOOD_TOOL)
 				.tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag)
-				.blockstate(NonNullBiConsumer.noop())
+				.blockstate(BronzeDepotBlock.genBlockState())
 				.lang("Bronze Depot")
 				.register();
 

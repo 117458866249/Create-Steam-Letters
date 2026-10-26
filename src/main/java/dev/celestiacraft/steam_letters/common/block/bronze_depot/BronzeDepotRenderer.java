@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 import com.simibubi.create.content.logistics.depot.DepotRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import com.simibubi.create.foundation.item.SmartInventory;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -12,14 +11,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.items.ItemStackHandler;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BronzeDepotRenderer extends SmartBlockEntityRenderer<BronzeDepotBlockEntity> {
-	private static final SecureRandom RANDOM = new SecureRandom();
-
 	private static final float SURFACE_Y = 15 / 16.0F;
 	private static final float CENTER = 0.5F;
 	private static final float[][] SINGLE = {{CENTER, CENTER}};
@@ -40,7 +37,7 @@ public class BronzeDepotRenderer extends SmartBlockEntityRenderer<BronzeDepotBlo
 
 		DepotBehaviour depot = entity.getBehaviour(DepotBehaviour.TYPE);
 		boolean hasSurface = depot != null && !depot.isEmpty();
-		SmartInventory inventory = entity.getInventory();
+		ItemStackHandler inventory = entity.getInventory();
 
 		List<ItemStack> stacks = new ArrayList<>();
 		List<Integer> slots = new ArrayList<>();
@@ -87,8 +84,7 @@ public class BronzeDepotRenderer extends SmartBlockEntityRenderer<BronzeDepotBlo
 			ms.pushPose();
 			ms.translate(x, SURFACE_Y, z);
 			ms.scale(scale, scale, scale);
-			RANDOM.setSeed(entity.getRenderSeed(slot));
-			DepotRenderer.renderItem(level, ms, source, light, overlay, stack, entity.getRenderAngle(slot), RANDOM, worldPosition, false);
+			DepotRenderer.renderItem(level, ms, source, light, overlay, stack, entity.getRenderAngle(slot), entity.getRenderRandom(slot), worldPosition, false);
 			ms.popPose();
 		}
 	}

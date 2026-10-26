@@ -31,7 +31,6 @@ public class BronzeDepotBlock extends DepotBlock {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public @NotNull Class<DepotBlockEntity> getBlockEntityClass() {
 		return (Class) BronzeDepotBlockEntity.class;
 	}

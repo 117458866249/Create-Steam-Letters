@@ -273,5 +273,27 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 				.define('B', AllBlocks.FLUID_TANK)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
 				.save(consumer, save(SHAPED + "boiler/plate"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_SOLAR_BOILER)
+				.pattern("ABA")
+				.pattern("ACA")
+				.pattern("DDD")
+				.define('A', SlItemTags.BRONZE_INGOT)
+				.define('B', Tags.Items.GLASS_PANES)
+				.define('C', AllBlocks.FLUID_TANK)
+				.define('D', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
+				.save(consumer, save(SHAPED + "solar/ingot"));
+
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_SOLAR_BOILER)
+				.pattern("ABA")
+				.pattern("ACA")
+				.pattern("DDD")
+				.define('A', SlItemTags.BRONZE_PLATES)
+				.define('B', Tags.Items.GLASS_PANES)
+				.define('C', AllBlocks.FLUID_TANK)
+				.define('D', Blocks.MUD_BRICKS)
+				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
+				.save(consumer, save(SHAPED + "solar/plate"));
 	}
 }
