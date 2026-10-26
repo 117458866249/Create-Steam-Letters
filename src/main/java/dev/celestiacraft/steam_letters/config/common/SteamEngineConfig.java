@@ -37,9 +37,11 @@ public class SteamEngineConfig extends ConfigModule {
 				.defineInRange("superheated_consumption_multiplier", 0.5D, 0.0D, 1.0D);
 
 		HEATUP_SECONDS = builder.translation(key("heatup_seconds"))
-				.comment("Steam consumption multiplier applied while the flywheel engine runs "
-						+ "on superheated steam. 0.5 means it only needs half the steam of a "
-						+ "normal-steam run.")
+				.comment("Seconds required for the flywheel engine to heat up before it outputs "
+						+ "its full stress.",
+						"The demand climbs through 25%, 50% and 75% of the full load during the "
+								+ "heat-up.",
+						"0 means no heat-up at all.")
 				.defineInRange("heatup_seconds", 2.0D, 0.0D, 10000.0D);
 
 		SUPERHEATED_ACCELERATION_MULTIPLIER = builder.translation(key("superheated_acceleration_multiplier"))

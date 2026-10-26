@@ -22,6 +22,7 @@ public class English {
 		addJeiLang(provider);
 		addSteamContainerLang(provider);
 		addConfigLang(provider);
+		addConfigCommentLang(provider);
 
 		// datagen 运行在独立 JVM 中, 不会触发 FMLClientSetupEvent, 这里需要再注册一次插件
 		SlPonderPlugin.register();
@@ -182,6 +183,7 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_4"), "Steam output multiplier of efficiency tier 4");
 
 		provider.add(ConfigModule.translationKey("solar_boiler"), "Solar Boiler");
+		provider.add(ConfigModule.translationKey("solar_boiler", "render_fluid"), "Render fluid inside the solar boiler");
 		provider.add(ConfigModule.translationKey("solar_boiler", "sunlight_efficiency"), "Efficiency multiplier when the solar boiler has unobstructed sky access");
 		provider.add(ConfigModule.translationKey("solar_boiler", "artificial_light_efficiency"), "Efficiency multiplier when the solar boiler runs on artificial light");
 		provider.add(ConfigModule.translationKey("solar_boiler", "artificial_light_threshold"), "Minimum block light level required for artificial light operation");
@@ -190,8 +192,8 @@ public class English {
 		provider.add(ConfigModule.translationKey("solar_boiler", "thunder_efficiency"), "Weather multiplier during thunderstorms");
 
 		provider.add(ConfigModule.translationKey("steam_burner"), "Steam Burner");
-		provider.add(ConfigModule.translationKey("steam_burner", "heat_gain_percent_per_second"), "Heat gained per second while burning, as a percentage of the maximum heat");
-		provider.add(ConfigModule.translationKey("steam_burner", "heat_loss_percent_per_second"), "Heat lost per second while idle, as a percentage of the maximum heat");
+		provider.add(ConfigModule.translationKey("steam_burner", "heatup_seconds"), "Seconds required for the burner to reach maximum heat");
+		provider.add(ConfigModule.translationKey("steam_burner", "cooldown_seconds"), "Seconds required for the burner to lose all of its heat");
 
 		provider.add(ConfigModule.translationKey("steam_engine"), "Steam Engine");
 		provider.add(ConfigModule.translationKey("steam_engine", "suck_efficiency"), "Ratio of steam gained when a flywheel engine draws steam directly from a boiler (0.75 = 25% loss)");
@@ -201,5 +203,118 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
+	}
+
+	/**
+	 * 配置项注释的英文键.
+	 * <p>
+	 * Configured 会以 {@code <界面翻译键>.comment} 查询注释, 命中即显示译文, 未命中则回退到 toml 里的原文.
+	 * 因此这里的内容必须与配置文件中的英文注释逐条对应.
+	 */
+	private static void addConfigCommentLang(RegistrateLangProvider provider) {
+		comment(provider, ConfigModule.translationKey("general"),
+				"All settings below only take effect after restarting the server or client.");
+
+		comment(provider, ConfigModule.translationKey("steam", "superheated_steam_consumption_multiplier"),
+				"Global steam consumption multiplier for machines running on superheated steam.\n"
+						+ "0.25 means such a machine only needs a quarter of the normal steam.");
+		comment(provider, ConfigModule.translationKey("steam", "output_steam_fluid"),
+				"Fluid id produced by steam boilers and solar boilers.\n"
+						+ "Existing tank contents are never converted when this changes.");
+
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_hammer_parallel"),
+				"Maximum number of recipes a single steam hammer processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_consumption"),
+				"Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_capacity"),
+				"Steam buffer capacity of a steam hammer (mB).");
+
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_mixer_parallel"),
+				"Maximum number of recipes a single steam mixer processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_consumption"),
+				"Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_capacity"),
+				"Steam buffer capacity of a steam mixer (mB).");
+
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_saw_parallel"),
+				"Maximum number of recipes a single steam saw processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_consumption"),
+				"Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_capacity"),
+				"Steam buffer capacity of a steam saw (mB).");
+		comment(provider, ConfigModule.translationKey("steam_saw", "processing_time_multiplier"),
+				"Working time multiplier of the steam saw (0.25 = 4 times faster than a mechanical saw).");
+
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_1"),
+				"Lowest heat percentage at which the boiler starts producing steam.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_2"),
+				"Heat percentage at which the boiler reaches efficiency tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_3"),
+				"Heat percentage at which the boiler reaches efficiency tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_4"),
+				"Heat percentage required for the boiler to run at full efficiency.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_1"),
+				"Steam output multiplier of efficiency tier 1.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_2"),
+				"Steam output multiplier of efficiency tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_3"),
+				"Steam output multiplier of efficiency tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_4"),
+				"Steam output multiplier of efficiency tier 4, i.e. the maximum boiler output.");
+
+		comment(provider, ConfigModule.translationKey("solar_boiler", "render_fluid"),
+				"Whether or not fluids inside the solar boiler will be rendered.\n"
+						+ "Hiding the fluid does not affect steam production.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "sunlight_efficiency"),
+				"Efficiency multiplier when the boiler has direct sky light (and no weather penalty).");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_efficiency"),
+				"Efficiency multiplier when the boiler is lit by block light instead of sky light.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_threshold"),
+				"Minimum block light level for the artificial light path to be usable.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "require_daylight"),
+				"Whether the sky light path additionally requires daytime.\n"
+						+ "Vanilla sky light level stays at 15 at night, so without this the boiler would "
+						+ "produce at full speed in complete darkness.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "rain_efficiency"),
+				"Weather multiplier while it is raining at the boiler.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "thunder_efficiency"),
+				"Weather multiplier while a thunder storm is raging at the boiler "
+						+ "(includes snow during thunder).");
+
+		comment(provider, ConfigModule.translationKey("steam_burner", "heatup_seconds"),
+				"Total time required for the burner to reach its maximum heat while fuel is burning.");
+		comment(provider, ConfigModule.translationKey("steam_burner", "cooldown_seconds"),
+				"Total time required for the burner to lose all of its heat while no fuel is burning.");
+
+		comment(provider, ConfigModule.translationKey("steam_engine", "suck_efficiency"),
+				"Efficiency (0~1) of steam drawn directly from an adjacent boiler.\n"
+						+ "4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine, "
+						+ "so a directly fed engine caps out at 75% of its stress output.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_consumption_multiplier"),
+				"Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n"
+						+ "0.5 means it only needs half the steam of a normal-steam run.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "heatup_seconds"),
+				"Seconds required for the flywheel engine to heat up before it outputs its full stress.\n"
+						+ "The demand climbs through 25%, 50% and 75% of the full load during the heat-up.\n"
+						+ "0 means no heat-up at all.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"),
+				"Divisor applied to the heat-up time while running on superheated steam.\n"
+						+ "2.0 means the heat-up takes half as long.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"),
+				"Stress output multiplier applied while running on superheated steam.");
+
+		comment(provider, ConfigModule.translationKey("bronze_basin", "slot_capacity"),
+				"Fluid capacity of each tank of a bronze basin (mB).\n"
+						+ "Basins have several tanks, so the total capacity is a multiple of this.");
+
+		comment(provider, ConfigModule.translationKey("advanced_spout", "capacity"),
+				"Fluid capacity of an advanced spout (mB).");
+		comment(provider, ConfigModule.translationKey("advanced_spout", "parallel"),
+				"Default parallel of newly placed advanced spouts.\n"
+						+ "Can still be changed per block with a wrench.");
+	}
+
+	private static void comment(RegistrateLangProvider provider, String translationKey, String comment) {
+		provider.add(translationKey + ".comment", comment);
 	}
 }

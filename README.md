@@ -83,7 +83,8 @@
 | `nebula/steam_letters/server.toml` | SERVER | 各设备的应力影响 (impact) 与应力容量 (capacity) |
 
 - 配置实现为模块化: 每个设备一个 `ConfigModule` 子类, 在 [`CommonConfigs`](src/main/java/dev/celestiacraft/steam_letters/config/CommonConfigs.java) 中挂载一次即生效. 新增模块不涉及其他改动.
-- 每个配置项均带 `.comment()` 与界面翻译键, 形如 `steam_letters.config.<模块>.<键>`, 中英翻译在 [`zh_cn.json`](src/main/resources/assets/steam_letters/lang/zh_cn.json).
+- 每个配置项均带 `.comment()` 与界面翻译键, 形如 `steam_letters.config.<模块>.<键>`. toml 中的注释保持英文原文, 界面上由 Configured 读取 `<界面翻译键>.comment` 显示译文.
+- 配置项的界面名与注释随语言数据生成: 英文在 [`English.java`](src/main/java/dev/celestiacraft/steam_letters/datagen/language/English.java), 中文在 [`Chinese.java`](src/main/java/dev/celestiacraft/steam_letters/datagen/language/Chinese.java), 运行 `runData` 后分别写入 `assets/steam_letters/lang/en_us.json` 与 `zh_cn.json`.
 - 改动需重启服务端或客户端后生效, 文件头部已有说明.
 - 应力值通过 Create 的 `BlockStressValues` 提供器读取, 因此护目镜提示与 Create 自身配置体系保持一致.
 
