@@ -28,7 +28,7 @@ public class AdvancedSpoutScene {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		RandomSource random = RandomSource.create();
 
-		scene.title("advanced_spout", "高级注液器");
+		scene.title("advanced_spout", "Advanced Spout");
 		scene.configureBasePlate(0, 0, 5);
 
 		Selection base = util.select().layer(0)
@@ -52,7 +52,7 @@ public class AdvancedSpoutScene {
 				.pointAt(spoutSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("高级注液器可以为其下方的物品注入流体");
+				.text("The Advanced Spout injects fluid into the items below it");
 		scene.idle(80);
 
 		scene.overlay().showText(60)
@@ -60,7 +60,7 @@ public class AdvancedSpoutScene {
 				.colored(PonderPalette.BLUE)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它比普通注液器快得多: 5 tick 就能完成一次注液");
+				.text("It is far faster than a regular spout: one injection takes only 5 ticks");
 		scene.idle(70);
 
 		Selection tank = util.select().fromTo(1, 1, 4, 1, 2, 4);
@@ -85,7 +85,7 @@ public class AdvancedSpoutScene {
 				.pointAt(util.vector().blockSurface(util.grid().at(2, 3, 4), Direction.NORTH))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("注液器不能手动倒入流体, 必须用泵和管道为它输送");
+				.text("Fluid cannot be poured in by hand; it has to be supplied with pumps and pipes");
 		scene.idle(20);
 
 		for (int i = 0; i < 10; i++) {
@@ -104,7 +104,7 @@ public class AdvancedSpoutScene {
 				.pointAt(util.vector().topOf(depotPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("物品被放在下方或经过下方时, 就会被注入流体");
+				.text("Items placed below or passing below get injected");
 		scene.idle(20);
 
 		scene.world().removeItemsFromBelt(depotPos);
@@ -117,7 +117,7 @@ public class AdvancedSpoutScene {
 				.pointAt(spoutSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("用扳手打开侧面的面板, 可以调整并行数量, 范围是 1 到 20");
+				.text("Use a wrench on the side panel to change the parallel count, from 1 to 20");
 		scene.idle(90);
 
 		Selection belt = util.select().fromTo(0, 1, 2, 4, 1, 2);
@@ -128,7 +128,7 @@ public class AdvancedSpoutScene {
 				.pointAt(util.vector().blockSurface(util.grid().at(2, 2, 2), Direction.WEST))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("放在传送带上时, 它会自动拦下经过的物品并处理");
+				.text("On a belt it automatically stops passing items and processes them");
 		scene.idle(15);
 
 		ElementLink<BeltItemElement> item = scene.world()

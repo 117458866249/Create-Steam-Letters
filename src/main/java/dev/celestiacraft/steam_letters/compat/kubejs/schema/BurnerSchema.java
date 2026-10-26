@@ -5,9 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
+import dev.celestiacraft.steam_letters.common.recipe.type.IBurnerFuelRecipe;
 import dev.latvian.mods.kubejs.item.InputItem;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
+import dev.latvian.mods.kubejs.recipe.component.BooleanComponent;
 import dev.latvian.mods.kubejs.recipe.component.ComponentRole;
 import dev.latvian.mods.kubejs.recipe.component.ItemComponents;
 import dev.latvian.mods.kubejs.recipe.component.NumberComponent;
@@ -19,15 +21,36 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class BurnerSchema {
+	public static final RecipeKey<Boolean> SUPERHEATED = new RecipeKey<>(
+			new FuelSuperheatedComponent(),
+			IBurnerFuelRecipe.SUPERHEATED_KEY
+	).optional(false);
+
 	public static final RecipeSchema SOLID_FUEL = new RecipeSchema(
+			BurnerRecipeJS.class,
+			BurnerRecipeJS::new,
 			new RecipeKey<>(new FuelItemComponent(), "fuel"),
-			new RecipeKey<>(new FuelTimeComponent(), "time")
+			new RecipeKey<>(new FuelTimeComponent(), "time"),
+			SUPERHEATED
 	);
 
 	public static final RecipeSchema FLUID_FUEL = new RecipeSchema(
+			BurnerRecipeJS.class,
+			BurnerRecipeJS::new,
 			new RecipeKey<>(new FuelFluidComponent(), "fuel"),
-			new RecipeKey<>(new FuelTimeComponent(), "time")
+			new RecipeKey<>(new FuelTimeComponent(), "time"),
+			SUPERHEATED
 	);
+
+	public static class BurnerRecipeJS extends RecipeJS {
+		public RecipeJS superheated() {
+			return superheated(Boolean.FALSE);
+		}
+
+		public RecipeJS superheated(@Nullable Boolean superheated) {
+			return setValue(SUPERHEATED, Boolean.TRUE.equals(superheated));
+		}
+	}
 
 	private static void writeIngredients(@NotNull JsonObject json, @NotNull JsonObject ingredient) {
 		JsonArray ingredients = new JsonArray();
@@ -211,6 +234,47 @@ public class BurnerSchema {
 		@Override
 		public void readFromJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<Integer> holder, @NotNull JsonObject json) {
 			holder.value = json.has("processingTime") ? json.get("processingTime").getAsInt() : 0;
+		}
+	}
+
+	private static class FuelSuperheatedComponent implements RecipeComponent<Boolean> {
+		@Override
+		public @NotNull Class<?> componentClass() {
+			return Boolean.class;
+		}
+
+		@Override
+		public @NotNull ComponentRole role() {
+			return ComponentRole.OTHER;
+		}
+
+		@Override
+		public @NotNull JsonElement write(@NotNull RecipeJS recipe, @NotNull Boolean value) {
+			return new JsonPrimitive(value);
+		}
+
+		@Override
+		public @NotNull Boolean read(@NotNull RecipeJS recipe, @Nullable Object from) {
+			if (from == null) {
+				return Boolean.FALSE;
+			}
+			return BooleanComponent.BOOLEAN.read(recipe, from);
+		}
+
+		@Override
+		public void writeToJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<Boolean> holder, @NotNull JsonObject json) {
+			String key = IBurnerFuelRecipe.SUPERHEATED_KEY;
+			if (Boolean.TRUE.equals(holder.value)) {
+				json.addProperty(key, true);
+			} else {
+				json.remove(key);
+			}
+		}
+
+		@Override
+		public void readFromJson(@NotNull RecipeJS recipe, @NotNull RecipeComponentValue<Boolean> holder, @NotNull JsonObject json) {
+			String key = IBurnerFuelRecipe.SUPERHEATED_KEY;
+			holder.value = json.has(key) && json.get(key).getAsBoolean();
 		}
 	}
 }

@@ -18,8 +18,8 @@ public class SlPonderTags {
 		helper.registerTag(SL)
 				.addToIndex()
 				.item(SlBlocks.BRONZE_STEAM_FLYWHEEL, true, false)
-				.title("机械动力: 来自蒸汽的信")
-				.description("设备")
+				.title("Create: Letter's in Steam")
+				.description("Machines")
 				.register();
 	}
 }

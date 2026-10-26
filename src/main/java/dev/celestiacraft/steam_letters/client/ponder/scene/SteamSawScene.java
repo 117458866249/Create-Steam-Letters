@@ -31,7 +31,7 @@ public class SteamSawScene {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		RandomSource random = RandomSource.create();
 
-		scene.title("steam_saw", "蒸汽锯");
+		scene.title("steam_saw", "Steam Saw");
 		scene.configureBasePlate(0, 0, 5);
 
 		Selection base = util.select().layer(0)
@@ -56,7 +56,7 @@ public class SteamSawScene {
 				.pointAt(sawSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽锯是一台动力锯, 会把送入的物品切开");
+				.text("The Steam Saw is a mechanical saw that cuts incoming items");
 		scene.idle(80);
 
 		Selection kinetics = util.select().fromTo(1, 1, 3, 3, 1, 3)
@@ -74,7 +74,7 @@ public class SteamSawScene {
 				.colored(PonderPalette.BLUE)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它需要旋转动力才能运转");
+				.text("It needs rotational force to run");
 		scene.idle(70);
 
 		Selection tank = util.select().fromTo(0, 1, 0, 0, 2, 0);
@@ -90,7 +90,7 @@ public class SteamSawScene {
 				.pointAt(sawSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它还需要蒸汽, 运转时会不断消耗内部的蒸汽");
+				.text("It also needs steam and keeps consuming its internal steam while running");
 		scene.idle(20);
 
 		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class, (nbt) -> {
@@ -112,7 +112,7 @@ public class SteamSawScene {
 				.pointAt(sawSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("以原木为例: 送进锯口的物品会被切成对应的产出");
+				.text("Take logs: whatever enters the saw is cut into the matching output");
 		scene.idle(30);
 
 		scene.world().modifyEntity(log, Entity::discard);
@@ -125,7 +125,7 @@ public class SteamSawScene {
 				.pointAt(sawSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽充足时, 一次可以并行处理整叠物品");
+				.text("With enough steam it can process a whole stack in parallel");
 		scene.idle(15);
 		scene.world().createItemEntity(sawTop.add(0, 2, 0), util.vector().of(0, -0.1, 0),
 				new ItemStack(Items.OAK_LOG, 32));
@@ -135,7 +135,7 @@ public class SteamSawScene {
 				.pointAt(sawSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽耗尽后, 锯会立刻停机");
+				.text("When steam runs out the saw stops immediately");
 		scene.idle(10);
 		scene.world().modifyBlockEntityNBT(saw, SteamSawBlockEntity.class, (nbt) -> {
 			nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag()));

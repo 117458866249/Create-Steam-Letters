@@ -2,6 +2,7 @@ package dev.celestiacraft.steam_letters.compat.kubejs;
 
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlApis;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.compat.kubejs.builder.*;
 import dev.celestiacraft.steam_letters.compat.kubejs.schema.BurnerSchema;
 import dev.celestiacraft.steam_letters.compat.kubejs.schema.FuelFluid;
@@ -9,6 +10,8 @@ import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.RegistryObject;
 
 public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 	@Override
@@ -58,7 +61,11 @@ public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 	@Override
 	public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
 		event.namespace(CreateLettersSteam.MODID)
-				.register("solid_fuel", BurnerSchema.SOLID_FUEL)
-				.register("fluid_fuel", BurnerSchema.FLUID_FUEL);
+				.register(getRecipeType(SlRecipeTypes.SOLID_FUEL), BurnerSchema.SOLID_FUEL)
+				.register(getRecipeType(SlRecipeTypes.FLUID_FUEL), BurnerSchema.FLUID_FUEL);
+	}
+
+	private String getRecipeType(RegistryObject<? extends RecipeType<?>> recipe) {
+		return recipe.getId().getPath();
 	}
 }

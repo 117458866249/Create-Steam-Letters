@@ -127,6 +127,7 @@ public class FluidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 
 		burnTotalTime = total;
 		burnTime = total;
+		setSuperheatedFuel(recipe.isSuperheated());
 		setChanged();
 		return true;
 	}

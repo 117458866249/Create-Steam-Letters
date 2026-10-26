@@ -4,9 +4,10 @@ import com.simibubi.create.api.stress.BlockStressValues;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlStress;
 import dev.celestiacraft.steam_letters.client.block.SlBlockPartialModel;
-import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.register.*;
 import dev.celestiacraft.steam_letters.config.CommonConfigs;
+import dev.celestiacraft.steam_letters.config.common.SteamConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -70,12 +71,20 @@ public class CreateLettersSteam {
 		if (STRESS_VALUES != null && event.getConfig().getSpec().equals(STRESS_VALUES_SPEC)) {
 			STRESS_VALUES.onLoad();
 		}
+
+		if (event.getConfig().getSpec().equals(CommonConfigs.SPEC)) {
+			SteamConfig.validate();
+		}
 	}
 
 	@SubscribeEvent
 	public void onConfigReload(ModConfigEvent.Reloading event) {
 		if (STRESS_VALUES != null && event.getConfig().getSpec().equals(STRESS_VALUES_SPEC)) {
 			STRESS_VALUES.onReload();
+		}
+
+		if (event.getConfig().getSpec().equals(CommonConfigs.SPEC)) {
+			SteamConfig.validate();
 		}
 	}
 }

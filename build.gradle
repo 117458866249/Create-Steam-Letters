@@ -23,7 +23,7 @@ group = mod_group_id
 version = mod_version
 
 base {
-	archivesName = "Create-Steam-Letters"
+	archivesName = "Steam-Letters"
 }
 
 java {
@@ -180,7 +180,7 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 tasks.named('jar', Jar).configure {
-	// 输出 jar 名：Create-Steam-Letters-<mod_version>-<minecraft_version>.jar
+	// 输出 jar 名：Steam-Letters-<mod_version>-<minecraft_version>.jar
 	archiveVersion = "${mod_version}-${minecraft_version}"
 
 	manifest {

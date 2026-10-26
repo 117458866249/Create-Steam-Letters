@@ -33,6 +33,7 @@ public class SlTranKeys {
 			GOGGLE_BRONZE_DEPOT_CONTENTS,
 			JEI_SOLID_FUEL,
 			JEI_FLUID_FUEL,
+			JEI_SUPERHEATED,
 			TOOLTIP_SEALED_CONTAINER_EMPTY,
 			TOOLTIP_SEALED_CONTAINER_FLUID,
 			TOOLTIP_STEAM_CONTAINER_EXTRACT,
@@ -82,6 +83,7 @@ public class SlTranKeys {
 
 		JEI_SOLID_FUEL = "jei.solid_fuel";
 		JEI_FLUID_FUEL = "jei.fluid_fuel";
+		JEI_SUPERHEATED = "jei.superheated";
 
 		TOOLTIP_SEALED_CONTAINER_EMPTY = "tooltip.sealed_steam_container.empty";
 		TOOLTIP_SEALED_CONTAINER_FLUID = "tooltip.sealed_steam_container.fluid";

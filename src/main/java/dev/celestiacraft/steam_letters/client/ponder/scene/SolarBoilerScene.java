@@ -25,7 +25,7 @@ public class SolarBoilerScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
-		scene.title("solar_boiler", "太阳能锅炉");
+		scene.title("solar_boiler", "Solar Boiler");
 
 		BlockPos boilerScaffoldingPos = new BlockPos(1, 1, 1);
 		BlockPos boilerPos = new BlockPos(1, 2, 1);
@@ -54,7 +54,7 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("太阳能锅炉带来了一种廉价的蒸汽获取方式");
+				.text("The Solar Boiler offers a cheap way to obtain steam");
 		scene.idle(80);
 
 		scene.world().showSection(water, Direction.WEST);
@@ -77,14 +77,14 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("向锅炉里通入水");
+				.text("Feed water into the boiler");
 		scene.idle(60);
 
 		scene.idle(10);
 		scene.overlay().showText(60)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("当光照充足时...(光照强度越大越好)");
+				.text("With enough light...(the brighter the better)");
 		scene.idle(70);
 
 		scene.world().showSection(clock, Direction.DOWN);
@@ -94,7 +94,7 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(clockPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("...最好是真正的日光");
+				.text("...and real sunlight is best");
 		scene.idle(90);
 
 		scene.world().modifyBlockEntityNBT(boilerSelectionForNbt, SolarBoilerBlockEntity.class, (nbt) -> {
@@ -111,7 +111,7 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("便能产生蒸汽");
+				.text("it starts producing steam");
 		scene.idle(80);
 
 		scene.world().showSection(engineAndFlywheel, Direction.NORTH);
@@ -124,7 +124,7 @@ public class SolarBoilerScene {
 				.pointAt(util.vector().centerOf(1, 2, 3))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("放上与其它锅炉一样的飞轮结构, 便能输出应力");
+				.text("Attach the same flywheel setup as any other boiler to get stress out");
 		scene.idle(80);
 
 		scene.markAsFinished();

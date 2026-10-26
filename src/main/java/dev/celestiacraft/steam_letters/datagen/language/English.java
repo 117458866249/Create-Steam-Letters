@@ -24,9 +24,7 @@ public class English {
 		addConfigLang(provider);
 		addConfigCommentLang(provider);
 
-		// datagen 运行在独立 JVM 中, 不会触发 FMLClientSetupEvent, 这里需要再注册一次插件
 		SlPonderPlugin.register();
-
 		LangRegistryAccess access = PonderIndex.getLangAccess();
 		access.provideLang(CreateLettersSteam.MODID, provider::add);
 	}
@@ -70,6 +68,7 @@ public class English {
 	private static void addJeiLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_SOLID_FUEL), "Solid Fuel");
 		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_FLUID_FUEL), "Fluid Fuel");
+		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_SUPERHEATED), "Superheated");
 	}
 
 	private static void addOtherLang(RegistrateLangProvider provider) {
@@ -181,6 +180,13 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_2"), "Steam output multiplier of efficiency tier 2");
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_3"), "Steam output multiplier of efficiency tier 3");
 		provider.add(ConfigModule.translationKey("steam_boiler", "efficiency_4"), "Steam output multiplier of efficiency tier 4");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_threshold_1"), "Heat percentage at which superheated production reaches tier 2");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_threshold_2"), "Heat percentage at which superheated production reaches tier 3");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_threshold_3"), "Heat percentage at which superheated production reaches tier 4");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_production_1"), "Superheated steam output multiplier right above the maximum heat");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_production_2"), "Superheated steam output multiplier of tier 2");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_production_3"), "Superheated steam output multiplier of tier 3");
+		provider.add(ConfigModule.translationKey("steam_boiler", "superheated_production_4"), "Superheated steam output multiplier of tier 4");
 
 		provider.add(ConfigModule.translationKey("solar_boiler"), "Solar Boiler");
 		provider.add(ConfigModule.translationKey("solar_boiler", "render_fluid"), "Render fluid inside the solar boiler");
@@ -194,6 +200,7 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_burner"), "Steam Burner");
 		provider.add(ConfigModule.translationKey("steam_burner", "heatup_seconds"), "Seconds required for the burner to reach maximum heat");
 		provider.add(ConfigModule.translationKey("steam_burner", "cooldown_seconds"), "Seconds required for the burner to lose all of its heat");
+		provider.add(ConfigModule.translationKey("steam_burner", "superheated_heatup_multiplier"), "Heat-up speed multiplier while burning superheated fuel");
 
 		provider.add(ConfigModule.translationKey("steam_engine"), "Steam Engine");
 		provider.add(ConfigModule.translationKey("steam_engine", "suck_efficiency"), "Ratio of steam gained when a flywheel engine draws steam directly from a boiler (0.75 = 25% loss)");
@@ -203,6 +210,8 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
+		provider.add(ConfigModule.translationKey("steam", "output_superheated_steam_fluid"), "Fluid id produced by boilers while superheated. Existing fluid inside machines is never converted when this changes");
+		provider.add(ConfigModule.translationKey("steam", "do_overheated_steam_replace"), "Whether the normal steam left in the output tank is converted into superheated steam instead of being destroyed");
 	}
 
 	/**
@@ -221,6 +230,15 @@ public class English {
 		comment(provider, ConfigModule.translationKey("steam", "output_steam_fluid"),
 				"Fluid id produced by steam boilers and solar boilers.\n"
 						+ "Existing tank contents are never converted when this changes.");
+		comment(provider, ConfigModule.translationKey("steam", "output_superheated_steam_fluid"),
+				"""
+						Fluid id produced by boilers while they run superheated.
+						Must not point to the same fluid as output_steam_fluid, otherwise the config fails to load.
+						Existing tank contents are never converted when this changes.""");
+		comment(provider, ConfigModule.translationKey("steam", "do_overheated_steam_replace"),
+				"When false the normal steam left in the output tank is destroyed; when true it is converted "
+						+ "into the same amount of superheated steam in place.\n"
+						+ "Neither option consumes additional water.");
 
 		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_hammer_parallel"),
 				"Maximum number of recipes a single steam hammer processes at once.");
@@ -261,6 +279,20 @@ public class English {
 				"Steam output multiplier of efficiency tier 3.");
 		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_4"),
 				"Steam output multiplier of efficiency tier 4, i.e. the maximum boiler output.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_1"),
+				"Heat percentage at which superheated production reaches tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_2"),
+				"Heat percentage at which superheated production reaches tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_3"),
+				"Heat percentage at which superheated production reaches its maximum rate.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_1"),
+				"Superheated steam output multiplier while heat stays right above the maximum heat.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_2"),
+				"Superheated steam output multiplier of tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_3"),
+				"Superheated steam output multiplier of tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_4"),
+				"Superheated steam output multiplier of tier 4, i.e. the maximum superheated output.");
 
 		comment(provider, ConfigModule.translationKey("solar_boiler", "render_fluid"),
 				"Whether or not fluids inside the solar boiler will be rendered.\n"
@@ -285,6 +317,9 @@ public class English {
 				"Total time required for the burner to reach its maximum heat while fuel is burning.");
 		comment(provider, ConfigModule.translationKey("steam_burner", "cooldown_seconds"),
 				"Total time required for the burner to lose all of its heat while no fuel is burning.");
+		comment(provider, ConfigModule.translationKey("steam_burner", "superheated_heatup_multiplier"),
+				"Divisor applied to the heat-up time while burning superheated fuel and below the maximum heat.\n"
+						+ "4.0 means the burner heats up four times as fast.");
 
 		comment(provider, ConfigModule.translationKey("steam_engine", "suck_efficiency"),
 				"Efficiency (0~1) of steam drawn directly from an adjacent boiler.\n"
@@ -294,9 +329,10 @@ public class English {
 				"Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n"
 						+ "0.5 means it only needs half the steam of a normal-steam run.");
 		comment(provider, ConfigModule.translationKey("steam_engine", "heatup_seconds"),
-				"Seconds required for the flywheel engine to heat up before it outputs its full stress.\n"
-						+ "The demand climbs through 25%, 50% and 75% of the full load during the heat-up.\n"
-						+ "0 means no heat-up at all.");
+				"""
+						Seconds required for the flywheel engine to heat up before it outputs its full stress.
+						The demand climbs through 25%, 50% and 75% of the full load during the heat-up.
+						0 means no heat-up at all.""");
 		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"),
 				"Divisor applied to the heat-up time while running on superheated steam.\n"
 						+ "2.0 means the heat-up takes half as long.");

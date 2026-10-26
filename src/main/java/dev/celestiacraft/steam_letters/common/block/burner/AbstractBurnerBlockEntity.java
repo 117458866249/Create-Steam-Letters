@@ -25,11 +25,14 @@ import java.util.Locale;
  * 燃烧室的公共实现: 维护自身热量, 供正上方锅炉读取.
  * <p>
  * 升温 / 降温速率按「最高热量的百分比每秒」计算, 燃料只决定燃烧时长, 不影响升温速度;
- * 热量始终钳位在 [0, maxHeat], 燃料耗尽后立刻开始降温.
+ * 热量钳位在 [0, 热量上限], 燃料耗尽后立刻开始降温.
+ * <p>
+ * 燃烧过热燃料时进入过热状态: 热量上限提升到最高热量的两倍, 到达最高热量之前升温更快.
  */
 public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity implements IHeatSource, IHaveGoggleInformation {
 	private static final String NBT_HEAT = "Heat";
 	private static final String NBT_BURN_TIME = "BurnTime";
+	private static final String NBT_SUPERHEATED = "Superheated";
 
 	/**
 	 * 内置青铜燃烧室的默认热量上限.
@@ -49,10 +52,16 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	protected int burnTime;
 
 	/**
+	 * 当前这份燃料是否为过热燃料. 燃料烧完后不立即清除, 过热状态要保留到热量归零.
+	 */
+	protected boolean superheatedFuel;
+
+	/**
 	 * 上次同步给客户端的数值, 用来避免每 10 tick 无条件发包.
 	 */
 	private double syncedHeat = Double.NaN;
 	private int syncedBurnTime = -1;
+	private boolean syncedSuperheated;
 
 	protected AbstractBurnerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -89,20 +98,74 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 			return;
 		}
 
-		// 配置的是「升到最高热量 / 降回 0 需要多少秒」, 换算成每 tick 的增量, 与实际 maxHeat 数值解耦.
-		double seconds = burning
-				? SteamBurnerConfig.HEATUP_SECONDS.get()
-				: SteamBurnerConfig.COOLDOWN_SECONDS.get();
+		// 这里看的是「当前这份燃料是不是过热燃料」, 而不是「有没有进入过热状态」:
+		// 过热燃料从点燃起就把容量抬到最高热量的两倍并在到达最高热量之前加速, 越过最高热量之后才算进入过热状态.
+		boolean limitRaised = superheatedFuel;
+		double limit = getHeatCapacity();
+
+		if (burning) {
+			// 配置的是「升到最高热量需要多少秒」, 换算成每 tick 的增量, 与实际 maxHeat 数值解耦.
+			// 过热燃料只在到达最高热量之前加速, 100% 以上回到正常速度.
+			double seconds = SteamBurnerConfig.HEATUP_SECONDS.get();
+			if (limitRaised && heat < maxHeat) {
+				seconds /= SteamBurnerConfig.SUPERHEATED_HEATUP_MULTIPLIER.get();
+			}
+			if (seconds <= 0.0D) {
+				// 0 秒视为瞬时完成
+				heat = limit;
+				return;
+			}
+
+			double delta = maxHeat / (seconds * 20.0D);
+			heat = Mth.clamp(heat + delta, 0.0D, limit);
+			return;
+		}
+
+		double seconds = SteamBurnerConfig.COOLDOWN_SECONDS.get();
 		if (seconds <= 0.0D) {
 			// 0 秒视为瞬时完成
-			heat = burning ? maxHeat : 0.0D;
+			heat = 0.0D;
+			clearSuperheated();
 			return;
 		}
 
 		double delta = maxHeat / (seconds * 20.0D);
+		if (limitRaised && heat > maxHeat) {
+			// 高出最高热量的那一段以双倍速度回落.
+			delta *= SteamBurnerConfig.SUPERHEATED_COOLDOWN_MULTIPLIER;
+		}
 
-		heat = burning ? heat + delta : heat - delta;
-		heat = Mth.clamp(heat, 0.0D, maxHeat);
+		heat = Mth.clamp(heat - delta, 0.0D, limit);
+
+		if (limitRaised && burnTime <= 0 && heat <= 0.0D) {
+			clearSuperheated();
+		}
+	}
+
+	/**
+	 * 热源当前是否处于过热状态.
+	 * <p>
+	 * 点燃了过热燃料只是前置条件, 只有热量真正越过最高热量之后才算进入过热状态;
+	 * 因此热量在 0-100% 区间内时仍按普通蒸汽生产, 越过 100% 之后才切换成过热蒸汽.
+	 */
+	@Override
+	public boolean isSuperheated() {
+		return superheatedFuel && heat >= getMaxHeat();
+	}
+
+	/**
+	 * 记录当前这份燃料是否为过热燃料, 由子类在点燃新燃料时调用.
+	 */
+	protected void setSuperheatedFuel(boolean superheated) {
+		if (superheatedFuel == superheated) {
+			return;
+		}
+		superheatedFuel = superheated;
+		setChanged();
+	}
+
+	protected void clearSuperheated() {
+		superheatedFuel = false;
 	}
 
 	@Override
@@ -114,6 +177,16 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	public double getMaxHeat() {
 		double configured = spec.getMaxHeat();
 		return configured > 0.0D ? configured : DEFAULT_MAX_HEAT;
+	}
+
+	/**
+	 * 当前热量上限: 点燃过热燃料后允许突破最高热量, 最高到它的两倍.
+	 */
+	public double getHeatCapacity() {
+		double maxHeat = getMaxHeat();
+		return superheatedFuel
+				? maxHeat * SteamBurnerConfig.SUPERHEATED_MAX_HEAT_MULTIPLIER
+				: maxHeat;
 	}
 
 	@Override
@@ -143,11 +216,12 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 		if (level == null || level.isClientSide()) {
 			return;
 		}
-		if (heat == syncedHeat && burnTime == syncedBurnTime) {
+		if (heat == syncedHeat && burnTime == syncedBurnTime && superheatedFuel == syncedSuperheated) {
 			return;
 		}
 		syncedHeat = heat;
 		syncedBurnTime = burnTime;
+		syncedSuperheated = superheatedFuel;
 		sendData();
 	}
 
@@ -158,7 +232,7 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 				.forGoggles(tooltip);
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BURNER_TEMPERATURE, Component.literal(
-				formatNumber(heat) + "%" + " / " + formatNumber(getMaxHeat()) + "%"
+				formatNumber(heat) + "%" + " / " + formatNumber(getHeatCapacity()) + "%"
 		).withStyle(ChatFormatting.GOLD));
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BURNER_FUEL_TIME, Component.literal(
@@ -209,6 +283,7 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 		super.write(tag, clientPacket);
 		tag.putDouble(NBT_HEAT, heat);
 		tag.putInt(NBT_BURN_TIME, burnTime);
+		tag.putBoolean(NBT_SUPERHEATED, superheatedFuel);
 	}
 
 	@Override
@@ -216,5 +291,6 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 		super.read(tag, clientPacket);
 		heat = tag.getDouble(NBT_HEAT);
 		burnTime = tag.getInt(NBT_BURN_TIME);
+		superheatedFuel = tag.getBoolean(NBT_SUPERHEATED);
 	}
 }

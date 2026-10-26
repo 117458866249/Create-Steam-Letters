@@ -1,5 +1,6 @@
 package dev.celestiacraft.steam_letters.compat.jei.category;
 
+import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.common.recipe.type.IBurnerFuelRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -9,6 +10,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -21,12 +23,17 @@ import java.util.Locale;
 
 public class BurnerFuelCategory<R extends IBurnerFuelRecipe> implements IRecipeCategory<R> {
 	private static final int WIDTH = 82;
-	private static final int HEIGHT = 26;
+	private static final int HEIGHT = 38;
 
 	private static final int SLOT_X = 1;
 	private static final int SLOT_Y = 5;
 	private static final int TIME_X = 44;
 	private static final int TIME_Y = 9;
+
+	private static final int SUPERHEATED_X = 6;
+	private static final int SUPERHEATED_Y = 27;
+
+	private static final int SUPERHEATED_COLOR = 0xE88300;
 
 	private final RecipeType<R> recipeType;
 	private final Component title;
@@ -83,8 +90,17 @@ public class BurnerFuelCategory<R extends IBurnerFuelRecipe> implements IRecipeC
 	}
 
 	@Override
-	public void draw(@NotNull R recipe, @NotNull IRecipeSlotsView slotsView, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+	public void draw(@NotNull R recipe, @NotNull IRecipeSlotsView view, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+		Font font = Minecraft.getInstance().font;
+
 		Component time = Component.literal(String.format(Locale.ROOT, "%.1fs", recipe.getTime() / 20.0D));
-		graphics.drawString(Minecraft.getInstance().font, time, TIME_X, TIME_Y, 0x404040, false);
+		graphics.drawString(font, time, TIME_X, TIME_Y, 0x404040, false);
+
+		if (!recipe.isSuperheated()) {
+			return;
+		}
+
+		Component note = Component.translatable(SlTranKeys.langKey(SlTranKeys.JEI_SUPERHEATED));
+		graphics.drawString(font, note, SUPERHEATED_X, SUPERHEATED_Y, SUPERHEATED_COLOR, false);
 	}
 }

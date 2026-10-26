@@ -120,6 +120,14 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 		return cachedEfficiency;
 	}
 
+	/**
+	 * 太阳能锅炉不接燃烧室, 因此永远不会进入过热状态, 始终生产普通蒸汽.
+	 */
+	@Override
+	protected boolean isSuperheated() {
+		return false;
+	}
+
 	private double computeEfficiency() {
 		if (level == null) {
 			return 0.0D;

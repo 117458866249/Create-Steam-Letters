@@ -1,8 +1,11 @@
 package dev.celestiacraft.steam_letters.common.recipe.type;
 
+import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
+import lombok.Setter;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -12,9 +15,59 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@Setter
 public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
+	private static final ThreadLocal<Boolean> DATAGEN_SUPERHEATED = new ThreadLocal<>();
+
+	private boolean superheated;
+
 	public SolidFuelRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
 		super(SlRecipeTypes.SOLID_FUEL_INFO, params);
+		superheated = consumeSuperheated();
+	}
+
+	public static void markNextSuperheated(boolean superheated) {
+		DATAGEN_SUPERHEATED.set(superheated);
+	}
+
+	private static boolean consumeSuperheated() {
+		Boolean marked = DATAGEN_SUPERHEATED.get();
+		if (marked == null) {
+			return false;
+		}
+		DATAGEN_SUPERHEATED.remove();
+		return marked;
+	}
+
+	@Override
+	public boolean isSuperheated() {
+		return superheated;
+	}
+
+	@Override
+	public void readAdditional(@NotNull JsonObject json) {
+		super.readAdditional(json);
+		superheated = json.has(SUPERHEATED_KEY) && json.get(SUPERHEATED_KEY).getAsBoolean();
+	}
+
+	@Override
+	public void writeAdditional(@NotNull JsonObject json) {
+		super.writeAdditional(json);
+		if (superheated) {
+			json.addProperty(SUPERHEATED_KEY, true);
+		}
+	}
+
+	@Override
+	public void readAdditional(@NotNull FriendlyByteBuf buffer) {
+		super.readAdditional(buffer);
+		superheated = buffer.readBoolean();
+	}
+
+	@Override
+	public void writeAdditional(@NotNull FriendlyByteBuf buffer) {
+		super.writeAdditional(buffer);
+		buffer.writeBoolean(superheated);
 	}
 
 	@Override

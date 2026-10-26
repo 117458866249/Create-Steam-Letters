@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.common.recipe.builder;
 import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.recipe.type.SolidFuelRecipe;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.TagKey;
@@ -33,6 +33,7 @@ public abstract class SolidFuelRecipeGen extends ProcessingRecipeGen {
 
 	public static class SolidFuelBuilder {
 		private final ProcessingRecipeBuilder<SolidFuelRecipe> builder;
+		private boolean superheated;
 
 		private SolidFuelBuilder(@NotNull ProcessingRecipeBuilder<SolidFuelRecipe> builder) {
 			this.builder = builder;
@@ -56,6 +57,16 @@ public abstract class SolidFuelRecipeGen extends ProcessingRecipeGen {
 			return this;
 		}
 
+		public SolidFuelBuilder superheated(boolean superheated) {
+			this.superheated = superheated;
+			return this;
+		}
+
+		public SolidFuelBuilder superheated() {
+			superheated = true;
+			return this;
+		}
+
 		public SolidFuelBuilder whenModLoaded(@NotNull String modid) {
 			builder.whenModLoaded(modid);
 			return this;
@@ -72,6 +83,7 @@ public abstract class SolidFuelRecipeGen extends ProcessingRecipeGen {
 		}
 
 		private ProcessingRecipeBuilder<SolidFuelRecipe> unwrap() {
+			SolidFuelRecipe.markNextSuperheated(superheated);
 			return builder;
 		}
 	}

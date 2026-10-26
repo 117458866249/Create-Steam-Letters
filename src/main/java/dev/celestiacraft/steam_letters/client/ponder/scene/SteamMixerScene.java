@@ -29,7 +29,7 @@ public class SteamMixerScene {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		RandomSource random = RandomSource.create();
 
-		scene.title("steam_mixer", "蒸汽搅拌机");
+		scene.title("steam_mixer", "Steam Mixer");
 		scene.configureBasePlate(0, 0, 5);
 
 		Selection base = util.select().layer(0)
@@ -53,7 +53,7 @@ public class SteamMixerScene {
 				.pointAt(mixerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽搅拌机需要架在青铜工作盆的正上方");
+				.text("The Steam Mixer must be mounted directly above a bronze basin");
 		scene.idle(80);
 
 		Selection shaft = util.select().fromTo(1, 1, 3, 1, 4, 3);
@@ -74,7 +74,7 @@ public class SteamMixerScene {
 				.colored(PonderPalette.BLUE)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它需要旋转动力才能运转");
+				.text("It needs rotational force to run");
 		scene.idle(70);
 
 		Selection tank = util.select().fromTo(0, 1, 2, 0, 2, 2);
@@ -89,7 +89,7 @@ public class SteamMixerScene {
 				.pointAt(mixerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它同样需要蒸汽, 运转时会不断消耗内部的蒸汽");
+				.text("It also needs steam and keeps consuming its internal steam while running");
 		scene.idle(20);
 
 		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class, (nbt) -> {
@@ -110,7 +110,7 @@ public class SteamMixerScene {
 				.pointAt(util.vector().blockSurface(basinPos, Direction.NORTH))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("投进工作盆的物品会被同时搅拌");
+				.text("Items put into the basin are mixed together");
 		scene.idle(15);
 
 		scene.world().createItemOnBelt(util.grid().at(3, 1, 1), Direction.NORTH, new ItemStack(Items.RED_DYE, 4));
@@ -127,7 +127,7 @@ public class SteamMixerScene {
 				.pointAt(mixerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽充足时, 一次可以并行处理多份搅拌配方");
+				.text("With enough steam it can process several mixing recipes in parallel");
 		scene.idle(15);
 		scene.world().createItemOnBelt(util.grid().at(3, 1, 1), Direction.NORTH, new ItemStack(Items.RED_DYE, 8));
 		scene.idle(45);
@@ -136,7 +136,7 @@ public class SteamMixerScene {
 				.pointAt(mixerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽耗尽后, 搅拌机会立刻停机");
+				.text("When steam runs out the mixer stops immediately");
 		scene.idle(10);
 		scene.world().modifyBlockEntityNBT(mixer, SteamMixerBlockEntity.class, (nbt) -> {
 			nbt.put("Steam", FluidStack.EMPTY.writeToNBT(new CompoundTag()));

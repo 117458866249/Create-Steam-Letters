@@ -25,7 +25,7 @@ public class BronzeSteamPumpScene {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
 		scene.scaleSceneView(0.5F);
-		scene.title("bronze_steam_pump", "青铜蒸汽泵");
+		scene.title("bronze_steam_pump", "Bronze Steam Pump");
 
 		BlockPos engineIText = new BlockPos(1, 2, 1);
 		BlockPos engineIText2 = new BlockPos(2, 2, 1);
@@ -62,13 +62,13 @@ public class BronzeSteamPumpScene {
 				.pointAt(util.vector().centerOf(engineIText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("如果将引擎和锅炉紧贴在一起, 将会降低效率");
+				.text("Putting the engine directly against the boiler lowers the efficiency");
 		scene.idle(80);
 
 		scene.overlay().showText(50)
 				.pointAt(util.vector().centerOf(engineIText2))
 				.placeNearTarget()
-				.text("在这里外接一个动力泵又太麻烦, 该怎么做呢");
+				.text("Wiring up an external mechanical pump here is a hassle. What to do?");
 		scene.idle(55);
 
 		scene.world().hideIndependentSection(engineILink, Direction.UP);
@@ -81,7 +81,7 @@ public class BronzeSteamPumpScene {
 				.pointAt(util.vector().centerOf(pumpShowText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("这时候就该青铜蒸汽泵出场了");
+				.text("That is where the Bronze Steam Pump comes in");
 		scene.idle(80);
 
 		scene.world().hideIndependentSection(pumpShowLink, Direction.WEST);
@@ -102,7 +102,7 @@ public class BronzeSteamPumpScene {
 				.pointAt(util.vector().centerOf(engineIIText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("把它放在引擎和锅炉中间即可");
+				.text("Simply place it between the engine and the boiler");
 		scene.idle(80);
 
 		ElementLink<WorldSectionElement> benefitShowLink = scene.world().showIndependentSection(benefitSelection, Direction.WEST);
@@ -112,7 +112,7 @@ public class BronzeSteamPumpScene {
 				.pointAt(util.vector().centerOf(benefitText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它最大的好处是无需任何外接应力");
+				.text("Its biggest advantage is that it needs no external stress");
 		scene.idle(80);
 
 		scene.world().hideIndependentSection(benefitShowLink, Direction.EAST);
@@ -124,7 +124,7 @@ public class BronzeSteamPumpScene {
 				.pointAt(util.vector().centerOf(whatCostText))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("那代价是什么呢? 除了蒸汽什么都运输不了");
+				.text("And the price? It moves nothing but steam");
 		scene.idle(80);
 
 		scene.world().hideIndependentSection(whatCostShowLink, Direction.SOUTH);

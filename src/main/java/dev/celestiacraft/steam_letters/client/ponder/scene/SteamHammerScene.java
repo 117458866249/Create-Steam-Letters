@@ -23,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -39,7 +38,7 @@ public class SteamHammerScene {
 		RandomSource random = RandomSource.create();
 
 		scene.scaleSceneView(0.9F);
-		scene.title("steam_hammer", "蒸汽锻锤");
+		scene.title("steam_hammer", "Steam Hammer");
 
 		BlockPos hammer = new BlockPos(3, 3, 2);
 		BlockPos tankController = new BlockPos(5, 1, 5);
@@ -79,14 +78,14 @@ public class SteamHammerScene {
 				.pointAt(util.vector().centerOf(hammer))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽锻锤是一台压机, 会把传入的物品压制成型");
+				.text("The Steam Hammer is a press that forms incoming items");
 		scene.idle(80);
 
 		scene.overlay().showText(70)
 				.pointAt(util.vector().centerOf(hammer))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("它不仅需要更高的应力维持工作...");
+				.text("It needs more stress than a mechanical press to keep working...");
 		scene.idle(40);
 
 		scene.world().modifyBlockEntityNBT(hammerSelection, KineticBlockEntity.class, (nbt) -> {
@@ -104,7 +103,7 @@ public class SteamHammerScene {
 		scene.overlay().showText(80)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("...还需要源源不断的蒸汽供应");
+				.text("...and a constant supply of steam as well");
 		scene.idle(40);
 
 		scene.world().modifyBlockEntityNBT(tankSelectionForNbt, FluidTankBlockEntity.class, (nbt) -> {
@@ -131,7 +130,7 @@ public class SteamHammerScene {
 		scene.overlay().showText(80)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("作为回报，它可以一次处理多个物品");
+				.text("In return it can process several items at once");
 		scene.idle(40);
 
 		ElementLink<BeltItemElement> itemDrop = scene.world().createItemOnBelt(beltHead, Direction.WEST, ironIngot);
@@ -169,7 +168,7 @@ public class SteamHammerScene {
 				.pointAt(util.vector().centerOf(hammer))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("当蒸汽断供时，锻锤将无法处理物品");
+				.text("Without steam the hammer cannot process anything");
 		scene.idle(40);
 
 		scene.world().createItemOnBelt(beltHead, Direction.WEST, copperIngot);

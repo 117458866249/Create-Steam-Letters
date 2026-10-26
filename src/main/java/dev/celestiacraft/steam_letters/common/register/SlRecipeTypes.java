@@ -1,9 +1,10 @@
-package dev.celestiacraft.steam_letters.common.recipe;
+package dev.celestiacraft.steam_letters.common.register;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlApis;
+import dev.celestiacraft.steam_letters.common.recipe.SimpleRecipeTypeInfo;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import dev.celestiacraft.steam_letters.common.recipe.type.SolidFuelRecipe;
 import net.minecraft.core.registries.Registries;

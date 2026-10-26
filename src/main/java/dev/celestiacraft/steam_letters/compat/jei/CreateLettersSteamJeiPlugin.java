@@ -6,7 +6,7 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.common.block.burner.FluidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlock;
-import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.recipe.type.SolidFuelRecipe;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.compat.jei.api.JeiRecipeType;

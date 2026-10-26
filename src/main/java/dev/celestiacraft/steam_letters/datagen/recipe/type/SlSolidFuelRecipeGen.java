@@ -11,12 +11,14 @@ public class SlSolidFuelRecipeGen extends SolidFuelRecipeGen {
 
 		recipe("diamond", (builder) -> {
 			return builder.item(Tags.Items.GEMS_DIAMOND)
-					.time(20 * (60 * 5));
+					.time(20 * (60 * 5))
+					.superheated();
 		});
 
 		recipe("diamond_block", (builder) -> {
 			return builder.item(Tags.Items.STORAGE_BLOCKS_DIAMOND)
-					.time(20 * (60 * 50));
+					.time(20 * (60 * 50))
+					.superheated();
 		});
 	}
 }

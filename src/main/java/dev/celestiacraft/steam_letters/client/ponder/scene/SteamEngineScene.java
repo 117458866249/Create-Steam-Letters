@@ -30,7 +30,7 @@ public class SteamEngineScene {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		RandomSource random = RandomSource.create();
 
-		scene.title("steam_engine", "蒸汽动力机组");
+		scene.title("steam_engine", "Steam Power Unit");
 		scene.configureBasePlate(0, 0, 5);
 
 		BlockPos burnerPos = util.grid().at(2, 1, 1);
@@ -72,7 +72,7 @@ public class SteamEngineScene {
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽锅炉与燃烧室, 蒸汽引擎, 蒸汽飞轮共同组成一台蒸汽动力机组");
+				.text("A steam boiler with its burner, a steam engine and a steam flywheel form one steam power unit");
 		scene.idle(90);
 
 		scene.overlay().showText(70)
@@ -80,14 +80,14 @@ public class SteamEngineScene {
 				.colored(PonderPalette.RED)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("燃烧室必须紧贴在锅炉的正下方, 否则锅炉得不到任何热量");
+				.text("The burner must sit directly below the boiler, otherwise the boiler gets no heat at all");
 		scene.idle(80);
 
 		scene.overlay().showText(70)
 				.pointAt(burnerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("投入煤炭之类的固体燃料后, 热量会逐渐上升");
+				.text("Feed solid fuel such as coal and the heat gradually rises");
 		scene.idle(20);
 		setHeat(scene, burner, 100.0D, 400);
 		puff(scene, util.vector().centerOf(burnerPos), 10, 0.2f, random);
@@ -98,7 +98,7 @@ public class SteamEngineScene {
 				.colored(PonderPalette.GREEN)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("热量越高, 锅炉的产出效率越高");
+				.text("The higher the heat, the faster the boiler produces steam");
 		scene.idle(70);
 
 		scene.overlay().showText(70)
@@ -106,7 +106,7 @@ public class SteamEngineScene {
 				.colored(PonderPalette.BLUE)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("也可以用流体燃烧室代替固体燃烧室, 燃料从侧面用管道注入");
+				.text("A fluid burner can replace the solid burner, with fuel piped in from the side");
 		scene.idle(20);
 		scene.world().setBlock(burnerPos, SlBlocks.BRONZE_FLUID_BURNER.getDefaultState()
 				.setValue(AbstractBurnerBlock.FACING, Direction.SOUTH), true);
@@ -123,7 +123,7 @@ public class SteamEngineScene {
 				.pointAt(boilerSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("用管道把水送进锅炉, 水被加热后就会变成蒸汽");
+				.text("Pipe water into the boiler; once heated it turns into steam");
 		scene.idle(20);
 		scene.world().modifyBlockEntityNBT(boiler, AbstractBoilerBlockEntity.class, (nbt) -> {
 			nbt.put("InputTank", new FluidStack(Fluids.WATER, 4000)
@@ -136,7 +136,7 @@ public class SteamEngineScene {
 				.pointAt(engineSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("把蒸汽引擎紧贴在锅炉旁边, 它就能从背后抽取蒸汽");
+				.text("Place the steam engine against the boiler and it draws steam from the back");
 		scene.idle(80);
 
 		scene.overlay().showText(70)
@@ -144,7 +144,7 @@ public class SteamEngineScene {
 				.colored(PonderPalette.RED)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("引擎本身不输出动力: 在它正前方留出一格, 放上蒸汽飞轮");
+				.text("The engine itself outputs no power: leave one block in front of it and place the steam flywheel there");
 		scene.idle(80);
 
 		scene.world().showSection(output, Direction.EAST);
@@ -157,7 +157,7 @@ public class SteamEngineScene {
 				.pointAt(util.vector().blockSurface(wheelShaftPos, Direction.UP))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("飞轮再把引擎产生的应力送进动力网络");
+				.text("The flywheel then feeds the stress produced by the engine into the kinetic network");
 		scene.idle(80);
 
 		scene.overlay().showText(60)
@@ -165,7 +165,7 @@ public class SteamEngineScene {
 				.colored(PonderPalette.BLUE)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("用扳手可以调整飞轮的连接方向, 决定动力从哪一侧取出");
+				.text("A wrench changes the flywheel facing so power can be taken from either side");
 		scene.idle(70);
 
 		scene.overlay().showText(60)
@@ -173,7 +173,7 @@ public class SteamEngineScene {
 				.colored(PonderPalette.RED)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("蒸汽耗尽后, 引擎会停机, 飞轮也停止输出");
+				.text("Once steam runs out the engine stops and the flywheel stops outputting");
 		scene.idle(10);
 		setHeat(scene, burner, 0.0D, 0);
 		scene.world().setKineticSpeed(output, 0);

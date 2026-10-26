@@ -43,6 +43,7 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 	 */
 	private ItemStack burnTimeKey = ItemStack.EMPTY;
 	private int burnTimeValue;
+	private boolean burnTimeSuperheated;
 	private boolean burnTimeCacheValid;
 
 	private LazyOptional<IItemHandler> itemCapability;
@@ -85,6 +86,7 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 			fuel = ItemStack.EMPTY;
 		}
 		burnTime = time;
+		setSuperheatedFuel(burnTimeSuperheated);
 		setChanged();
 		return true;
 	}
@@ -102,10 +104,12 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		}
 
 		int time = 0;
+		boolean superheated = false;
 		if (level != null) {
 			SolidFuelRecipe recipe = SolidFuelRecipe.find(level, stack);
 			if (recipe != null) {
 				time = recipe.getTime();
+				superheated = recipe.isSuperheated();
 			} else {
 				time = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
 			}
@@ -113,6 +117,7 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 
 		burnTimeKey = stack.copy();
 		burnTimeValue = time;
+		burnTimeSuperheated = superheated;
 		burnTimeCacheValid = true;
 		return time;
 	}
@@ -125,6 +130,7 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		burnTimeCacheValid = false;
 		burnTimeKey = ItemStack.EMPTY;
 		burnTimeValue = 0;
+		burnTimeSuperheated = false;
 	}
 
 	/**

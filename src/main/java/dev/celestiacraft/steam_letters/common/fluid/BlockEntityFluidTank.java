@@ -7,18 +7,18 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import java.util.function.Predicate;
 
 public class BlockEntityFluidTank extends FluidTank {
-	private final BlockEntity owner;
+	private final BlockEntity entity;
 	private final Predicate<FluidStack> validator;
 
-	public BlockEntityFluidTank(BlockEntity owner, int capacity, Predicate<FluidStack> validator) {
+	public BlockEntityFluidTank(BlockEntity entity, int capacity, Predicate<FluidStack> validator) {
 		super(capacity);
-		this.owner = owner;
+		this.entity = entity;
 		this.validator = validator;
 	}
 
 	@Override
 	protected void onContentsChanged() {
-		owner.setChanged();
+		entity.setChanged();
 	}
 
 	@Override

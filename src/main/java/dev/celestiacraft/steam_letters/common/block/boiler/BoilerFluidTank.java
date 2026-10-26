@@ -8,8 +8,8 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.function.Predicate;
 
 public class BoilerFluidTank extends BlockEntityFluidTank {
-	public BoilerFluidTank(BlockEntity owner, int capacity, Predicate<FluidStack> validator) {
-		super(owner, capacity, validator);
+	public BoilerFluidTank(BlockEntity entity, int capacity, Predicate<FluidStack> validator) {
+		super(entity, capacity, validator);
 	}
 
 	public static boolean isWater(FluidStack stack) {

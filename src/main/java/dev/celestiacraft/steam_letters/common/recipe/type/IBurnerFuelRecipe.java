@@ -6,7 +6,13 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.List;
 
 public interface IBurnerFuelRecipe {
+	String SUPERHEATED_KEY = "superheated";
+
 	int getTime();
+
+	default boolean isSuperheated() {
+		return false;
+	}
 
 	default List<ItemStack> getFuelItems() {
 		return List.of();

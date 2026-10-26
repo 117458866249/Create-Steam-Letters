@@ -19,6 +19,7 @@ public class SlFluidFuelRecipeGen extends FluidFuelRecipeGen {
 		recipe("blazing_blood", (builder) -> {
 			return builder.fluid(TinkerFluids.blazingBlood.get())
 					.time(20 * (30 * 2))
+					.superheated()
 					.whenModLoaded(TConstruct.MOD_ID);
 		});
 	}

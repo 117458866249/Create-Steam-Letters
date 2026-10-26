@@ -4,7 +4,7 @@ import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import dev.celestiacraft.steam_letters.common.recipe.SlRecipeTypes;
+import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.TagKey;
@@ -32,6 +32,7 @@ public abstract class FluidFuelRecipeGen extends ProcessingRecipeGen {
 
 	public static class FluidFuelBuilder {
 		private final ProcessingRecipeBuilder<FluidFuelRecipe> builder;
+		private boolean superheated;
 
 		private FluidFuelBuilder(@NotNull ProcessingRecipeBuilder<FluidFuelRecipe> builder) {
 			this.builder = builder;
@@ -55,6 +56,16 @@ public abstract class FluidFuelRecipeGen extends ProcessingRecipeGen {
 			return this;
 		}
 
+		public FluidFuelBuilder superheated(boolean superheated) {
+			this.superheated = superheated;
+			return this;
+		}
+
+		public FluidFuelBuilder superheated() {
+			superheated = true;
+			return this;
+		}
+
 		public FluidFuelBuilder whenModLoaded(@NotNull String modid) {
 			builder.whenModLoaded(modid);
 			return this;
@@ -71,6 +82,7 @@ public abstract class FluidFuelRecipeGen extends ProcessingRecipeGen {
 		}
 
 		private ProcessingRecipeBuilder<FluidFuelRecipe> unwrap() {
+			FluidFuelRecipe.markNextSuperheated(superheated);
 			return builder;
 		}
 	}

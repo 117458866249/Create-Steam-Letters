@@ -3,7 +3,6 @@ package dev.celestiacraft.steam_letters.datagen;
 import com.tterrag.registrate.providers.ProviderType;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import dev.celestiacraft.steam_letters.api.SlApis;
-import dev.celestiacraft.steam_letters.datagen.language.Chinese;
 import dev.celestiacraft.steam_letters.datagen.language.English;
 import dev.celestiacraft.steam_letters.datagen.recipe.SlRecipeProvider;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.SlFluidFuelRecipeGen;
@@ -37,7 +36,6 @@ public class DataGenerators {
 
 		if (client) {
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.LANG, English::addTranslations);
-			generator.addProvider(client, new Chinese(output));
 		}
 
 		if (server) {
