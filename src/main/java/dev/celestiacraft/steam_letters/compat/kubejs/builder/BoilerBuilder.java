@@ -2,6 +2,7 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
+import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,8 @@ public class BoilerBuilder extends BoilerDeviceBuilder<SteamBoilerBlock, SteamBo
 		super(id);
 		itemTag(SlItemTags.STEAM_PRODUCTION.location());
 		itemTag(SlItemTags.STEAM_BOILER.location());
+		blockTag(SlBlockTags.STEAM_PRODUCTION.location());
+		blockTag(SlBlockTags.STEAM_BOILER.location());
 	}
 
 	@Override

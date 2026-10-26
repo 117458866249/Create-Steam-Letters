@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlockEntity;
+import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,8 @@ public class SolidBurnerBuilder extends BurnerDeviceBuilder<SolidBurnerBlock, So
 		super(id);
 		itemTag(SlItemTags.STEAM_PRODUCTION.location());
 		itemTag(SlItemTags.STEAM_SOLID_BURNER.location());
+		blockTag(SlBlockTags.STEAM_PRODUCTION.location());
+		blockTag(SlBlockTags.STEAM_SOLID_BURNER.location());
 	}
 
 	@Override

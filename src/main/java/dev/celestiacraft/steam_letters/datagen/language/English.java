@@ -68,6 +68,7 @@ public class English {
 	private static void addJeiLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_SOLID_FUEL), "Solid Fuel");
 		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_FLUID_FUEL), "Fluid Fuel");
+		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_HEATED), "Heated");
 		provider.add(SlTranKeys.langKey(SlTranKeys.JEI_SUPERHEATED), "Superheated");
 	}
 

@@ -10,7 +10,8 @@ import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
 import dev.celestiacraft.steam_letters.common.recipe.type.SolidFuelRecipe;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.compat.jei.api.JeiRecipeType;
-import dev.celestiacraft.steam_letters.compat.jei.category.BurnerFuelCategory;
+import dev.celestiacraft.steam_letters.compat.jei.category.FluidFuelBurnerCategory;
+import dev.celestiacraft.steam_letters.compat.jei.category.SolidFuelBurnerCategory;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -37,6 +38,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @JeiPlugin
 public class CreateLettersSteamJeiPlugin implements IModPlugin {
@@ -53,15 +56,17 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
 
 		registration.addRecipeCategories(
-				new BurnerFuelCategory(
+				new SolidFuelBurnerCategory(
 						JeiRecipeType.SOLID_FUEL,
 						Component.translatable(SlTranKeys.langKey(SlTranKeys.JEI_SOLID_FUEL)),
-						helper.createDrawableItemStack(Items.COAL.getDefaultInstance())
+						helper.createDrawableItemStack(Items.COAL.getDefaultInstance()),
+						helper
 				),
-				new BurnerFuelCategory(
+				new FluidFuelBurnerCategory(
 						JeiRecipeType.FLUID_FUEL,
 						Component.translatable(SlTranKeys.langKey(SlTranKeys.JEI_FLUID_FUEL)),
-						helper.createDrawableItemStack(Items.LAVA_BUCKET.getDefaultInstance())
+						helper.createDrawableItemStack(Items.LAVA_BUCKET.getDefaultInstance()),
+						helper
 				)
 		);
 	}
@@ -86,10 +91,13 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 	 * 固体燃烧室在没有命中 {@code steam_letters:solid_fuel} 配方时会回退到原版熔炉燃料表,
 	 * 所以 JEI 里必须把这部分也列出来, 否则玩家只看得到自定义配方.
 	 * <p>
+	 * 原版燃料按燃烧时间分组: 时长相同的物品合并成一条配方, 槽内轮播.
+	 * 逐物品建条目会让木板, 原木这类成组出现的燃料占满整页, 而它们的时间本来就是同一个值.
+	 * <p>
 	 * 已经被自定义配方覆盖的物品跳过, 避免同一个物品出现两页.
 	 */
 	private static List<SolidFuelRecipe> collectFurnaceFuels(List<SolidFuelRecipe> custom) {
-		List<SolidFuelRecipe> derived = new ArrayList<>();
+		Map<Integer, List<ItemStack>> byTime = new TreeMap<>();
 		for (Item item : ForgeRegistries.ITEMS) {
 			ItemStack stack = item.getDefaultInstance();
 			if (stack.isEmpty() || matchesAny(custom, stack)) {
@@ -101,16 +109,17 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 				continue;
 			}
 
-			ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
-			if (key == null) {
-				continue;
-			}
-			ResourceLocation id = SlApis.loadResource("solid_fuel/derived/" + key.getNamespace() + "/" + key.getPath());
+			byTime.computeIfAbsent(time, (key) -> new ArrayList<>()).add(stack);
+		}
+
+		List<SolidFuelRecipe> derived = new ArrayList<>();
+		byTime.forEach((time, stacks) -> {
+			ResourceLocation id = SlApis.loadResource("solid_fuel/derived/" + time);
 			derived.add(new ProcessingRecipeBuilder<>(SolidFuelRecipe::new, id)
-					.withItemIngredients(Ingredient.of(stack))
+					.withItemIngredients(Ingredient.of(stacks.toArray(ItemStack[]::new)))
 					.duration(time)
 					.build());
-		}
+		});
 		return derived;
 	}
 

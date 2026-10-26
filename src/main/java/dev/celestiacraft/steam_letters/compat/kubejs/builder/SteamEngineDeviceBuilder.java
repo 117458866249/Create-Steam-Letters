@@ -5,6 +5,7 @@ import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlockEntity;
+import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -36,6 +37,8 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 
 		itemTag(SlItemTags.STEAM_ENGINE.location());
 		flywheel.itemTag(SlItemTags.STEAM_FLYWHEEL.location());
+		blockTag(SlBlockTags.STEAM_ENGINE.location());
+		flywheel.blockTag(SlBlockTags.STEAM_FLYWHEEL.location());
 	}
 
 	private static ResourceLocation flywheelId(ResourceLocation id) {

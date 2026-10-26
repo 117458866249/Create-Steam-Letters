@@ -161,6 +161,7 @@
   "steam_letters.gui.goggles.steam_engine.steam": "蒸汽储量",
   "steam_letters.gui.goggles.steam_engine.stress": "应力输出",
   "steam_letters.jei.fluid_fuel": "流体燃料",
+  "steam_letters.jei.heated": "加热",
   "steam_letters.jei.solid_fuel": "固体燃料",
   "steam_letters.jei.superheated": "超级加热",
   "steam_letters.ponder.advanced_spout.header": "高级注液器",

@@ -8,6 +8,7 @@ import dev.celestiacraft.steam_letters.datagen.recipe.SlRecipeProvider;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.SlFluidFuelRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.SlSolidFuelRecipeGen;
 import dev.celestiacraft.steam_letters.datagen.recipe.type.create.*;
+import dev.celestiacraft.steam_letters.datagen.tags.BlockTagsGen;
 import dev.celestiacraft.steam_letters.datagen.tags.ItemTagsGen;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.minecraft.core.HolderLookup;
@@ -50,6 +51,7 @@ public class DataGenerators {
 			generator.addProvider(server, new SlMillingRecipeGen(output));
 
 			SlApis.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, ItemTagsGen::addItemTags);
+			SlApis.REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, BlockTagsGen::addBlockTags);
 		}
 	}
 

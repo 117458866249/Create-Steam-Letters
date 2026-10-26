@@ -131,6 +131,9 @@ dependencies {
 	// 柴油动力
 	implementation fg.deobf("curse.maven:create-diesel-generators-869316:7869519")
 
+	// CC&A
+	implementation fg.deobf("curse.maven:createaddition-439890:7208610")
+
 	// Jade
 	implementation fg.deobf("curse.maven:jade-324717:6106101")
 

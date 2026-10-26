@@ -2,6 +2,7 @@ package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
 import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlockEntity;
+import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,8 @@ public class SolarBoilerBuilder extends BoilerDeviceBuilder<SolarBoilerBlock, So
 		super(id);
 		itemTag(SlItemTags.STEAM_PRODUCTION.location());
 		itemTag(SlItemTags.STEAM_SOLAR_BOILER.location());
+		blockTag(SlBlockTags.STEAM_PRODUCTION.location());
+		blockTag(SlBlockTags.STEAM_SOLAR_BOILER.location());
 	}
 
 	@Override
