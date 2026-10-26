@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.boiler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import dev.celestiacraft.steam_letters.client.render.SlFluidRenderer;
+import dev.celestiacraft.steam_letters.config.common.SolarBoilerConfig;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
@@ -29,8 +30,13 @@ public class SolarBoilerRenderer extends SmartBlockEntityRenderer<SolarBoilerBlo
 	protected void renderSafe(SolarBoilerBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int light, int overlay) {
 		float waterFill = Mth.clamp(entity.getRenderedWaterLevel(partialTicks), 0.0F, 1.0F);
 		float steamFill = Mth.clamp(entity.getRenderedSteamLevel(partialTicks), 0.0F, 1.0F);
+		boolean renderFluid = SolarBoilerConfig.RENDER_FLUID.get();
 
 		if (waterFill <= LEVEL_EPSILON && steamFill <= LEVEL_EPSILON) {
+			return;
+		}
+
+		if (!renderFluid) {
 			return;
 		}
 

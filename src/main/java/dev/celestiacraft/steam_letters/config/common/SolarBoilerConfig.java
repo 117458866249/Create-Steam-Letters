@@ -20,7 +20,9 @@ public class SolarBoilerConfig extends ConfigModule {
 
 	public static ForgeConfigSpec.IntValue ARTIFICIAL_LIGHT_THRESHOLD;
 
-	public static ForgeConfigSpec.BooleanValue REQUIRE_DAYLIGHT;
+	public static ForgeConfigSpec.BooleanValue
+			REQUIRE_DAYLIGHT,
+			RENDER_FLUID;
 
 	public SolarBoilerConfig(ForgeConfigSpec.Builder builder) {
 		super(builder, "solar_boiler");
@@ -28,25 +30,29 @@ public class SolarBoilerConfig extends ConfigModule {
 
 	@Override
 	protected void addConfigs() {
+		RENDER_FLUID = builder.translation(key("render_fluid"))
+				.comment("Whether or not fluids inside the solar boiler will be rendered.")
+				.define("render_fluid", true);
+
 		SUNLIGHT_EFFICIENCY = builder.translation(key("sunlight_efficiency"))
 				.comment("Efficiency multiplier when the boiler has direct sky light "
-					+ "(and no weather penalty).")
+						+ "(and no weather penalty).")
 				.defineInRange("sunlight_efficiency", 1.0D, 0.0D, 1.0D);
 
 		ARTIFICIAL_LIGHT_EFFICIENCY = builder.translation(key("artificial_light_efficiency"))
 				.comment("Efficiency multiplier when the boiler is lit by block light "
-					+ "instead of sky light.")
+						+ "instead of sky light.")
 				.defineInRange("artificial_light_efficiency", 0.5D, 0.0D, 1.0D);
 
 		ARTIFICIAL_LIGHT_THRESHOLD = builder.translation(key("artificial_light_threshold"))
 				.comment("Minimum block light level for the artificial light path "
-					+ "to be usable.")
+						+ "to be usable.")
 				.defineInRange("artificial_light_threshold", 8, 0, 15);
 
 		REQUIRE_DAYLIGHT = builder.translation(key("require_daylight"))
 				.comment("Whether the sky light path additionally requires daytime.",
-					"Vanilla sky light level stays at 15 at night, so without this "
-							+ "the boiler would produce at full speed in complete darkness.")
+						"Vanilla sky light level stays at 15 at night, so without this "
+								+ "the boiler would produce at full speed in complete darkness.")
 				.define("require_daylight", true);
 
 		RAIN_EFFICIENCY = builder.translation(key("rain_efficiency"))
@@ -55,7 +61,7 @@ public class SolarBoilerConfig extends ConfigModule {
 
 		THUNDER_EFFICIENCY = builder.translation(key("thunder_efficiency"))
 				.comment("Weather multiplier while a thunder storm is raging at the boiler "
-					+ "(includes snow during thunder).")
+						+ "(includes snow during thunder).")
 				.defineInRange("thunder_efficiency", 0.25D, 0.0D, 1.0D);
 	}
 

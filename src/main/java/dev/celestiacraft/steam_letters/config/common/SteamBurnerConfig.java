@@ -24,10 +24,10 @@ public class SteamBurnerConfig extends ConfigModule {
 		HEATUP_SECONDS = builder.translation(key("heatup_seconds"))
 				.comment("Total time required to heat up while burning fuel, "
 						+ "as time required for the burner to reach max heat.")
-				.defineInRange("heatup_seconds", 10.0D, 0.0D, 10000.0D);
+				.defineInRange("heatup_seconds", 60.0D, 0.0D, 10000.0D);
 		COOLDOWN_SECONDS = builder.translation(key("cooldown_seconds"))
 				.comment("Total time to lose all heat while no fuel is burning, "
 						+ "as time required for the burner to lose all heat.")
-				.defineInRange("cooldown_seconds", 5.0D, 0.0D, 10000.0D);
+				.defineInRange("cooldown_seconds", 30.0D, 0.0D, 10000.0D);
 	}
 }
