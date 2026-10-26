@@ -143,7 +143,7 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	 * 输出罐里是否正压着「另一种」蒸汽: 产普通蒸汽时罐里是过热蒸汽, 或反之.
 	 * <p>
 	 * 单流体罐在这种状态下既灌不进也抽不出, 生产会完全停摆, 直到玩家把罐里的蒸汽抽走.
-	 * 罐空着、或罐里正是当前该产的那种蒸汽时返回 false.
+	 * 罐空着, 或罐里正是当前该产的那种蒸汽时返回 false.
 	 */
 	private boolean outputHoldsOtherSteam(boolean superheatedProduction) {
 		FluidStack stored = outputTank.getFluid();

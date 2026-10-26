@@ -183,7 +183,7 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 tasks.named('jar', Jar).configure {
-	// 输出 jar 名：Steam-Letters-<mod_version>-<minecraft_version>.jar
+	// 输出 jar 名: Steam-Letters-<mod_version>-<minecraft_version>.jar
 	archiveVersion = "${mod_version}-${minecraft_version}"
 
 	manifest {

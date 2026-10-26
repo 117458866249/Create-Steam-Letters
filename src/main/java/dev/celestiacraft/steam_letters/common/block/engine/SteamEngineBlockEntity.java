@@ -525,7 +525,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_ENGINE_STRESS, Component.literal(
 				formatNumber(appliedStrength) + " / " + formatNumber(getTargetStrength()) + " SU ("
-						+ (supplyStage * 100 / STAGES) + "%)"
+						+ Math.round(appliedStrength / (float) getTargetStrength() * 100.0F) + "%)"
 		).withStyle(appliedStrength > 0.0F ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
 
 		addGoggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_ENGINE_STEAM, Component.literal(

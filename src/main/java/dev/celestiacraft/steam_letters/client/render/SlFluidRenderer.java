@@ -15,11 +15,11 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 /**
- * 自己实现的流体盒渲染, 代替 catnip 的 FluidRenderHelper.renderFluidBox。
+ * 自己实现的流体盒渲染, 代替 catnip 的 FluidRenderHelper.renderFluidBox. 
  * <p>
  * catnip 那套走的是 ponder 专用的 RenderType, 在普通的 BlockEntityRenderer 里
  * 对自定义流体(动画贴图 / 气体)会渲不出来或者采样越界, 所以这里改用原版的
- * {@link RenderType#translucent()} 手写六个面, 每个面正反各画一次, 免得被背面剔除。
+ * {@link RenderType#translucent()} 手写六个面, 每个面正反各画一次, 免得被背面剔除. 
  */
 public class SlFluidRenderer {
 	public static void renderFluidBox(FluidStack stack, float x1, float y1, float z1, float x2, float y2, float z2, MultiBufferSource buffer, PoseStack ms, int light, float alpha) {

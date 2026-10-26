@@ -47,8 +47,8 @@ public class CreateLettersSteamKubeJSPlugin extends KubeJSPlugin {
 				FluidBurnerBuilder.class,
 				FluidBurnerBuilder::new
 		);
-		// 引擎和飞轮永远成对注册, 只留一个类型: 脚本 id 当材质前缀,
-		// event.create("cmi:cast_iron") -> cmi:cast_iron_steam_engine + cmi:cast_iron_steam_flywheel
+		// 引擎和飞轮永远成对注册, 只留一个类型, 注册id当前缀,
+		// event.create("cmi:cast_iron")自动注册 cmi:cast_iron_steam_engine和cmi:cast_iron_steam_flywheel
 		RegistryInfo.BLOCK.addType(
 				SlApis.loadResource("engine_and_flywheel").toString(),
 				SteamEngineDeviceBuilder.class,

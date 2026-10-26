@@ -31,10 +31,10 @@ public class SlLang {
 	}
 
 	/**
-	 * 翻译指定的语言键并返回 {@link LangBuilder}, 支持动态参数。
+	 * 翻译指定的语言键并返回 {@link LangBuilder}, 支持动态参数. 
 	 * <p>
-	 * 自动添加模组 id 前缀到语言键。例如, 传入 {@code "tooltip.example"}
-	 * 会查找 {@code "steam_letters.tooltip.example"} 键。
+	 * 自动添加模组 id 前缀到语言键. 例如, 传入 {@code "tooltip.example"}
+	 * 会查找 {@code "steam_letters.tooltip.example"} 键. 
 	 *
 	 * @param langKey 语言键(不含模组 id 前缀)
 	 * @param args    格式化参数, 用于替换翻译文本中的占位符(如 {@code %s})

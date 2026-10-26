@@ -30,6 +30,8 @@ public class SlTranKeys {
 			GOGGLE_STEAM_ENGINE_HEATUP,
 			GOGGLE_STEAM_ENGINE_STRESS,
 			GOGGLE_STEAM_ENGINE_STEAM,
+			GOGGLE_BOILER_STEAM_OUTPUT_RATE,
+			GOGGLE_BOILER_WATER_STORED,
 			GOGGLE_BRONZE_DEPOT_CONTENTS,
 			JEI_SOLID_FUEL,
 			JEI_FLUID_FUEL,
@@ -79,6 +81,9 @@ public class SlTranKeys {
 		GOGGLE_STEAM_ENGINE_HEATUP = "gui.goggles.steam_engine.heatup";
 		GOGGLE_STEAM_ENGINE_STRESS = "gui.goggles.steam_engine.stress";
 		GOGGLE_STEAM_ENGINE_STEAM = "gui.goggles.steam_engine.steam";
+
+		GOGGLE_BOILER_STEAM_OUTPUT_RATE = "gui.goggles.boiler.steam_output_rate";
+		GOGGLE_BOILER_WATER_STORED = "gui.goggles.boiler.water_stored";
 
 		GOGGLE_BRONZE_DEPOT_CONTENTS = "gui.goggles.bronze_depot.contents";
 

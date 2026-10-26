@@ -53,6 +53,9 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_LIGHT_NONE), "Light: None");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_PRODUCTION), "Steam Production");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_SOLAR_BOILER_RATE), "Share of Full Output");
+
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BOILER_STEAM_OUTPUT_RATE), "Steam Output Rate");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BOILER_WATER_STORED), "Water Stored");
 	}
 
 	private static void addSteamEngineLang(RegistrateLangProvider provider) {
@@ -210,6 +213,15 @@ public class English {
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"), "Divisor applied to the heat-up time when running on superheated steam");
 		provider.add(ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier when running on superheated steam");
 
+		provider.add(ConfigModule.translationKey("boiler_steam"), "Create Boiler Steam");
+		provider.add(ConfigModule.translationKey("boiler_steam", "base_consumption"), "Steam output per continuous boiler level per tick (mB)");
+		provider.add(ConfigModule.translationKey("boiler_steam", "steam_per_water"), "Steam produced per mB of water (mB)");
+		provider.add(ConfigModule.translationKey("boiler_steam", "buffer_multiplier"), "Steam buffer capacity multiplier (1000 mB per boiler block)");
+		provider.add(ConfigModule.translationKey("boiler_steam", "water_per_block"), "Water buffer capacity per boiler block (mB)");
+		provider.add(ConfigModule.translationKey("boiler_steam", "strict_quota"), "Use an explicit device quota instead of flow thinning");
+		provider.add(ConfigModule.translationKey("boiler_steam", "superheated_at_level"), "Minimum continuous boiler level required to produce superheated steam");
+		provider.add(ConfigModule.translationKey("boiler_steam", "superheated_water_multiplier"), "Water consumption multiplier while producing superheated steam");
+
 		provider.add(ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by boilers. Existing fluid inside machines is never converted when this changes");
 		provider.add(ConfigModule.translationKey("steam", "output_superheated_steam_fluid"), "Fluid id produced by boilers while superheated. Existing fluid inside machines is never converted when this changes");
 		provider.add(ConfigModule.translationKey("steam", "do_overheated_steam_replace"), "Whether the normal steam left in the output tank is converted into superheated steam instead of being destroyed");
@@ -339,6 +351,37 @@ public class English {
 						+ "2.0 means the heat-up takes half as long.");
 		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"),
 				"Stress output multiplier applied while running on superheated steam.");
+
+		comment(provider, ConfigModule.translationKey("boiler_steam", "base_consumption"),
+				"Steam produced per tick for each continuous level of the boiler (mB).\n"
+						+ "Should match the full-load steam demand of one engine for the quota to line up.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "steam_per_water"),
+				"""
+						A boiler draws water out of its own water buffer, which is filled by whatever flows in.
+						This ratio is therefore the only link between that water and the steam output.
+						1.2 makes the water a level needs equal to the 10 mB per level that the level itself demands.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "water_per_block"),
+				"""
+						Water buffer capacity = boiler block count * this value.
+						Water is no longer consumed the moment it flows in, so a full steam buffer does not
+						force the boiler to swallow water for nothing.
+						0 disables the buffer, and the boiler falls back to counting only the water that flows through it.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "buffer_multiplier"),
+				"Buffer capacity = boiler block count * 1000 * this multiplier.\n"
+						+ "0 means the boiler stores no steam.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "strict_quota"),
+				"""
+						When true steam engines and bronze pumps share one quota, so a boiler of level L feeds
+						min(1, L / (engines + pumps)) to every attached engine.
+						Adding a pump to a full quota therefore lowers the stress of every engine.
+						This also covers the steam engines of Create itself, which never consume fluid and
+						derive their stress from this efficiency alone.
+						When false the boiler only limits the total steam flow and leaves the quota to scarcity.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_at_level"),
+				"Level 18 requires 18 points of heat, at least 72 boiler blocks and 180 mB/t of water supply.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_water_multiplier"),
+				"Water consumption multiplier while producing superheated steam.\n"
+						+ "Kept in line with the superheated output multiplier of the engine so the switch does not create free output.");
 
 		comment(provider, ConfigModule.translationKey("bronze_basin", "slot_capacity"),
 				"Fluid capacity of each tank of a bronze basin (mB).\n"
