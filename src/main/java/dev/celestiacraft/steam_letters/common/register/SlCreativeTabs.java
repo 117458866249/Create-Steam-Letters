@@ -71,6 +71,10 @@ public class SlCreativeTabs {
 						output.accept(SlMaterials.TIN_PLATE);
 						output.accept(SlMaterials.TIN_NUGGET);
 						output.accept(SlMaterials.TIN_BLOCK);
+
+						// 流体桶
+						output.accept(SlFluids.STEAM.get().getBucket());
+						output.accept(SlFluids.SUPERHEATED_STEAM.get().getBucket());
 					})
 					.build();
 		});
