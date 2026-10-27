@@ -5,6 +5,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import dev.celestiacraft.steam_letters.common.register.SlRecipeTypes;
+import lombok.Setter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@Setter
 public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements IBurnerFuelRecipe {
 	/**
 	 * 一份燃料的固定量, 1000mB
@@ -50,18 +52,14 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 		return superheated;
 	}
 
-	public void setSuperheated(boolean superheated) {
-		this.superheated = superheated;
-	}
-
 	@Override
-	public void readAdditional(JsonObject json) {
+	public void readAdditional(@NotNull JsonObject json) {
 		super.readAdditional(json);
 		superheated = json.has(SUPERHEATED_KEY) && json.get(SUPERHEATED_KEY).getAsBoolean();
 	}
 
 	@Override
-	public void writeAdditional(JsonObject json) {
+	public void writeAdditional(@NotNull JsonObject json) {
 		super.writeAdditional(json);
 		if (superheated) {
 			json.addProperty(SUPERHEATED_KEY, true);
@@ -69,15 +67,15 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	}
 
 	@Override
-	public void readAdditional(FriendlyByteBuf buffer) {
-		super.readAdditional(buffer);
-		superheated = buffer.readBoolean();
+	public void readAdditional(@NotNull FriendlyByteBuf buf) {
+		super.readAdditional(buf);
+		superheated = buf.readBoolean();
 	}
 
 	@Override
-	public void writeAdditional(FriendlyByteBuf buffer) {
-		super.writeAdditional(buffer);
-		buffer.writeBoolean(superheated);
+	public void writeAdditional(@NotNull FriendlyByteBuf buf) {
+		super.writeAdditional(buf);
+		buf.writeBoolean(superheated);
 	}
 
 	@Override
@@ -122,7 +120,7 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	}
 
 	@Override
-	public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
+	public boolean matches(@NotNull RecipeWrapper wrapper, @NotNull Level level) {
 		return false;
 	}
 

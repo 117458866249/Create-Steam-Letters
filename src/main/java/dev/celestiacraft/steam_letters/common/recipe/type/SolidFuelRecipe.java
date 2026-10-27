@@ -59,15 +59,15 @@ public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	}
 
 	@Override
-	public void readAdditional(@NotNull FriendlyByteBuf buffer) {
-		super.readAdditional(buffer);
-		superheated = buffer.readBoolean();
+	public void readAdditional(@NotNull FriendlyByteBuf buf) {
+		super.readAdditional(buf);
+		superheated = buf.readBoolean();
 	}
 
 	@Override
-	public void writeAdditional(@NotNull FriendlyByteBuf buffer) {
-		super.writeAdditional(buffer);
-		buffer.writeBoolean(superheated);
+	public void writeAdditional(@NotNull FriendlyByteBuf buf) {
+		super.writeAdditional(buf);
+		buf.writeBoolean(superheated);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	}
 
 	@Override
-	public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
+	public boolean matches(@NotNull RecipeWrapper wrapper, @NotNull Level level) {
 		return false;
 	}
 
