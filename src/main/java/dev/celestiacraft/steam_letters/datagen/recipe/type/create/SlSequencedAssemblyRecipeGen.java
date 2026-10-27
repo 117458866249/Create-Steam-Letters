@@ -14,7 +14,7 @@ public class SlSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
 	public SlSequencedAssemblyRecipeGen(PackOutput output) {
 		super(output, CreateLettersSteam.MODID);
 
-		create("steam_mechanism", (builder) -> {
+		create("steam_mechanism_1", (builder) -> {
 			return builder.require(SlMaterials.BRONZE_PLATE)
 					.transitionTo(SlItems.INCOMPLETE_STEAM_MECHANISM)
 					.loops(2)
@@ -24,6 +24,19 @@ public class SlSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
 					})
 					.addStep(FillingRecipe::new, (step) -> {
 						return step.require(SlFluidTags.STEAM, 500);
+					});
+		});
+
+		create("steam_mechanism_2", (builder) -> {
+			return builder.require(SlMaterials.BRONZE_PLATE)
+					.transitionTo(SlItems.INCOMPLETE_STEAM_MECHANISM)
+					.loops(2)
+					.addOutput(SlItems.STEAM_MECHANISM, 120)
+					.addStep(DeployerApplicationRecipe::new, (step) -> {
+						return step.require(AllBlocks.COGWHEEL);
+					})
+					.addStep(FillingRecipe::new, (step) -> {
+						return step.require(SlFluidTags.SUPERHEATED_STEAM, 125);
 					});
 		});
 	}
