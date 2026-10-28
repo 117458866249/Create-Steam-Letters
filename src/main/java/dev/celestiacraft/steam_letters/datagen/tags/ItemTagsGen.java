@@ -1,12 +1,16 @@
 package dev.celestiacraft.steam_letters.datagen.tags;
 
+import com.mrh0.createaddition.index.CABlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
+import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 
 public class ItemTagsGen {
 	public static void addItemTags(RegistrateItemTagsProvider provider) {
@@ -16,10 +20,13 @@ public class ItemTagsGen {
 		provider.addTag(SlItemTags.ANDESITE_ALLOY_INGOT)
 				.add(AllItems.ANDESITE_ALLOY.asItem());
 
-		// 超级燃料
+		// 超级加热燃料
 		provider.addTag(SlItemTags.SUPERHEATED_FUEL)
 				.add(AllItems.BLAZE_CAKE.asItem())
-				.add(AllItems.CREATIVE_BLAZE_CAKE.asItem());
+				.add(AllItems.CREATIVE_BLAZE_CAKE.asItem())
+				.addOptional(CABlocks.BIOMASS_PALLET.getId())
+				.addOptional(ResourceLocation.parse(TinkerFluids.blazingBlood.getId() + "_bucket"))
+				.addOptionalTag(SlApis.loadForge("storage_blocks/coal_coke"));
 
 		// 固体燃烧室
 		provider.addTag(SlItemTags.STEAM_SOLID_BURNER)
