@@ -12,6 +12,7 @@ import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.compat.jei.api.JeiRecipeType;
 import dev.celestiacraft.steam_letters.compat.jei.category.FluidFuelBurnerCategory;
 import dev.celestiacraft.steam_letters.compat.jei.category.SolidFuelBurnerCategory;
+import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -97,7 +98,9 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 	 * 已经被自定义配方覆盖的物品跳过, 避免同一个物品出现两页.
 	 */
 	private static List<SolidFuelRecipe> collectFurnaceFuels(List<SolidFuelRecipe> custom) {
-		Map<Integer, List<ItemStack>> byTime = new TreeMap<>();
+		Map<Integer, List<ItemStack>> normal = new TreeMap<>();
+		Map<Integer, List<ItemStack>> superheated = new TreeMap<>();
+
 		for (Item item : ForgeRegistries.ITEMS) {
 			ItemStack stack = item.getDefaultInstance();
 			if (stack.isEmpty() || matchesAny(custom, stack)) {
@@ -109,18 +112,29 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 				continue;
 			}
 
-			byTime.computeIfAbsent(time, (key) -> new ArrayList<>()).add(stack);
+			Map<Integer, List<ItemStack>> target = stack.is(SlItemTags.SUPERHEATED_FUEL) ? superheated : normal;
+			target.computeIfAbsent(time, (key) -> {
+				return new ArrayList<>();
+			}).add(stack);
 		}
 
 		List<SolidFuelRecipe> derived = new ArrayList<>();
-		byTime.forEach((time, stacks) -> {
-			ResourceLocation id = SlApis.loadResource("solid_fuel/derived/" + time);
-			derived.add(new ProcessingRecipeBuilder<>(SolidFuelRecipe::new, id)
+		addDerivedRecipes(derived, normal, false);
+		addDerivedRecipes(derived, superheated, true);
+		return derived;
+	}
+
+	private static void addDerivedRecipes(List<SolidFuelRecipe> out, Map<Integer, List<ItemStack>> grouped, boolean superheated) {
+		String suffix = superheated ? "_superheated" : "";
+		grouped.forEach((time, stacks) -> {
+			ResourceLocation id = SlApis.loadResource("solid_fuel/derived/" + time + suffix);
+			SolidFuelRecipe recipe = new ProcessingRecipeBuilder<>(SolidFuelRecipe::new, id)
 					.withItemIngredients(Ingredient.of(stacks.toArray(ItemStack[]::new)))
 					.duration(time)
-					.build());
+					.build();
+			recipe.setSuperheated(superheated);
+			out.add(recipe);
 		});
-		return derived;
 	}
 
 	private static boolean matchesAny(List<SolidFuelRecipe> recipes, ItemStack stack) {

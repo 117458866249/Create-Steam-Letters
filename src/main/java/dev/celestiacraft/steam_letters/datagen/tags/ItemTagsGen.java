@@ -16,6 +16,11 @@ public class ItemTagsGen {
 		provider.addTag(SlItemTags.ANDESITE_ALLOY_INGOT)
 				.add(AllItems.ANDESITE_ALLOY.asItem());
 
+		// 超级燃料
+		provider.addTag(SlItemTags.SUPERHEATED_FUEL)
+				.add(AllItems.BLAZE_CAKE.asItem())
+				.add(AllItems.CREATIVE_BLAZE_CAKE.asItem());
+
 		// 固体燃烧室
 		provider.addTag(SlItemTags.STEAM_SOLID_BURNER)
 				.add(SlBlocks.BRONZE_SOLID_BURNER.asItem());

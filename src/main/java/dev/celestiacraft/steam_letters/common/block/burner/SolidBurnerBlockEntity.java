@@ -1,6 +1,7 @@
 package dev.celestiacraft.steam_letters.common.block.burner;
 
 import dev.celestiacraft.steam_letters.common.recipe.type.SolidFuelRecipe;
+import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
@@ -104,12 +105,13 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		}
 
 		int time = 0;
-		boolean superheated = false;
+		// 标签优先于配方字段: 进了 superheated_fuel 的物品一律按过热燃料算, 原版燃料也适用
+		boolean superheated = stack.is(SlItemTags.SUPERHEATED_FUEL);
 		if (level != null) {
 			SolidFuelRecipe recipe = SolidFuelRecipe.find(level, stack);
 			if (recipe != null) {
 				time = recipe.getTime();
-				superheated = recipe.isSuperheated();
+				superheated |= recipe.isSuperheated();
 			} else {
 				time = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
 			}

@@ -16,7 +16,8 @@ public class SlItemTags {
 			STEAM_SOLAR_BOILER,
 			STEAM_BURNERS,
 			STEAM_PRODUCTION,
-			STEAM_CONTAINER;
+			STEAM_CONTAINER,
+			SUPERHEATED_FUEL;
 
 	public static final TagKey<Item>
 			ANDESITE_ALLOY_INGOT,
@@ -38,6 +39,7 @@ public class SlItemTags {
 		STEAM_BURNERS = addMod("steam_burners");
 		STEAM_PRODUCTION = addMod("steam_production");
 		STEAM_CONTAINER = addMod("steam_containers");
+		SUPERHEATED_FUEL = addMod("superheated_fuel");
 
 		ANDESITE_ALLOY_INGOT = addForge("ingots/andesite_alloy");
 		BRONZE_INGOT = addForge("ingots/bronze");
