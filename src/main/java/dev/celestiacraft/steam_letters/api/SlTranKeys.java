@@ -7,8 +7,9 @@ public class SlTranKeys {
 			BASIC_TAB,
 			TOOLTIP_STEAM_HAMMER_SUMMARY,
 			TOOLTIP_STEAM_HAMMER_CONDITION,
-			TOOLTIP_STEAM_HAMMER_BEHAVIOUR1,
-			TOOLTIP_STEAM_HAMMER_BEHAVIOUR2,
+			TOOLTIP_STEAM_HAMMER_CONSUMPTION,
+			TOOLTIP_STEAM_HAMMER_PARALLEL,
+			TOOLTIP_STEAM_HAMMER_CAPACITY,
 			GOGGLE_STEAM_BURNER,
 			GOGGLE_STEAM_BURNER_TEMPERATURE,
 			GOGGLE_STEAM_BURNER_FUEL_TIME,
@@ -55,8 +56,9 @@ public class SlTranKeys {
 		BASIC_TAB = setCreativeTabKey("basic");
 		TOOLTIP_STEAM_HAMMER_SUMMARY = "tooltip.steam_hammer.summary";
 		TOOLTIP_STEAM_HAMMER_CONDITION = "tooltip.steam_hammer.condition1";
-		TOOLTIP_STEAM_HAMMER_BEHAVIOUR1 = "tooltip.steam_hammer.behaviour1";
-		TOOLTIP_STEAM_HAMMER_BEHAVIOUR2 = "tooltip.steam_hammer.behaviour2";
+		TOOLTIP_STEAM_HAMMER_CONSUMPTION = "tooltip.steam_hammer.consumption";
+		TOOLTIP_STEAM_HAMMER_PARALLEL = "tooltip.steam_hammer.parallel";
+		TOOLTIP_STEAM_HAMMER_CAPACITY = "tooltip.steam_hammer.capacity";
 
 		GOGGLE_STEAM_BURNER = "gui.goggles.steam_burner";
 		GOGGLE_STEAM_BURNER_TEMPERATURE = "gui.goggles.steam_burner.temperature";

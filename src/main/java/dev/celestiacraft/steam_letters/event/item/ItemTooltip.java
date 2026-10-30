@@ -180,36 +180,43 @@ public class ItemTooltip {
 
 	private static void addSteamHammerTooltip(List<Component> tooltip) {
 		int steamCost = SteamHammerConfig.STEAM_CONSUMPTION.get();
+		int parallel = SteamHammerConfig.STEAM_HAMMER_PARALLEL.get();
+		int capacity = SteamHammerConfig.STEAM_CAPACITY.get();
 
 		SlLang.isShiftDown(tooltip);
 
-		if (SlLang.isShiftDown()) {
-			tooltip.add(Component.empty());
-
-			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY).getString(),
-					FontHelper.Palette.STANDARD_CREATE
-			));
-
-			tooltip.add(Component.empty());
-
-			SlLang.translate(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION)
-					.style(ChatFormatting.GRAY)
-					.addTo(tooltip);
-
-			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR1, steamCost).getString(),
-					FontHelper.Palette.STANDARD_CREATE.primary(),
-					FontHelper.Palette.STANDARD_CREATE.highlight(),
-					1
-			));
-
-			tooltip.addAll(TooltipHelper.cutStringTextComponent(
-					SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2, steamCost).getString(),
-					FontHelper.Palette.STANDARD_CREATE.primary(),
-					FontHelper.Palette.STANDARD_CREATE.highlight(),
-					1
-			));
+		if (!SlLang.isShiftDown()) {
+			return;
 		}
+
+		tooltip.add(Component.empty());
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_PARALLEL, parallel).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_CAPACITY, capacity).getString(),
+				FontHelper.Palette.STANDARD_CREATE
+		));
+
+		tooltip.add(Component.empty());
+
+		SlLang.translate(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION)
+				.style(ChatFormatting.GRAY)
+				.addTo(tooltip);
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(
+				SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONSUMPTION, steamCost).getString(),
+				FontHelper.Palette.STANDARD_CREATE.primary(),
+				FontHelper.Palette.STANDARD_CREATE.highlight(),
+				1
+		));
 	}
 }

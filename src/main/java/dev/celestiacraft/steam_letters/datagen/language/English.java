@@ -82,19 +82,23 @@ public class English {
 	private static void addSteamHammerLang(RegistrateLangProvider provider) {
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY),
-				"Processes _whole stacks_ in a single working cycle, covering _Pressing_, _Compacting_ and _Automated Packing_ recipes"
+				"Handles _Pressing_, _Compacting_ and _Automated Packing_ recipes"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_PARALLEL),
+				"Processes up to _%s_ recipes in parallel"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CAPACITY),
+				"Holds _%s mB_ of steam internally"
 		);
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION),
 				"When working:"
 		);
 		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR1),
-				"Only functions when _%s mB_ of steam is in the device"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_BEHAVIOUR2),
-				"Consumes _%s mB_ of steam per operation"
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONSUMPTION),
+				"Consumes _%s mB_ of steam per operation to function"
 		);
 	}
 

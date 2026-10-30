@@ -18,8 +18,12 @@ public class SlLang {
 	}
 
 	public static void isShiftDown(@NotNull List<Component> tooltip) {
+		if (Screen.hasShiftDown()) {
+			return;
+		}
+
 		MutableComponent shift = Component.literal("Shift")
-				.withStyle(Screen.hasShiftDown() ? ChatFormatting.WHITE : ChatFormatting.GRAY);
+				.withStyle(ChatFormatting.GRAY);
 
 		CreateLang.translate("tooltip.holdForDescription", shift)
 				.style(ChatFormatting.DARK_GRAY)
