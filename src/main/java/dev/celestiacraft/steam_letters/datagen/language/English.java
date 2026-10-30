@@ -44,7 +44,7 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_ROTATION), "Requires rotational force");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_STRESS_IMPACT), "Kinetic Stress Impact: _%s_");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION),
-				"Consumes only _%s_ of the steam when running on superheated steam");
+				"Consumes only _%s_ of the steam when running on _superheated steam_");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CONDITION), "When working:");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_PRODUCTION),
 				"Produces _%s mB/t_ of steam at full efficiency");
