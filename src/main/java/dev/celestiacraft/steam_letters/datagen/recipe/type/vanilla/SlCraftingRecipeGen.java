@@ -77,7 +77,7 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 				.define('B', SlBlocks.BRONZE_CASING)
 				.define('M', SlItems.STEAM_MECHANISM)
 				.define('C', AllBlocks.MECHANICAL_PRESS)
-				.define('D', SlMaterials.BRONZE_BLOCK)
+				.define('D', SlItemTags.BRONZE_BLOCK)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
 				.save(consumer, save(SHAPED + "bronze/steam_hammer"));
 
