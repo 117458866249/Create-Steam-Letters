@@ -12,13 +12,21 @@ import net.createmod.ponder.foundation.PonderIndex;
 public class English {
 	public static void addTranslations(RegistrateLangProvider provider) {
 		addOtherLang(provider);
+		addCommonLang(provider);
 		addSteamHammerLang(provider);
+		addSteamMixerLang(provider);
+		addSteamSawLang(provider);
 		addSteamPumpLang(provider);
 		addSteamPipeLang(provider);
 		addBronzeBasinLang(provider);
 		addAdvancedSpoutLang(provider);
+		addAdvancedSpoutTooltipLang(provider);
 		addGoggleLang(provider);
+		addBronzeBoilerLang(provider);
+		addSolarBoilerLang(provider);
+		addBurnerLang(provider);
 		addSteamEngineLang(provider);
+		addSteamEngineTooltipLang(provider);
 		addJeiLang(provider);
 		addSteamContainerLang(provider);
 		addConfigLang(provider);
@@ -29,9 +37,97 @@ public class English {
 		access.provideLang(CreateLettersSteam.MODID, provider::add);
 	}
 
+	private static void addCommonLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_PARALLEL), "Processes up to _%s_ items per cycle");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CAPACITY), "Holds _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CONSUMPTION), "Consumes _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_ROTATION), "Requires rotational force");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_STRESS_IMPACT), "Kinetic Stress Impact: _%s_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION),
+				"Consumes only _%s_ of the steam when running on superheated steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CONDITION), "When working:");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_PRODUCTION),
+				"Produces _%s mB/t_ of steam at full efficiency");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_WATER_STEAM_CAPACITY),
+				"Holds _%s mB_ of water and _%s mB_ of steam");
+	}
+
+	private static void addSteamMixerLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_MIXER_SUMMARY), "Processes mixing recipes");
+	}
+
+	private static void addSteamSawLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_SUMMARY), "Processes cutting recipes");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_PROCESSING_TIME),
+				"Takes only _%s_ of the time a Mechanical Saw needs");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_CONSUMPTION),
+				"Consumes _%s mB_ of steam per output");
+	}
+
+	private static void addAdvancedSpoutTooltipLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_SUMMARY),
+				"Finishes a pouring cycle in _%s_ ticks");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_PARALLEL),
+				"Has _%s_ parallel slots (adjustable with a Wrench, 1–20)");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_CAPACITY),
+				"Holds _%s mB_ of fluid");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_NO_STEAM),
+				"Requires neither steam nor rotational force");
+	}
+
+	private static void addBronzeBoilerLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_SUMMARY), "Heats water into steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_NEEDS_BURNER),
+				"Requires a burner directly below");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_SUPERHEATED),
+				"Produces superheated steam at full heat");
+	}
+
+	private static void addSolarBoilerLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_SUMMARY),
+				"Turns water into steam with light");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_LIGHT),
+				"Sunlight _%s_, artificial light _%s_ (light level ≥ _%s_)");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_WEATHER),
+				"Rain _%s_, thunder _%s_");
+	}
+
+	private static void addBurnerLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLID_BURNER_SUMMARY),
+				"Provides heat to the boiler above");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_SUMMARY),
+				"Burns fluid fuel to heat the boiler above");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_MAX_HEAT), "Maximum heat _%s_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_CYCLE),
+				"Takes _%s_ s to heat up and _%s_ s to cool down");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_SUPERHEATED),
+				"Superheated fuel heats up ×_%s_ and can reach _%s_ of the maximum heat");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_TANK), "Holds _%s mB_ of fuel");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_FUEL_CYCLE),
+				"Burns one cycle per _1000 mB_ of fuel");
+	}
+
+	private static void addSteamEngineTooltipLang(RegistrateLangProvider provider) {
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUMMARY), "Turns steam into stress");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_OUTPUT), "Outputs _%s SU_ at _%s RPM_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_CONSUMPTION),
+				"Consumes _%s mB/t_ of steam at full load");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_CAPACITY), "Holds _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_HEATUP),
+				"Takes _%s_ s to warm up to full output");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_DIRECT_DRAW),
+				"Draws at _%s_ efficiency from an adjacent boiler");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER),
+				"Superheated steam:");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS),
+				"Steam use ×_%s_, stress output ×_%s_");
+	}
+
 	private static void addSteamContainerLang(RegistrateLangProvider provider) {
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SEALED_CONTAINER_EMPTY), "Holds up to _%s mB_ of steam");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SEALED_CONTAINER_FLUID), "%s: _%s_ / %s mB");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EMPTY), "Holds up to _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_FLUID), "%s: _%s_ / %s mB");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_ONLY_STEAM),
+				"Stores steam and superheated steam only");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT), "▸ Right-click a boiler, fluid tank or steam engine to extract steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_INSERT), "▸ Right-click a fluid tank or steam engine to inject steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE), "▸ Sneak-right-click to keep extracting");
@@ -56,6 +152,18 @@ public class English {
 
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BOILER_STEAM_OUTPUT_RATE), "Steam Output Rate");
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BOILER_WATER_STORED), "Water Stored");
+
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_STEAM), "Steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_HEAT), "Heat");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_EFFICIENCY), "Efficiency");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED), "Superheated");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED_YES), "Yes");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED_NO), "No");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_BOILER_NO_BURNER), "No burner below");
+
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_MACHINE_STEAM), "Steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_MACHINE_OPERATIONS), "Operations");
+		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_STEAM_MACHINE_PARALLEL), "Parallel");
 	}
 
 	private static void addSteamEngineLang(RegistrateLangProvider provider) {
@@ -84,22 +192,6 @@ public class English {
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY),
 				"Handles _Pressing_, _Compacting_ and _Automated Packing_ recipes"
 		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_PARALLEL),
-				"Processes up to _%s_ recipes in parallel"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CAPACITY),
-				"Holds _%s mB_ of steam internally"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONDITION),
-				"When working:"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_CONSUMPTION),
-				"Consumes _%s mB_ of steam per operation to function"
-		);
 	}
 
 	private static void addSteamPumpLang(RegistrateLangProvider provider) {
@@ -113,7 +205,11 @@ public class English {
 		);
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2),
-				"Works on its own once a steam pipe is attached"
+				"Works on its own once a steam pipe or tank is attached"
+		);
+		provider.add(
+				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR3),
+				"Shuts down entirely if any other fluid enters the suction network"
 		);
 	}
 
@@ -131,7 +227,7 @@ public class English {
 	private static void addBronzeBasinLang(RegistrateLangProvider provider) {
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_SUMMARY),
-				"Each fluid slot holds _16 times_ the fluid of a regular basin"
+				"Each fluid slot holds _%s mB_ of fluid, 4 slots in total"
 		);
 		provider.add(
 				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR1),

@@ -17,6 +17,12 @@ public class SlItemTags {
 			STEAM_BURNERS,
 			STEAM_PRODUCTION,
 			STEAM_CONTAINER,
+			STEAM_HAMMER,
+			STEAM_MIXER,
+			STEAM_SAW,
+			BRONZE_STEAM_PUMP,
+			BRONZE_BASIN,
+			ADVANCED_SPOUT,
 			SUPERHEATED_FUEL;
 
 	public static final TagKey<Item>
@@ -39,6 +45,12 @@ public class SlItemTags {
 		STEAM_BURNERS = addMod("steam_burners");
 		STEAM_PRODUCTION = addMod("steam_production");
 		STEAM_CONTAINER = addMod("steam_containers");
+		STEAM_HAMMER = addMod("steam_hammer");
+		STEAM_MIXER = addMod("steam_mixer");
+		STEAM_SAW = addMod("steam_saw");
+		BRONZE_STEAM_PUMP = addMod("bronze_steam_pump");
+		BRONZE_BASIN = addMod("bronze_basin");
+		ADVANCED_SPOUT = addMod("advanced_spout");
 		SUPERHEATED_FUEL = addMod("superheated_fuel");
 
 		ANDESITE_ALLOY_INGOT = addForge("ingots/andesite_alloy");

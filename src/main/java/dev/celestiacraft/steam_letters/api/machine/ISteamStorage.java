@@ -1,11 +1,19 @@
 package dev.celestiacraft.steam_letters.api.machine;
 
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.api.machine.capability.SteamFluidHandler;
+import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.config.common.SteamConfig;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import java.util.List;
 
 /**
  * 通用蒸汽机器接口: 储存, 填充, 抽取, 消耗.
@@ -209,5 +217,49 @@ public interface ISteamStorage {
 
 	default IFluidHandler steamFluidHandler() {
 		return new SteamFluidHandler(this);
+	}
+
+	/**
+	 * 蒸汽量跨过 250 mB 档位时同步给客户端, 供护目镜显示.
+	 */
+	default void notifySteamChanged(int previousAmount) {
+		if (!(this instanceof SmartBlockEntity blockEntity)) {
+			return;
+		}
+
+		Level level = blockEntity.getLevel();
+		if (level == null || level.isClientSide()) {
+			return;
+		}
+
+		if (previousAmount / 250 != getSteamStack().getAmount() / 250) {
+			blockEntity.sendData();
+		}
+	}
+
+	/**
+	 * 向护目镜追加蒸汽储量, 可加工次数与并行数.
+	 */
+	default void appendSteamGoggle(List<Component> tooltip) {
+		SlLang.translate(SlTranKeys.GOGGLE_STEAM_MACHINE_STEAM)
+				.style(ChatFormatting.GRAY)
+				.text(ChatFormatting.DARK_GRAY, ": ")
+				.add(Component.literal(getSteamStack().getAmount() + " / " + getSteamCapacity() + " mB")
+						.withStyle(ChatFormatting.AQUA))
+				.forGoggles(tooltip, 1);
+
+		SlLang.translate(SlTranKeys.GOGGLE_STEAM_MACHINE_OPERATIONS)
+				.style(ChatFormatting.GRAY)
+				.text(ChatFormatting.DARK_GRAY, ": ")
+				.add(Component.literal(String.valueOf(getSteamOperations()))
+						.withStyle(getSteamOperations() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY))
+				.forGoggles(tooltip, 1);
+
+		SlLang.translate(SlTranKeys.GOGGLE_STEAM_MACHINE_PARALLEL)
+				.style(ChatFormatting.GRAY)
+				.text(ChatFormatting.DARK_GRAY, ": ")
+				.add(Component.literal(String.valueOf(getParallelCount()))
+						.withStyle(ChatFormatting.AQUA))
+				.forGoggles(tooltip, 1);
 	}
 }

@@ -52,23 +52,6 @@ public class SlLang {
 		));
 	}
 
-	public static void isCtrlDown(@NotNull List<Component> tooltip) {
-		MutableComponent ctrl = Component.literal("Ctrl")
-				.withStyle(Screen.hasControlDown() ? ChatFormatting.WHITE : ChatFormatting.GRAY);
-
-		SlLang.translate("tooltip.holdForDescriptionCtrl", ctrl)
-				.style(ChatFormatting.DARK_GRAY)
-				.addTo(tooltip);
-	}
-
-	public static boolean isCtrlDown() {
-		return Screen.hasControlDown();
-	}
-
-	public static boolean isAltDown() {
-		return Screen.hasAltDown();
-	}
-
 	public static MutableComponent translateDirect(String langKey, Object... args) {
 		return Component.translatable(
 				SlTranKeys.langKey(langKey),

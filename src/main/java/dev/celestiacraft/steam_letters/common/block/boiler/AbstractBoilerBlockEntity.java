@@ -45,6 +45,12 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	private double pending;
 
 	/**
+	 * 上次同步给客户端的两个罐的存量, 用于按档位触发同步.
+	 */
+	private int syncedInput;
+	private int syncedOutput;
+
+	/**
 	 * 上一次 tick 是否在产过热蒸汽, 用来识别普通 / 过热产出的切换.
 	 */
 	private boolean producingSuperheated;
@@ -71,6 +77,22 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 			return;
 		}
 		tickProduction();
+		syncClientFluid();
+	}
+
+	/**
+	 * 两个罐的存量跨过 250 mB 档位时同步给客户端, 供锅炉护目镜显示.
+	 */
+	private void syncClientFluid() {
+		int input = inputTank.getFluidAmount();
+		int output = outputTank.getFluidAmount();
+		if (input / 250 == syncedInput / 250 && output / 250 == syncedOutput / 250) {
+			return;
+		}
+
+		syncedInput = input;
+		syncedOutput = output;
+		sendData();
 	}
 
 	private void tickProduction() {
@@ -193,7 +215,7 @@ public abstract class AbstractBoilerBlockEntity extends SmartBlockEntity {
 	/**
 	 * @return 正下方燃烧室的真实热量百分比, 过热状态下会超过 100
 	 */
-	private double getRawHeatPercent() {
+	protected double getRawHeatPercent() {
 		IHeatSource source = getHeatSource();
 		if (source == null) {
 			return 0.0D;

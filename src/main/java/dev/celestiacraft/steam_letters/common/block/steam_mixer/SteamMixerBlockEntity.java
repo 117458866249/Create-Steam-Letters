@@ -7,6 +7,7 @@ import dev.celestiacraft.steam_letters.config.common.SteamMixerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +20,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements ISteamBasinMachine {
@@ -30,14 +32,23 @@ public class SteamMixerBlockEntity extends MechanicalMixerBlockEntity implements
 	}
 
 	@Override
+	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+		appendSteamGoggle(tooltip);
+		return true;
+	}
+
+	@Override
 	public FluidStack getSteamStack() {
 		return steam;
 	}
 
 	@Override
 	public void setSteamStack(FluidStack stack) {
+		int previous = steam.getAmount();
 		steam = stack.isEmpty() ? FluidStack.EMPTY : stack.copy();
 		setChanged();
+		notifySteamChanged(previous);
 	}
 
 	@Override

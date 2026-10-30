@@ -63,6 +63,25 @@ public class ItemTagsGen {
 		provider.addTag(SlItemTags.STEAM_FLYWHEEL)
 				.add(SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem());
 
+		// 蒸汽加工机器
+		provider.addTag(SlItemTags.STEAM_HAMMER)
+				.add(SlBlocks.STEAM_HAMMER.asItem());
+
+		provider.addTag(SlItemTags.STEAM_MIXER)
+				.add(SlBlocks.STEAM_MIXER.asItem());
+
+		provider.addTag(SlItemTags.STEAM_SAW)
+				.add(SlBlocks.STEAM_SAW.asItem());
+
+		provider.addTag(SlItemTags.BRONZE_STEAM_PUMP)
+				.add(SlBlocks.BRONZE_STEAM_PUMP.asItem());
+
+		provider.addTag(SlItemTags.BRONZE_BASIN)
+				.add(SlBlocks.BRONZE_BASIN.asItem());
+
+		provider.addTag(SlItemTags.ADVANCED_SPOUT)
+				.add(SlBlocks.ADVANCED_SPOUT.asItem());
+
 		// 深板岩
 		provider.addTag(AllPaletteStoneTypes.DEEPSLATE.materialTag)
 				.add(Items.COBBLED_DEEPSLATE);
