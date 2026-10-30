@@ -18,8 +18,12 @@ public class SlLang {
 	}
 
 	public static void isShiftDown(@NotNull List<Component> tooltip) {
+		if (Screen.hasShiftDown()) {
+			return;
+		}
+
 		MutableComponent shift = Component.literal("Shift")
-				.withStyle(Screen.hasShiftDown() ? ChatFormatting.WHITE : ChatFormatting.GRAY);
+				.withStyle(ChatFormatting.GRAY);
 
 		CreateLang.translate("tooltip.holdForDescription", shift)
 				.style(ChatFormatting.DARK_GRAY)
@@ -46,23 +50,6 @@ public class SlLang {
 				SlTranKeys.langKey(langKey),
 				LangBuilder.resolveBuilders(args)
 		));
-	}
-
-	public static void isCtrlDown(@NotNull List<Component> tooltip) {
-		MutableComponent ctrl = Component.literal("Ctrl")
-				.withStyle(Screen.hasControlDown() ? ChatFormatting.WHITE : ChatFormatting.GRAY);
-
-		SlLang.translate("tooltip.holdForDescriptionCtrl", ctrl)
-				.style(ChatFormatting.DARK_GRAY)
-				.addTo(tooltip);
-	}
-
-	public static boolean isCtrlDown() {
-		return Screen.hasControlDown();
-	}
-
-	public static boolean isAltDown() {
-		return Screen.hasAltDown();
 	}
 
 	public static MutableComponent translateDirect(String langKey, Object... args) {

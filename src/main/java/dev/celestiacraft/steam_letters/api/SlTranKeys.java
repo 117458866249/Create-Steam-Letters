@@ -5,10 +5,45 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 public class SlTranKeys {
 	public static final String
 			BASIC_TAB,
+			TOOLTIP_COMMON_PARALLEL,
+			TOOLTIP_COMMON_CAPACITY,
+			TOOLTIP_COMMON_CONSUMPTION,
+			TOOLTIP_COMMON_ROTATION,
+			TOOLTIP_COMMON_STRESS_IMPACT,
+			TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION,
+			TOOLTIP_COMMON_CONDITION,
+			TOOLTIP_COMMON_PRODUCTION,
+			TOOLTIP_COMMON_WATER_STEAM_CAPACITY,
 			TOOLTIP_STEAM_HAMMER_SUMMARY,
-			TOOLTIP_STEAM_HAMMER_CONDITION,
-			TOOLTIP_STEAM_HAMMER_BEHAVIOUR1,
-			TOOLTIP_STEAM_HAMMER_BEHAVIOUR2,
+			TOOLTIP_STEAM_MIXER_SUMMARY,
+			TOOLTIP_STEAM_SAW_SUMMARY,
+			TOOLTIP_STEAM_SAW_PROCESSING_TIME,
+			TOOLTIP_STEAM_SAW_CONSUMPTION,
+			TOOLTIP_ADVANCED_SPOUT_SUMMARY,
+			TOOLTIP_ADVANCED_SPOUT_PARALLEL,
+			TOOLTIP_ADVANCED_SPOUT_CAPACITY,
+			TOOLTIP_ADVANCED_SPOUT_NO_STEAM,
+			TOOLTIP_BRONZE_BOILER_SUMMARY,
+			TOOLTIP_BRONZE_BOILER_NEEDS_BURNER,
+			TOOLTIP_BRONZE_BOILER_SUPERHEATED,
+			TOOLTIP_SOLAR_BOILER_SUMMARY,
+			TOOLTIP_SOLAR_BOILER_LIGHT,
+			TOOLTIP_SOLAR_BOILER_WEATHER,
+			TOOLTIP_SOLID_BURNER_SUMMARY,
+			TOOLTIP_FLUID_BURNER_SUMMARY,
+			TOOLTIP_BURNER_MAX_HEAT,
+			TOOLTIP_BURNER_CYCLE,
+			TOOLTIP_BURNER_SUPERHEATED,
+			TOOLTIP_FLUID_BURNER_TANK,
+			TOOLTIP_FLUID_BURNER_FUEL_CYCLE,
+			TOOLTIP_STEAM_ENGINE_SUMMARY,
+			TOOLTIP_STEAM_ENGINE_OUTPUT,
+			TOOLTIP_STEAM_ENGINE_CONSUMPTION,
+			TOOLTIP_STEAM_ENGINE_CAPACITY,
+			TOOLTIP_STEAM_ENGINE_HEATUP,
+			TOOLTIP_STEAM_ENGINE_DIRECT_DRAW,
+			TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER,
+			TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS,
 			GOGGLE_STEAM_BURNER,
 			GOGGLE_STEAM_BURNER_TEMPERATURE,
 			GOGGLE_STEAM_BURNER_FUEL_TIME,
@@ -32,19 +67,31 @@ public class SlTranKeys {
 			GOGGLE_STEAM_ENGINE_STEAM,
 			GOGGLE_BOILER_STEAM_OUTPUT_RATE,
 			GOGGLE_BOILER_WATER_STORED,
+			GOGGLE_STEAM_BOILER_STEAM,
+			GOGGLE_STEAM_BOILER_HEAT,
+			GOGGLE_STEAM_BOILER_EFFICIENCY,
+			GOGGLE_STEAM_BOILER_SUPERHEATED,
+			GOGGLE_STEAM_BOILER_SUPERHEATED_YES,
+			GOGGLE_STEAM_BOILER_SUPERHEATED_NO,
+			GOGGLE_STEAM_BOILER_NO_BURNER,
+			GOGGLE_STEAM_MACHINE_STEAM,
+			GOGGLE_STEAM_MACHINE_OPERATIONS,
+			GOGGLE_STEAM_MACHINE_PARALLEL,
 			GOGGLE_BRONZE_DEPOT_CONTENTS,
 			JEI_SOLID_FUEL,
 			JEI_FLUID_FUEL,
 			JEI_HEATED,
 			JEI_SUPERHEATED,
-			TOOLTIP_SEALED_CONTAINER_EMPTY,
-			TOOLTIP_SEALED_CONTAINER_FLUID,
+			TOOLTIP_STEAM_CONTAINER_EMPTY,
+			TOOLTIP_STEAM_CONTAINER_FLUID,
+			TOOLTIP_STEAM_CONTAINER_ONLY_STEAM,
 			TOOLTIP_STEAM_CONTAINER_EXTRACT,
 			TOOLTIP_STEAM_CONTAINER_INSERT,
 			TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE,
 			TOOLTIP_STEAM_PUMP_SUMMARY,
 			TOOLTIP_STEAM_PUMP_BEHAVIOUR1,
 			TOOLTIP_STEAM_PUMP_BEHAVIOUR2,
+			TOOLTIP_STEAM_PUMP_BEHAVIOUR3,
 			TOOLTIP_STEAM_PIPE_SUMMARY,
 			TOOLTIP_STEAM_PIPE_BEHAVIOUR,
 			TOOLTIP_BRONZE_BASIN_SUMMARY,
@@ -53,10 +100,52 @@ public class SlTranKeys {
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
+
+		TOOLTIP_COMMON_PARALLEL = "tooltip.common.parallel";
+		TOOLTIP_COMMON_CAPACITY = "tooltip.common.capacity";
+		TOOLTIP_COMMON_CONSUMPTION = "tooltip.common.consumption";
+		TOOLTIP_COMMON_ROTATION = "tooltip.common.rotation";
+		TOOLTIP_COMMON_STRESS_IMPACT = "tooltip.common.stress_impact";
+		TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION = "tooltip.common.superheated_consumption";
+		TOOLTIP_COMMON_CONDITION = "tooltip.common.condition";
+		TOOLTIP_COMMON_PRODUCTION = "tooltip.common.production";
+		TOOLTIP_COMMON_WATER_STEAM_CAPACITY = "tooltip.common.water_steam_capacity";
+
 		TOOLTIP_STEAM_HAMMER_SUMMARY = "tooltip.steam_hammer.summary";
-		TOOLTIP_STEAM_HAMMER_CONDITION = "tooltip.steam_hammer.condition1";
-		TOOLTIP_STEAM_HAMMER_BEHAVIOUR1 = "tooltip.steam_hammer.behaviour1";
-		TOOLTIP_STEAM_HAMMER_BEHAVIOUR2 = "tooltip.steam_hammer.behaviour2";
+		TOOLTIP_STEAM_MIXER_SUMMARY = "tooltip.steam_mixer.summary";
+		TOOLTIP_STEAM_SAW_SUMMARY = "tooltip.steam_saw.summary";
+		TOOLTIP_STEAM_SAW_PROCESSING_TIME = "tooltip.steam_saw.processing_time";
+		TOOLTIP_STEAM_SAW_CONSUMPTION = "tooltip.steam_saw.consumption";
+
+		TOOLTIP_ADVANCED_SPOUT_SUMMARY = "tooltip.advanced_spout.summary";
+		TOOLTIP_ADVANCED_SPOUT_PARALLEL = "tooltip.advanced_spout.parallel";
+		TOOLTIP_ADVANCED_SPOUT_CAPACITY = "tooltip.advanced_spout.capacity";
+		TOOLTIP_ADVANCED_SPOUT_NO_STEAM = "tooltip.advanced_spout.no_steam";
+
+		TOOLTIP_BRONZE_BOILER_SUMMARY = "tooltip.bronze_boiler.summary";
+		TOOLTIP_BRONZE_BOILER_NEEDS_BURNER = "tooltip.bronze_boiler.needs_burner";
+		TOOLTIP_BRONZE_BOILER_SUPERHEATED = "tooltip.bronze_boiler.superheated";
+
+		TOOLTIP_SOLAR_BOILER_SUMMARY = "tooltip.solar_boiler.summary";
+		TOOLTIP_SOLAR_BOILER_LIGHT = "tooltip.solar_boiler.light";
+		TOOLTIP_SOLAR_BOILER_WEATHER = "tooltip.solar_boiler.weather";
+
+		TOOLTIP_SOLID_BURNER_SUMMARY = "tooltip.solid_burner.summary";
+		TOOLTIP_FLUID_BURNER_SUMMARY = "tooltip.fluid_burner.summary";
+		TOOLTIP_BURNER_MAX_HEAT = "tooltip.burner.max_heat";
+		TOOLTIP_BURNER_CYCLE = "tooltip.burner.cycle";
+		TOOLTIP_BURNER_SUPERHEATED = "tooltip.burner.superheated";
+		TOOLTIP_FLUID_BURNER_TANK = "tooltip.fluid_burner.tank";
+		TOOLTIP_FLUID_BURNER_FUEL_CYCLE = "tooltip.fluid_burner.fuel_cycle";
+
+		TOOLTIP_STEAM_ENGINE_SUMMARY = "tooltip.steam_engine.summary";
+		TOOLTIP_STEAM_ENGINE_OUTPUT = "tooltip.steam_engine.output";
+		TOOLTIP_STEAM_ENGINE_CONSUMPTION = "tooltip.steam_engine.consumption";
+		TOOLTIP_STEAM_ENGINE_CAPACITY = "tooltip.steam_engine.capacity";
+		TOOLTIP_STEAM_ENGINE_HEATUP = "tooltip.steam_engine.heatup";
+		TOOLTIP_STEAM_ENGINE_DIRECT_DRAW = "tooltip.steam_engine.direct_draw";
+		TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER = "tooltip.steam_engine.superheated_header";
+		TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS = "tooltip.steam_engine.superheated_effects";
 
 		GOGGLE_STEAM_BURNER = "gui.goggles.steam_burner";
 		GOGGLE_STEAM_BURNER_TEMPERATURE = "gui.goggles.steam_burner.temperature";
@@ -85,6 +174,18 @@ public class SlTranKeys {
 		GOGGLE_BOILER_STEAM_OUTPUT_RATE = "gui.goggles.boiler.steam_output_rate";
 		GOGGLE_BOILER_WATER_STORED = "gui.goggles.boiler.water_stored";
 
+		GOGGLE_STEAM_BOILER_STEAM = "gui.goggles.steam_boiler.steam";
+		GOGGLE_STEAM_BOILER_HEAT = "gui.goggles.steam_boiler.heat";
+		GOGGLE_STEAM_BOILER_EFFICIENCY = "gui.goggles.steam_boiler.efficiency";
+		GOGGLE_STEAM_BOILER_SUPERHEATED = "gui.goggles.steam_boiler.superheated";
+		GOGGLE_STEAM_BOILER_SUPERHEATED_YES = "gui.goggles.steam_boiler.superheated.yes";
+		GOGGLE_STEAM_BOILER_SUPERHEATED_NO = "gui.goggles.steam_boiler.superheated.no";
+		GOGGLE_STEAM_BOILER_NO_BURNER = "gui.goggles.steam_boiler.no_burner";
+
+		GOGGLE_STEAM_MACHINE_STEAM = "gui.goggles.steam_machine.steam";
+		GOGGLE_STEAM_MACHINE_OPERATIONS = "gui.goggles.steam_machine.operations";
+		GOGGLE_STEAM_MACHINE_PARALLEL = "gui.goggles.steam_machine.parallel";
+
 		GOGGLE_BRONZE_DEPOT_CONTENTS = "gui.goggles.bronze_depot.contents";
 
 		JEI_SOLID_FUEL = "jei.solid_fuel";
@@ -92,8 +193,9 @@ public class SlTranKeys {
 		JEI_HEATED = "jei.heated";
 		JEI_SUPERHEATED = "jei.superheated";
 
-		TOOLTIP_SEALED_CONTAINER_EMPTY = "tooltip.sealed_steam_container.empty";
-		TOOLTIP_SEALED_CONTAINER_FLUID = "tooltip.sealed_steam_container.fluid";
+		TOOLTIP_STEAM_CONTAINER_EMPTY = "tooltip.steam_container.empty";
+		TOOLTIP_STEAM_CONTAINER_FLUID = "tooltip.steam_container.fluid";
+		TOOLTIP_STEAM_CONTAINER_ONLY_STEAM = "tooltip.steam_container.only_steam";
 		TOOLTIP_STEAM_CONTAINER_EXTRACT = "tooltip.steam_container.extract";
 		TOOLTIP_STEAM_CONTAINER_INSERT = "tooltip.steam_container.insert";
 		TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE = "tooltip.steam_container.extract_more";
@@ -101,6 +203,7 @@ public class SlTranKeys {
 		TOOLTIP_STEAM_PUMP_SUMMARY = "tooltip.steam_pump.summary";
 		TOOLTIP_STEAM_PUMP_BEHAVIOUR1 = "tooltip.steam_pump.behaviour1";
 		TOOLTIP_STEAM_PUMP_BEHAVIOUR2 = "tooltip.steam_pump.behaviour2";
+		TOOLTIP_STEAM_PUMP_BEHAVIOUR3 = "tooltip.steam_pump.behaviour3";
 		TOOLTIP_STEAM_PIPE_SUMMARY = "tooltip.steam_pipe.summary";
 		TOOLTIP_STEAM_PIPE_BEHAVIOUR = "tooltip.steam_pipe.behaviour";
 		TOOLTIP_BRONZE_BASIN_SUMMARY = "tooltip.bronze_basin.summary";

@@ -6,6 +6,7 @@ import dev.celestiacraft.steam_letters.config.common.SteamSawConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +17,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage {
 	private FluidStack steam = FluidStack.EMPTY;
@@ -28,14 +31,23 @@ public class SteamSawBlockEntity extends SawBlockEntity implements ISteamStorage
 	}
 
 	@Override
+	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+		appendSteamGoggle(tooltip);
+		return true;
+	}
+
+	@Override
 	public FluidStack getSteamStack() {
 		return steam;
 	}
 
 	@Override
 	public void setSteamStack(FluidStack stack) {
+		int previous = steam.getAmount();
 		steam = stack.isEmpty() ? FluidStack.EMPTY : stack.copy();
 		setChanged();
+		notifySteamChanged(previous);
 	}
 
 	@Override

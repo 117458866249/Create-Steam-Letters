@@ -21,7 +21,7 @@ public class SteamHammerConfig extends ConfigModule {
 				.defineInRange("steam_hammer_parallel", 64, 1, 64);
 
 		STEAM_CONSUMPTION = builder.translation(key("steam_consumption"))
-				.comment("Steam consumed per finished recipe (mB).")
+				.comment("Steam consumed per working cycle (mB).")
 				.defineInRange("steam_consumption", 1000, 0, 1000000);
 
 		STEAM_CAPACITY = builder.translation(key("steam_capacity"))

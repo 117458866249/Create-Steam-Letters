@@ -9,6 +9,7 @@ import dev.celestiacraft.steam_letters.config.common.SteamHammerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -35,14 +36,23 @@ public class SteamHammerBlockEntity extends MechanicalPressBlockEntity implement
 	}
 
 	@Override
+	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+		appendSteamGoggle(tooltip);
+		return true;
+	}
+
+	@Override
 	public FluidStack getSteamStack() {
 		return steam;
 	}
 
 	@Override
 	public void setSteamStack(FluidStack stack) {
+		int previous = steam.getAmount();
 		steam = stack.isEmpty() ? FluidStack.EMPTY : stack.copy();
 		setChanged();
+		notifySteamChanged(previous);
 	}
 
 	@Override
