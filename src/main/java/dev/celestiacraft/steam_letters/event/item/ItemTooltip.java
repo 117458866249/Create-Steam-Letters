@@ -316,11 +316,11 @@ public class ItemTooltip {
 		Component status = emptied || stored.isEmpty()
 				? SlLang.translateDirect(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EMPTY, SteamContainerItem.CAPACITY)
 				: SlLang.translateDirect(
-						SlTranKeys.TOOLTIP_STEAM_CONTAINER_FLUID,
-						stored.getDisplayName(),
-						stored.getAmount(),
-						SteamContainerItem.CAPACITY
-				);
+				SlTranKeys.TOOLTIP_STEAM_CONTAINER_FLUID,
+				stored.getDisplayName(),
+				stored.getAmount(),
+				SteamContainerItem.CAPACITY
+		);
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(
 				status.getString(),

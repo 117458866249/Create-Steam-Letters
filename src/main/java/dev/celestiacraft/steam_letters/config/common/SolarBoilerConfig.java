@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * 太阳能锅炉的环境效率配置.
  * <p>
  * 天气系数只乘在已经选中的光路上 (太阳光或人造光), 不与光照基础效率混为一谈.
- * 例: 人造光 50% × 雨天 50% = 25%.
+ * 例: 人造光 50% x 雨天 50% = 25%.
  */
 public class SolarBoilerConfig extends ConfigModule {
 	public static ForgeConfigSpec.DoubleValue

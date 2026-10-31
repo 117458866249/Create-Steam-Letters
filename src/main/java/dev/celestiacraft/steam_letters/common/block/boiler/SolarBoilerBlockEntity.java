@@ -243,7 +243,7 @@ public class SolarBoilerBlockEntity extends AbstractBoilerBlockEntity implements
 				.style(lightSourceColor(source))
 				.forGoggles(tooltip, 1);
 
-		// 实际产汽速率 = 满速产出 × 当前环境效率; 占满速比例与效率是同一个数, 只是换了说法更直观.
+		// 实际产汽速率 = 满速产出 x 当前环境效率; 占满速比例与效率是同一个数, 只是换了说法更直观.
 		double production = fullOutput * efficiency;
 
 		SlLang.translate(SlTranKeys.GOGGLE_SOLAR_BOILER_PRODUCTION)

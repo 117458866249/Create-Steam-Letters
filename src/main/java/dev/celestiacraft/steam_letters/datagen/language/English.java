@@ -101,7 +101,7 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_CYCLE),
 				"Takes _%s_ s to heat up and _%s_ s to cool down");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_SUPERHEATED),
-				"Superheated fuel heats up ×_%s_ and can reach _%s_ of the maximum heat");
+				"Superheated fuel heats up x_%s_ and can reach _%s_ of the maximum heat");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_TANK), "Holds _%s mB_ of fuel");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_FUEL_CYCLE),
 				"Burns one cycle per _1000 mB_ of fuel");
@@ -110,24 +110,18 @@ public class English {
 	private static void addSteamEngineTooltipLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUMMARY), "Turns steam into stress");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_OUTPUT), "Outputs _%s SU_ at _%s RPM_");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_CONSUMPTION),
-				"Consumes _%s mB/t_ of steam at full load");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_CONSUMPTION), "Consumes _%s mB/t_ of steam at full load");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_CAPACITY), "Holds _%s mB_ of steam");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_HEATUP),
-				"Takes _%s_ s to warm up to full output");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_DIRECT_DRAW),
-				"Draws at _%s_ efficiency from an adjacent boiler");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER),
-				"Superheated steam:");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS),
-				"Steam use ×_%s_, stress output ×_%s_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_HEATUP), "Takes _%s_ s to warm up to full output");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_DIRECT_DRAW), "Draws at _%s_ efficiency from an adjacent boiler");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER), "Superheated steam:");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS), "Steam use x_%s_, stress output x_%s_");
 	}
 
 	private static void addSteamContainerLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EMPTY), "Holds up to _%s mB_ of steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_FLUID), "%s: _%s_ / %s mB");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_ONLY_STEAM),
-				"Stores steam and superheated steam only");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_ONLY_STEAM), "Stores steam and superheated steam only");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT), "▸ Right-click a boiler, fluid tank or steam engine to extract steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_INSERT), "▸ Right-click a fluid tank or steam engine to inject steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_CONTAINER_EXTRACT_MORE), "▸ Sneak-right-click to keep extracting");
