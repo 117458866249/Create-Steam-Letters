@@ -44,7 +44,7 @@ public class BurnerSchema {
 
 	public static class BurnerRecipeJS extends RecipeJS {
 		public RecipeJS superheated() {
-			return superheated(Boolean.FALSE);
+			return superheated(Boolean.TRUE);
 		}
 
 		public RecipeJS superheated(@Nullable Boolean superheated) {
