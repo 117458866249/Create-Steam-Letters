@@ -31,6 +31,7 @@ public class ParticleBase extends TextureSheetParticle {
 		zd *= 1.25;
 	}
 
+	@Override
 	public @NotNull ParticleRenderType getRenderType() {
 		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
@@ -45,6 +46,7 @@ public class ParticleBase extends TextureSheetParticle {
 		super.render(consumer, camera, pt);
 	}
 
+	@Override
 	public void tick() {
 		xo = x;
 		yo = y;

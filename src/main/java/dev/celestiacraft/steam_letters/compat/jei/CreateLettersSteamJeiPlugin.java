@@ -176,8 +176,11 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		addCatalyst(SlApis.loadCreate("block_cutting"), saw);
 
 		if (ModList.get().isLoaded(CreateDieselGenerators.ID)) {
+			addCatalyst(SlApis.loadCDG("compression_molding"), basin);
 			addCatalyst(SlApis.loadCDG("compression_molding"), hammer);
 			addCatalyst(SlApis.loadCDG("casting"), basin);
+			addCatalyst(SlApis.loadCDG("casting"), spout);
+			addCatalyst(SlApis.loadCDG("basin_fermenting"), basin);
 		}
 	}
 
