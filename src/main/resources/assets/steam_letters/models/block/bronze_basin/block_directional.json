@@ -5,7 +5,8 @@
 	"render_type": "minecraft:cutout_mipped",
 	"textures": {
 		"1": "steam_letters:block/bronze_basin/basin",
-		"2": "steam_letters:block/bronze_basin/basin_canal"
+		"2": "steam_letters:block/bronze_basin/basin_canal",
+		"particle": "steam_letters:block/bronze_basin/basin_canal"
 	},
 	"elements": [
 		{
