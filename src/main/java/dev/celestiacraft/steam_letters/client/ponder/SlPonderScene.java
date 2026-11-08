@@ -2,6 +2,11 @@ package dev.celestiacraft.steam_letters.client.ponder;
 
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import dev.celestiacraft.steam_letters.client.ponder.scene.*;
+import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlock;
+import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
+import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlock;
+import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
+import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
 import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.world.item.Item;
@@ -59,34 +64,20 @@ public class SlPonderScene {
 	}
 
 	private static void steamEngine(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(
-						SlBlocks.BRONZE_BOILER.asItem(),
-						SlBlocks.BRONZE_SOLID_BURNER.asItem(),
-						SlBlocks.BRONZE_FLUID_BURNER.asItem(),
-						SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem(),
-						SlBlocks.BRONZE_STEAM_ENGINE.asItem()
-				)
-				.addStoryBoard(
-						"steam_engine",
-						SteamEngineScene::usage,
-						AllCreatePonderTags.FLUIDS,
-						AllCreatePonderTags.KINETIC_SOURCES,
-						SlPonderTags.SL
-				);
+		SlPonderPlugin.addPonderForBlocks(helper, (block) -> {
+			return (block instanceof SteamBoilerBlock)
+					|| (block instanceof AbstractBurnerBlock)
+					|| (block instanceof SteamFlywheelBlock)
+					|| (block instanceof SteamEngineBlock);
+		}, "steam_engine", SteamEngineScene::usage, AllCreatePonderTags.FLUIDS, AllCreatePonderTags.KINETIC_SOURCES, SlPonderTags.SL);
 	}
 
 	private static void solarBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(
-						SlBlocks.BRONZE_SOLAR_BOILER.asItem(),
-						SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem(),
-						SlBlocks.BRONZE_STEAM_ENGINE.asItem()
-				)
-				.addStoryBoard(
-						"solar_boiler",
-						SolarBoilerScene::usage,
-						AllCreatePonderTags.FLUIDS,
-						SlPonderTags.SL
-				);
+		SlPonderPlugin.addPonderForBlocks(helper, (block) -> {
+			return (block instanceof SolarBoilerBlock)
+					|| (block instanceof SteamFlywheelBlock)
+					|| (block instanceof SteamEngineBlock);
+		}, "solar_boiler", SolarBoilerScene::usage, AllCreatePonderTags.FLUIDS, SlPonderTags.SL);
 	}
 
 	private static void bronzeSteamPump(@NotNull PonderSceneRegistrationHelper<Item> helper) {

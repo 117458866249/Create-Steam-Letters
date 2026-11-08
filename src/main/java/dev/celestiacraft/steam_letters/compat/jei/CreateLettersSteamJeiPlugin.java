@@ -157,10 +157,10 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		ItemStack basin = SlBlocks.BRONZE_BASIN.asStack();
 		ItemStack saw = SlBlocks.STEAM_SAW.asStack();
 
-		addCatalystsForBlock(RecipeTypes.FUELING, SolidBurnerBlock.class);
+		addCatalystsForBlocks(RecipeTypes.FUELING, SolidBurnerBlock.class);
 
-		addCatalystsForBlock(JeiRecipeType.SOLID_FUEL, SolidBurnerBlock.class);
-		addCatalystsForBlock(JeiRecipeType.FLUID_FUEL, FluidBurnerBlock.class);
+		addCatalystsForBlocks(JeiRecipeType.SOLID_FUEL, SolidBurnerBlock.class);
+		addCatalystsForBlocks(JeiRecipeType.FLUID_FUEL, FluidBurnerBlock.class);
 
 		addCatalyst(SlApis.loadCreate("pressing"), hammer);
 		addCatalyst(SlApis.loadCreate("packing"), hammer);
@@ -184,7 +184,7 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		}
 	}
 
-	private void addCatalystsForBlock(RecipeType<?> type, Class<? extends Block> blockClass) {
+	private void addCatalystsForBlocks(RecipeType<?> type, Class<? extends Block> blockClass) {
 		for (Block block : ForgeRegistries.BLOCKS.getValues()) {
 			if (blockClass.isInstance(block)) {
 				registration.addRecipeCatalyst(block, type);
@@ -192,7 +192,7 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 		}
 	}
 
-	private void addCatalystsForItem(RecipeType<?> type, Class<? extends Item> itemClass) {
+	private void addCatalystsForItems(RecipeType<?> type, Class<? extends Item> itemClass) {
 		for (Item block : ForgeRegistries.ITEMS.getValues()) {
 			if (itemClass.isInstance(block)) {
 				registration.addRecipeCatalyst(block, type);

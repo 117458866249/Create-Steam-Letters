@@ -43,13 +43,10 @@ public class English {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CONSUMPTION), "Consumes _%s mB_ of steam");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_ROTATION), "Requires rotational force");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_STRESS_IMPACT), "Kinetic Stress Impact: _%s_");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION),
-				"Consumes only _%s_ of the steam when running on _superheated steam_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_SUPERHEATED_CONSUMPTION), "Consumes only _%s_ of the steam when running on _superheated steam_");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_CONDITION), "When working:");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_PRODUCTION),
-				"Produces _%s mB/t_ of steam at full efficiency");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_WATER_STEAM_CAPACITY),
-				"Holds _%s mB_ of water and _%s mB_ of steam");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_PRODUCTION), "Produces _%s mB/t_ of steam at full efficiency");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_COMMON_WATER_STEAM_CAPACITY), "Holds _%s mB_ of water and _%s mB_ of steam");
 	}
 
 	private static void addSteamMixerLang(RegistrateLangProvider provider) {
@@ -58,53 +55,37 @@ public class English {
 
 	private static void addSteamSawLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_SUMMARY), "Processes cutting recipes");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_PROCESSING_TIME),
-				"Takes only _%s_ of the time a Mechanical Saw needs");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_CONSUMPTION),
-				"Consumes _%s mB_ of steam per output");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_PROCESSING_TIME), "Takes only _%s_ of the time a Mechanical Saw needs");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_SAW_CONSUMPTION), "Consumes _%s mB_ of steam per output");
 	}
 
 	private static void addAdvancedSpoutTooltipLang(RegistrateLangProvider provider) {
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_SUMMARY),
-				"Finishes a pouring cycle in _%s_ ticks");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_PARALLEL),
-				"Has _%s_ parallel slots (adjustable with a Wrench, 1–20)");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_CAPACITY),
-				"Holds _%s mB_ of fluid");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_NO_STEAM),
-				"Requires neither steam nor rotational force");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_SUMMARY), "Finishes a pouring cycle in _%s_ ticks");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_PARALLEL), "Has _%s_ parallel slots (adjustable with a Wrench, 1–20)");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_CAPACITY), "Holds _%s mB_ of fluid");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_ADVANCED_SPOUT_NO_STEAM), "Requires neither steam nor rotational force");
 	}
 
 	private static void addBronzeBoilerLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_SUMMARY), "Heats water into steam");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_NEEDS_BURNER),
-				"Requires a burner directly below");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_SUPERHEATED),
-				"Produces superheated steam at full heat");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_NEEDS_BURNER), "Requires a burner directly below");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BOILER_SUPERHEATED), "Produces superheated steam at full heat");
 	}
 
 	private static void addSolarBoilerLang(RegistrateLangProvider provider) {
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_SUMMARY),
-				"Turns water into steam with light");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_LIGHT),
-				"Sunlight _%s_, artificial light _%s_ (light level ≥ _%s_)");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_WEATHER),
-				"Rain _%s_, thunder _%s_");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_SUMMARY), "Turns water into steam with light");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_LIGHT), "Sunlight _%s_, artificial light _%s_ (light level ≥ _%s_)");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLAR_BOILER_WEATHER), "Rain _%s_, thunder _%s_");
 	}
 
 	private static void addBurnerLang(RegistrateLangProvider provider) {
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLID_BURNER_SUMMARY),
-				"Provides heat to the boiler above");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_SUMMARY),
-				"Burns fluid fuel to heat the boiler above");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_SOLID_BURNER_SUMMARY), "Provides heat to the boiler above");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_SUMMARY), "Burns fluid fuel to heat the boiler above");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_MAX_HEAT), "Maximum heat _%s_");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_CYCLE),
-				"Takes _%s_ s to heat up and _%s_ s to cool down");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_SUPERHEATED),
-				"Superheated fuel heats up x_%s_ and can reach _%s_ of the maximum heat");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_CYCLE), "Takes _%s_ s to heat up and _%s_ s to cool down");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BURNER_SUPERHEATED), "Superheated fuel heats up x_%s_ and can reach _%s_ of the maximum heat");
 		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_TANK), "Holds _%s mB_ of fuel");
-		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_FUEL_CYCLE),
-				"Burns one cycle per _1000 mB_ of fuel");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_FLUID_BURNER_FUEL_CYCLE), "Burns one cycle per _1000 mB_ of fuel");
 	}
 
 	private static void addSteamEngineTooltipLang(RegistrateLangProvider provider) {
@@ -179,58 +160,29 @@ public class English {
 
 	private static void addOtherLang(RegistrateLangProvider provider) {
 		provider.add(SlTranKeys.BASIC_TAB, CreateLettersSteam.NAME);
+		provider.add(SlTranKeys.THERMAL_PACK_DESCRIPTION, "§6 Thermal Hue Resource Pack");
 	}
 
 	private static void addSteamHammerLang(RegistrateLangProvider provider) {
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY),
-				"Handles _Pressing_, _Compacting_ and _Automated Packing_ recipes"
-		);
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_HAMMER_SUMMARY), "Handles _Pressing_, _Compacting_ and _Automated Packing_ recipes");
 	}
 
 	private static void addSteamPumpLang(RegistrateLangProvider provider) {
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_SUMMARY),
-				"Only ever _moves steam_, and only when it is the _sole_ medium in the pipe"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR1),
-				"Requires _no rotational force_ and consumes _no stress"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2),
-				"Works on its own once a steam pipe or tank is attached"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR3),
-				"Shuts down entirely if any other fluid enters the suction network"
-		);
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_SUMMARY), "Only ever _moves steam_, and only when it is the _sole_ medium in the pipe");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR1), "Requires _no rotational force_ and consumes _no stress");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR2), "Works on its own once a steam pipe or tank is attached");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PUMP_BEHAVIOUR3), "Shuts down entirely if any other fluid enters the suction network");
 	}
 
 	private static void addSteamPipeLang(RegistrateLangProvider provider) {
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_SUMMARY),
-				"Only _steam_ may flow through this pipe"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_BEHAVIOUR),
-				"Use it together with the _Bronze Steam Pump_"
-		);
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_SUMMARY), "Only _steam_ may flow through this pipe");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_STEAM_PIPE_BEHAVIOUR), "Use it together with the _Bronze Steam Pump_");
 	}
 
 	private static void addBronzeBasinLang(RegistrateLangProvider provider) {
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_SUMMARY),
-				"Each fluid slot holds _%s mB_ of fluid, 4 slots in total"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR1),
-				"Accepts _multiple fluids_, used by mixing and compacting recipes"
-		);
-		provider.add(
-				SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR2),
-				"Processes more recipes before it needs to be refilled"
-		);
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_SUMMARY), "Each fluid slot holds _%s mB_ of fluid, 4 slots in total");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR1), "Accepts _multiple fluids_, used by mixing and compacting recipes");
+		provider.add(SlTranKeys.langKey(SlTranKeys.TOOLTIP_BRONZE_BASIN_BEHAVIOUR2), "Processes more recipes before it needs to be refilled");
 
 		provider.add(SlTranKeys.langKey(SlTranKeys.GOGGLE_BRONZE_DEPOT_CONTENTS), "Bronze Depot Contents");
 	}
@@ -328,164 +280,91 @@ public class English {
 	 * 因此这里的内容必须与配置文件中的英文注释逐条对应.
 	 */
 	private static void addConfigCommentLang(RegistrateLangProvider provider) {
-		comment(provider, ConfigModule.translationKey("general"),
-				"All settings below only take effect after restarting the server or client.");
+		comment(provider, ConfigModule.translationKey("general"), "All settings below only take effect after restarting the server or client.");
 
-		comment(provider, ConfigModule.translationKey("steam", "superheated_steam_consumption_multiplier"),
-				"Global steam consumption multiplier for machines running on superheated steam.\n"
-						+ "0.25 means such a machine only needs a quarter of the normal steam.");
-		comment(provider, ConfigModule.translationKey("steam", "output_steam_fluid"),
-				"Fluid id produced by steam boilers and solar boilers.\n"
-						+ "Existing tank contents are never converted when this changes.");
-		comment(provider, ConfigModule.translationKey("steam", "output_superheated_steam_fluid"),
-				"""
-						Fluid id produced by boilers while they run superheated.
-						Must not point to the same fluid as output_steam_fluid, otherwise the config fails to load.
-						Existing tank contents are never converted when this changes.""");
-		comment(provider, ConfigModule.translationKey("steam", "do_overheated_steam_replace"),
-				"When false the normal steam left in the output tank is destroyed; when true it is converted "
-						+ "into the same amount of superheated steam in place.\n"
-						+ "Neither option consumes additional water.");
+		comment(provider, ConfigModule.translationKey("steam", "superheated_steam_consumption_multiplier"), "Global steam consumption multiplier for machines running on superheated steam.\n" + "0.25 means such a machine only needs a quarter of the normal steam.");
+		comment(provider, ConfigModule.translationKey("steam", "output_steam_fluid"), "Fluid id produced by steam boilers and solar boilers.\n" + "Existing tank contents are never converted when this changes.");
+		comment(provider, ConfigModule.translationKey("steam", "output_superheated_steam_fluid"), """
+				Fluid id produced by boilers while they run superheated.
+				Must not point to the same fluid as output_steam_fluid, otherwise the config fails to load.
+				Existing tank contents are never converted when this changes.""");
+		comment(provider, ConfigModule.translationKey("steam", "do_overheated_steam_replace"), "When false the normal steam left in the output tank is destroyed; when true it is converted " + "into the same amount of superheated steam in place.\n" + "Neither option consumes additional water.");
 
-		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_hammer_parallel"),
-				"Maximum number of recipes a single steam hammer processes at once.");
-		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_consumption"),
-				"Steam consumed per finished recipe (mB).");
-		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_capacity"),
-				"Steam buffer capacity of a steam hammer (mB).");
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_hammer_parallel"), "Maximum number of recipes a single steam hammer processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_consumption"), "Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_hammer", "steam_capacity"), "Steam buffer capacity of a steam hammer (mB).");
 
-		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_mixer_parallel"),
-				"Maximum number of recipes a single steam mixer processes at once.");
-		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_consumption"),
-				"Steam consumed per finished recipe (mB).");
-		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_capacity"),
-				"Steam buffer capacity of a steam mixer (mB).");
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_mixer_parallel"), "Maximum number of recipes a single steam mixer processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_consumption"), "Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_mixer", "steam_capacity"), "Steam buffer capacity of a steam mixer (mB).");
 
-		comment(provider, ConfigModule.translationKey("steam_saw", "steam_saw_parallel"),
-				"Maximum number of recipes a single steam saw processes at once.");
-		comment(provider, ConfigModule.translationKey("steam_saw", "steam_consumption"),
-				"Steam consumed per finished recipe (mB).");
-		comment(provider, ConfigModule.translationKey("steam_saw", "steam_capacity"),
-				"Steam buffer capacity of a steam saw (mB).");
-		comment(provider, ConfigModule.translationKey("steam_saw", "processing_time_multiplier"),
-				"Working time multiplier of the steam saw (0.25 = 4 times faster than a mechanical saw).");
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_saw_parallel"), "Maximum number of recipes a single steam saw processes at once.");
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_consumption"), "Steam consumed per finished recipe (mB).");
+		comment(provider, ConfigModule.translationKey("steam_saw", "steam_capacity"), "Steam buffer capacity of a steam saw (mB).");
+		comment(provider, ConfigModule.translationKey("steam_saw", "processing_time_multiplier"), "Working time multiplier of the steam saw (0.25 = 4 times faster than a mechanical saw).");
 
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_1"),
-				"Lowest heat percentage at which the boiler starts producing steam.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_2"),
-				"Heat percentage at which the boiler reaches efficiency tier 2.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_3"),
-				"Heat percentage at which the boiler reaches efficiency tier 3.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_4"),
-				"Heat percentage required for the boiler to run at full efficiency.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_1"),
-				"Steam output multiplier of efficiency tier 1.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_2"),
-				"Steam output multiplier of efficiency tier 2.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_3"),
-				"Steam output multiplier of efficiency tier 3.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_4"),
-				"Steam output multiplier of efficiency tier 4, i.e. the maximum boiler output.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_1"),
-				"Heat percentage at which superheated production reaches tier 2.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_2"),
-				"Heat percentage at which superheated production reaches tier 3.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_3"),
-				"Heat percentage at which superheated production reaches its maximum rate.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_1"),
-				"Superheated steam output multiplier while heat stays right above the maximum heat.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_2"),
-				"Superheated steam output multiplier of tier 2.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_3"),
-				"Superheated steam output multiplier of tier 3.");
-		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_4"),
-				"Superheated steam output multiplier of tier 4, i.e. the maximum superheated output.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_1"), "Lowest heat percentage at which the boiler starts producing steam.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_2"), "Heat percentage at which the boiler reaches efficiency tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_3"), "Heat percentage at which the boiler reaches efficiency tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_threshold_4"), "Heat percentage required for the boiler to run at full efficiency.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_1"), "Steam output multiplier of efficiency tier 1.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_2"), "Steam output multiplier of efficiency tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_3"), "Steam output multiplier of efficiency tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "efficiency_4"), "Steam output multiplier of efficiency tier 4, i.e. the maximum boiler output.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_1"), "Heat percentage at which superheated production reaches tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_2"), "Heat percentage at which superheated production reaches tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_threshold_3"), "Heat percentage at which superheated production reaches its maximum rate.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_1"), "Superheated steam output multiplier while heat stays right above the maximum heat.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_2"), "Superheated steam output multiplier of tier 2.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_3"), "Superheated steam output multiplier of tier 3.");
+		comment(provider, ConfigModule.translationKey("steam_boiler", "superheated_production_4"), "Superheated steam output multiplier of tier 4, i.e. the maximum superheated output.");
 
-		comment(provider, ConfigModule.translationKey("solar_boiler", "render_fluid"),
-				"Whether or not fluids inside the solar boiler will be rendered.\n"
-						+ "Hiding the fluid does not affect steam production.");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "sunlight_efficiency"),
-				"Efficiency multiplier when the boiler has direct sky light (and no weather penalty).");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_efficiency"),
-				"Efficiency multiplier when the boiler is lit by block light instead of sky light.");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_threshold"),
-				"Minimum block light level for the artificial light path to be usable.");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "require_daylight"),
-				"Whether the sky light path additionally requires daytime.\n"
-						+ "Vanilla sky light level stays at 15 at night, so without this the boiler would "
-						+ "produce at full speed in complete darkness.");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "rain_efficiency"),
-				"Weather multiplier while it is raining at the boiler.");
-		comment(provider, ConfigModule.translationKey("solar_boiler", "thunder_efficiency"),
-				"Weather multiplier while a thunder storm is raging at the boiler "
-						+ "(includes snow during thunder).");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "render_fluid"), "Whether or not fluids inside the solar boiler will be rendered.\n" + "Hiding the fluid does not affect steam production.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "sunlight_efficiency"), "Efficiency multiplier when the boiler has direct sky light (and no weather penalty).");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_efficiency"), "Efficiency multiplier when the boiler is lit by block light instead of sky light.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "artificial_light_threshold"), "Minimum block light level for the artificial light path to be usable.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "require_daylight"), "Whether the sky light path additionally requires daytime.\n" + "Vanilla sky light level stays at 15 at night, so without this the boiler would " + "produce at full speed in complete darkness.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "rain_efficiency"), "Weather multiplier while it is raining at the boiler.");
+		comment(provider, ConfigModule.translationKey("solar_boiler", "thunder_efficiency"), "Weather multiplier while a thunder storm is raging at the boiler " + "(includes snow during thunder).");
 
-		comment(provider, ConfigModule.translationKey("steam_burner", "heatup_seconds"),
-				"Total time required for the burner to reach its maximum heat while fuel is burning.");
-		comment(provider, ConfigModule.translationKey("steam_burner", "cooldown_seconds"),
-				"Total time required for the burner to lose all of its heat while no fuel is burning.");
-		comment(provider, ConfigModule.translationKey("steam_burner", "superheated_heatup_multiplier"),
-				"Divisor applied to the heat-up time while burning superheated fuel and below the maximum heat.\n"
-						+ "4.0 means the burner heats up four times as fast.");
+		comment(provider, ConfigModule.translationKey("steam_burner", "heatup_seconds"), "Total time required for the burner to reach its maximum heat while fuel is burning.");
+		comment(provider, ConfigModule.translationKey("steam_burner", "cooldown_seconds"), "Total time required for the burner to lose all of its heat while no fuel is burning.");
+		comment(provider, ConfigModule.translationKey("steam_burner", "superheated_heatup_multiplier"), "Divisor applied to the heat-up time while burning superheated fuel and below the maximum heat.\n" + "4.0 means the burner heats up four times as fast.");
 
-		comment(provider, ConfigModule.translationKey("steam_engine", "suck_efficiency"),
-				"Efficiency (0~1) of steam drawn directly from an adjacent boiler.\n"
-						+ "4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine, "
-						+ "so a directly fed engine caps out at 75% of its stress output.");
-		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_consumption_multiplier"),
-				"Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n"
-						+ "0.5 means it only needs half the steam of a normal-steam run.");
-		comment(provider, ConfigModule.translationKey("steam_engine", "heatup_seconds"),
-				"""
-						Seconds required for the flywheel engine to heat up before it outputs its full stress.
-						The demand climbs through 25%, 50% and 75% of the full load during the heat-up.
-						0 means no heat-up at all.""");
-		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"),
-				"Divisor applied to the heat-up time while running on superheated steam.\n"
-						+ "2.0 means the heat-up takes half as long.");
-		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"),
-				"Stress output multiplier applied while running on superheated steam.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "suck_efficiency"), "Efficiency (0~1) of steam drawn directly from an adjacent boiler.\n" + "4n mB is drawn out of the boiler per tick while only 3n mB reaches the engine, " + "so a directly fed engine caps out at 75% of its stress output.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_consumption_multiplier"), "Steam consumption multiplier applied while the flywheel engine runs on superheated steam.\n" + "0.5 means it only needs half the steam of a normal-steam run.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "heatup_seconds"), """
+				Seconds required for the flywheel engine to heat up before it outputs its full stress.
+				The demand climbs through 25%, 50% and 75% of the full load during the heat-up.
+				0 means no heat-up at all.""");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_acceleration_multiplier"), "Divisor applied to the heat-up time while running on superheated steam.\n" + "2.0 means the heat-up takes half as long.");
+		comment(provider, ConfigModule.translationKey("steam_engine", "superheated_output_multiplier"), "Stress output multiplier applied while running on superheated steam.");
 
-		comment(provider, ConfigModule.translationKey("boiler_steam", "base_consumption"),
-				"Steam produced per tick for each continuous level of the boiler (mB).\n"
-						+ "Should match the full-load steam demand of one engine for the quota to line up.");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "steam_per_water"),
-				"""
-						A boiler draws water out of its own water buffer, which is filled by whatever flows in.
-						This ratio is therefore the only link between that water and the steam output.
-						1.2 makes the water a level needs equal to the 10 mB per level that the level itself demands.""");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "water_per_block"),
-				"""
-						Water buffer capacity = boiler block count * this value.
-						Water is no longer consumed the moment it flows in, so a full steam buffer does not
-						force the boiler to swallow water for nothing.
-						0 disables the buffer, and the boiler falls back to counting only the water that flows through it.""");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "buffer_multiplier"),
-				"Buffer capacity = boiler block count * 1000 * this multiplier.\n"
-						+ "0 means the boiler stores no steam.");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "strict_quota"),
-				"""
-						When true steam engines and bronze pumps share one quota, so a boiler of level L feeds
-						min(1, L / (engines + pumps)) to every attached engine.
-						Adding a pump to a full quota therefore lowers the stress of every engine.
-						This also covers the steam engines of Create itself, which never consume fluid and
-						derive their stress from this efficiency alone.
-						When false the boiler only limits the total steam flow and leaves the quota to scarcity.""");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_at_level"),
-				"Level 18 requires 18 points of heat, at least 72 boiler blocks and 180 mB/t of water supply.");
-		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_water_multiplier"),
-				"Water consumption multiplier while producing superheated steam.\n"
-						+ "Kept in line with the superheated output multiplier of the engine so the switch does not create free output.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "base_consumption"), "Steam produced per tick for each continuous level of the boiler (mB).\n" + "Should match the full-load steam demand of one engine for the quota to line up.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "steam_per_water"), """
+				A boiler draws water out of its own water buffer, which is filled by whatever flows in.
+				This ratio is therefore the only link between that water and the steam output.
+				1.2 makes the water a level needs equal to the 10 mB per level that the level itself demands.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "water_per_block"), """
+				Water buffer capacity = boiler block count * this value.
+				Water is no longer consumed the moment it flows in, so a full steam buffer does not
+				force the boiler to swallow water for nothing.
+				0 disables the buffer, and the boiler falls back to counting only the water that flows through it.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "buffer_multiplier"), "Buffer capacity = boiler block count * 1000 * this multiplier.\n" + "0 means the boiler stores no steam.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "strict_quota"), """
+				When true steam engines and bronze pumps share one quota, so a boiler of level L feeds
+				min(1, L / (engines + pumps)) to every attached engine.
+				Adding a pump to a full quota therefore lowers the stress of every engine.
+				This also covers the steam engines of Create itself, which never consume fluid and
+				derive their stress from this efficiency alone.
+				When false the boiler only limits the total steam flow and leaves the quota to scarcity.""");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_at_level"), "Level 18 requires 18 points of heat, at least 72 boiler blocks and 180 mB/t of water supply.");
+		comment(provider, ConfigModule.translationKey("boiler_steam", "superheated_water_multiplier"), "Water consumption multiplier while producing superheated steam.\n" + "Kept in line with the superheated output multiplier of the engine so the switch does not create free output.");
 
-		comment(provider, ConfigModule.translationKey("bronze_basin", "slot_capacity"),
-				"Fluid capacity of each tank of a bronze basin (mB).\n"
-						+ "Basins have several tanks, so the total capacity is a multiple of this.");
+		comment(provider, ConfigModule.translationKey("bronze_basin", "slot_capacity"), "Fluid capacity of each tank of a bronze basin (mB).\n" + "Basins have several tanks, so the total capacity is a multiple of this.");
 
-		comment(provider, ConfigModule.translationKey("advanced_spout", "capacity"),
-				"Fluid capacity of an advanced spout (mB).");
-		comment(provider, ConfigModule.translationKey("advanced_spout", "parallel"),
-				"Default parallel of newly placed advanced spouts.\n"
-						+ "Can still be changed per block with a wrench.");
+		comment(provider, ConfigModule.translationKey("advanced_spout", "capacity"), "Fluid capacity of an advanced spout (mB).");
+		comment(provider, ConfigModule.translationKey("advanced_spout", "parallel"), "Default parallel of newly placed advanced spouts.\n" + "Can still be changed per block with a wrench.");
 	}
 
 	private static void comment(RegistrateLangProvider provider, String translationKey, String comment) {

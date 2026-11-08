@@ -1,14 +1,23 @@
 package dev.celestiacraft.steam_letters.client.ponder;
 
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
-import net.createmod.ponder.api.registration.PonderPlugin;
-import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
-import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.createmod.ponder.api.registration.*;
+import net.createmod.ponder.api.scene.PonderStoryBoard;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class SlPonderPlugin implements PonderPlugin {
 	public static void register() {
@@ -37,7 +46,81 @@ public class SlPonderPlugin implements PonderPlugin {
 		SlPonderTags.register(helper);
 	}
 
-	private static PonderSceneRegistrationHelper<Item> helper(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+	private PonderSceneRegistrationHelper<Item> helper(PonderSceneRegistrationHelper<ResourceLocation> helper) {
 		return helper.withKeyFunction(ForgeRegistries.ITEMS::getKey);
+	}
+
+	public static void addPonderForBlocks(PonderSceneRegistrationHelper<Item> helper, Class<?> type, String scene, PonderStoryBoard board, ResourceLocation... tags) {
+		addPonderForBlocks(helper, type::isInstance, scene, board, tags);
+	}
+
+	public static void addPonderForBlocks(PonderSceneRegistrationHelper<Item> helper, Predicate<Block> filter, String scene, PonderStoryBoard board, ResourceLocation... tags) {
+		Set<Item> components = new LinkedHashSet<>();
+
+		for (Block block : ForgeRegistries.BLOCKS.getValues()) {
+			if (!filter.test(block)) {
+				continue;
+			}
+
+			Item item = block.asItem();
+			if (item == Items.AIR) {
+				continue;
+			}
+
+			components.add(item);
+		}
+
+		addScenes(helper, scene, board, tags, components);
+	}
+
+	public static void addPonderForItems(PonderSceneRegistrationHelper<Item> helper, Class<?> type, String scene, PonderStoryBoard board, ResourceLocation... tags) {
+		Set<Item> components = new LinkedHashSet<>();
+
+		for (Item item : ForgeRegistries.ITEMS.getValues()) {
+			if (type.isInstance(item)) {
+				components.add(item);
+			}
+		}
+
+		addScenes(helper, scene, board, tags, components);
+	}
+
+	private static void addScenes(PonderSceneRegistrationHelper<Item> helper, String scene, PonderStoryBoard board, ResourceLocation[] tags, Collection<Item> components) {
+		if (components.isEmpty()) {
+			return;
+		}
+
+		ResourceLocation location = helper.asLocation(scene);
+		List<Item> targets = new ArrayList<>();
+
+		for (Item item : components) {
+			if (!hasStoryBoard(item, location)) {
+				targets.add(item);
+			}
+		}
+
+		if (targets.isEmpty()) {
+			return;
+		}
+
+		helper.forComponents(targets)
+				.addStoryBoard(scene, board, tags);
+	}
+
+	private static boolean hasStoryBoard(Item item, ResourceLocation scene) {
+		ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+		SceneRegistryAccess access = PonderIndex.getSceneAccess();
+
+		if (key == null) {
+			return true;
+		}
+
+		for (Map.Entry<ResourceLocation, StoryBoardEntry> entry : access.getRegisteredEntries()) {
+			if (entry.getKey().equals(key) && entry.getValue().getSchematicLocation().equals(scene)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

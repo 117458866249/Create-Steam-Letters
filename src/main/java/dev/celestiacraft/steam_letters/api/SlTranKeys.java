@@ -5,6 +5,7 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 public class SlTranKeys {
 	public static final String
 			BASIC_TAB,
+			THERMAL_PACK_DESCRIPTION,
 			TOOLTIP_COMMON_PARALLEL,
 			TOOLTIP_COMMON_CAPACITY,
 			TOOLTIP_COMMON_CONSUMPTION,
@@ -100,6 +101,8 @@ public class SlTranKeys {
 
 	static {
 		BASIC_TAB = setCreativeTabKey("basic");
+
+		THERMAL_PACK_DESCRIPTION = "resourcepack.steam_letters_thermal.description";
 
 		TOOLTIP_COMMON_PARALLEL = "tooltip.common.parallel";
 		TOOLTIP_COMMON_CAPACITY = "tooltip.common.capacity";
