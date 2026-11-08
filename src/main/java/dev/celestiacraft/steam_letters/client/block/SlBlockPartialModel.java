@@ -1,31 +1,33 @@
 package dev.celestiacraft.steam_letters.client.block;
 
-import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes.ComponentPartials;
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class SlBlockPartialModel {
 	public static final PartialModel
-			STEAM_HAMMER,
+			STEAM_HAMMER;
+
+	public static final PartialModel
+			SPOUT_TOP,
+			SPOUT_MIDDLE,
+			SPOUT_BOTTOM;
+
+	public static final PartialModel
 			STEAM_FLYWHEEL_WHEEL,
 			STEAM_FLYWHEEL_UPPER_ROTATING,
 			STEAM_FLYWHEEL_LOWER_ROTATING,
 			STEAM_FLYWHEEL_UPPER_SLIDING,
-			STEAM_FLYWHEEL_LOWER_SLIDING,
+			STEAM_FLYWHEEL_LOWER_SLIDING;
+
+	public static final PartialModel
 			STEAM_MIXER_HEAD,
 			STEAM_MIXER_POLE,
-			STEAM_MIXER_COGWHEEL,
-			SPOUT_TOP,
-			SPOUT_MIDDLE,
-			SPOUT_BOTTOM;
+			STEAM_MIXER_COGWHEEL;
 
 	public static final String UPPER_ROTATING_CONNECTOR = "upper_rotating_connector";
 	public static final String LOWER_ROTATING_CONNECTOR = "lower_rotating_connector";
@@ -61,9 +63,9 @@ public class SlBlockPartialModel {
 
 	/**
 	 * 青铜蒸汽管道的接口模型: 玩家自己看的法兰/接头没法用 Create 的 (那是铜色), 所以整套复制了一份.
-	 * 键是 {@link ComponentPartials} (CONNECTION / RIM_CONNECTOR / RIM / DRAIN), 内层按朝向索引.
+	 * 键是 {@link FluidTransportBehaviour.AttachmentTypes.ComponentPartials} (CONNECTION / RIM_CONNECTOR / RIM / DRAIN), 内层按朝向索引.
 	 */
-	public static final Map<ComponentPartials, Map<Direction, PartialModel>> BRONZE_PIPE_ATTACHMENTS =
+	public static final Map<FluidTransportBehaviour.AttachmentTypes.ComponentPartials, Map<Direction, PartialModel>> BRONZE_PIPE_ATTACHMENTS =
 			buildBronzePipeAttachments();
 
 	/**
@@ -132,10 +134,10 @@ public class SlBlockPartialModel {
 		));
 	}
 
-	private static Map<ComponentPartials, Map<Direction, PartialModel>> buildBronzePipeAttachments() {
-		Map<ComponentPartials, Map<Direction, PartialModel>> attachments = new EnumMap<>(ComponentPartials.class);
+	private static Map<FluidTransportBehaviour.AttachmentTypes.ComponentPartials, Map<Direction, PartialModel>> buildBronzePipeAttachments() {
+		Map<FluidTransportBehaviour.AttachmentTypes.ComponentPartials, Map<Direction, PartialModel>> attachments = new EnumMap<>(FluidTransportBehaviour.AttachmentTypes.ComponentPartials.class);
 
-		for (ComponentPartials part : ComponentPartials.values()) {
+		for (FluidTransportBehaviour.AttachmentTypes.ComponentPartials part : FluidTransportBehaviour.AttachmentTypes.ComponentPartials.values()) {
 			Map<Direction, PartialModel> byFacing = new EnumMap<>(Direction.class);
 
 			for (Direction direction : Direction.values()) {

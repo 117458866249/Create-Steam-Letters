@@ -120,7 +120,7 @@ public class SlClientSetup {
 
 			Pack loaded = Pack.readMetaAndCreate(
 					packId,
-					Component.translatable(SlTranKeys.THERMAL_PACK_DESCRIPTION),
+					Component.translatable(SlTranKeys.THERMAL_PACK_TITLE),
 					false,
 					(id) -> resources,
 					PackType.CLIENT_RESOURCES,
