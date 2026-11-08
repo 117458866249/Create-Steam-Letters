@@ -68,8 +68,8 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 
 	@Override
 	protected boolean tickFuel() {
-		if (burnTime > 0) {
-			burnTime--;
+		if (getBurnTime() > 0) {
+			setBurnTime(getBurnTime() - 1);
 			return true;
 		}
 
@@ -86,7 +86,7 @@ public class SolidBurnerBlockEntity extends AbstractBurnerBlockEntity {
 		if (fuel.isEmpty()) {
 			fuel = ItemStack.EMPTY;
 		}
-		burnTime = time;
+		setBurnTime(time);
 		setSuperheatedFuel(burnTimeSuperheated);
 		setChanged();
 		return true;

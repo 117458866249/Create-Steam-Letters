@@ -4,6 +4,7 @@ import dev.celestiacraft.steam_letters.CreateLettersSteam;
 import net.createmod.ponder.api.registration.*;
 import net.createmod.ponder.api.scene.PonderStoryBoard;
 import net.createmod.ponder.foundation.PonderIndex;
+import net.createmod.ponder.foundation.PonderTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -44,6 +45,22 @@ public class SlPonderPlugin implements PonderPlugin {
 	@Override
 	public void registerTags(@NotNull PonderTagRegistrationHelper<ResourceLocation> helper) {
 		SlPonderTags.register(helper);
+
+		// 场景条目的 highlightTags 就是它归属的 tag, 一并写进 tag 索引.
+		// 只注册 tag 本身的话, tag 页面里只有那个当图标的物品, 场景对应的机器不会出现在列表里.
+		for (Map.Entry<ResourceLocation, StoryBoardEntry> entry : PonderIndex.getSceneAccess().getRegisteredEntries()) {
+			StoryBoardEntry storyBoard = entry.getValue();
+
+			if (!getModId().equals(storyBoard.getNamespace())) {
+				continue;
+			}
+
+			for (ResourceLocation tag : storyBoard.getTags()) {
+				if (!PonderTag.Highlight.ALL.equals(tag)) {
+					helper.addTagToComponent(storyBoard.getComponent(), tag);
+				}
+			}
+		}
 	}
 
 	private PonderSceneRegistrationHelper<Item> helper(PonderSceneRegistrationHelper<ResourceLocation> helper) {

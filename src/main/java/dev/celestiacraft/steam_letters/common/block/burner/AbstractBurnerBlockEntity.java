@@ -10,6 +10,8 @@ import dev.celestiacraft.steam_letters.api.machine.heat.IHeatSource;
 import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.config.common.SteamBoilerConfig;
 import dev.celestiacraft.steam_letters.config.common.SteamBurnerConfig;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -44,17 +46,22 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 	/**
 	 * 当前热量, 允许小数 —— 每 tick 的增量通常远小于 1, 取整会直接丢掉全部产出.
 	 */
-	protected double heat;
+	@Getter
+	@Setter
+	private double heat;
 
 	/**
 	 * 当前这份燃料剩余的燃烧时间 (tick), 0 表示没有燃料在燃烧.
 	 */
-	protected int burnTime;
+	@Getter
+	@Setter
+	private int burnTime;
 
 	/**
 	 * 当前这份燃料是否为过热燃料. 燃料烧完后不立即清除, 过热状态要保留到热量归零.
 	 */
-	protected boolean superheatedFuel;
+	@Getter
+	private boolean superheatedFuel;
 
 	/**
 	 * 上次同步给客户端的数值, 用来避免每 10 tick 无条件发包.
@@ -166,11 +173,6 @@ public abstract class AbstractBurnerBlockEntity extends SmartBlockEntity impleme
 
 	protected void clearSuperheated() {
 		superheatedFuel = false;
-	}
-
-	@Override
-	public double getHeat() {
-		return heat;
 	}
 
 	@Override
