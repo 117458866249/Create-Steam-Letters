@@ -1,13 +1,15 @@
 package dev.celestiacraft.steam_letters.client.ponder.scene;
 
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
-import dev.celestiacraft.steam_letters.common.block.boiler.AbstractBoilerBlockEntity;
+import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlock;
-import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
-import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.common.register.SlParticles;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.ponder.api.PonderPalette;
+import net.createmod.ponder.api.element.ElementLink;
+import net.createmod.ponder.api.element.WorldSectionElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
@@ -15,185 +17,203 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
  * 蒸汽动力机组的 Ponder 场景: 蒸汽锅炉 / 固体燃烧室 / 流体燃烧室 / 蒸汽飞轮 / 飞轮引擎 共用.
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/steam_engine.nbt}
- * 等待重写
  */
 public class SteamEngineScene {
 	public static void usage(SceneBuilder builder, SceneBuildingUtil util) {
 		CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 		RandomSource random = RandomSource.create();
 
-		scene.title("steam_engine", "Steam Power Unit");
-		scene.configureBasePlate(0, 0, 5);
+		scene.scaleSceneView(0.86F);
+		scene.title("steam_engine", "蒸汽动力源");
 
-		BlockPos burnerPos = util.grid().at(2, 1, 1);
-		BlockPos boilerPos = util.grid().at(2, 2, 1);
-		BlockPos enginePos = util.grid().at(2, 2, 2);
-		BlockPos flywheelPos = util.grid().at(2, 2, 4);
-		BlockPos wheelShaftPos = util.grid().at(3, 2, 4);
-		BlockPos wheelCogwheelPos = util.grid().at(4, 2, 4);
+		BlockPos boilerPos = util.grid().at(4, 2, 4);
+		BlockPos boilerScaffoldingPos = util.grid().at(4, 1, 4);
+		BlockPos waterTankController = util.grid().at(6, 1, 6);
+		BlockPos waterTankCorner = util.grid().at(7, 3, 7);
+		BlockPos waterPipeCorner = util.grid().at(4, 1, 5);
+		BlockPos waterPump = util.grid().at(5, 2, 6);
+		BlockPos solidBurnerPos = util.grid().at(4, 1, 1);
+		BlockPos liquidBurnerPos = util.grid().at(4, 1, 2);
+		BlockPos beltHead = util.grid().at(8, 1, 1);
+		BlockPos beltTail = util.grid().at(6, 1, 1);
+		BlockPos lavaPumpPos = util.grid().at(6, 1, 2);
+		BlockPos lavaTankControllerPos = util.grid().at(7, 1, 2);
+		BlockPos flywheelPos = util.grid().at(1, 2, 4);
+		BlockPos flywheelCorner = util.grid().at(3, 1, 4);
 
-		Selection burner = util.select().position(burnerPos);
 		Selection boiler = util.select().position(boilerPos);
-		Selection engine = util.select().position(enginePos);
-		Selection flywheel = util.select().position(flywheelPos);
-		Selection tank = util.select().fromTo(0, 1, 2, 0, 2, 2);
-		Selection pipes = util.select().position(0, 2, 1)
-				.add(util.select().position(1, 2, 1));
-		Selection output = util.select().position(wheelShaftPos)
-				.add(util.select().position(wheelCogwheelPos))
-				.add(util.select().position(4, 3, 3));
+		Selection boilerScaffolding = util.select().position(boilerScaffoldingPos);
+		Selection waterTank = util.select().fromTo(waterTankController, waterTankCorner);
+		Selection waterTankForNbt = util.select().position(waterTankController);
+		Selection boilerForNbt = util.select().position(boilerPos);
+		Selection waterPipe = util.select().fromTo(waterPipeCorner, waterPump);
+		Selection waterPipeForNbt = util.select().position(waterPump);
+		Selection solidBurnerSelection = util.select().fromTo(solidBurnerPos, beltHead);
+		Selection liquidBurnerSelection = util.select().fromTo(4, 1, 2, 8, 2, 3);
+		Selection lavaPump = util.select().position(lavaPumpPos);
+		Selection lavaTankController = util.select().position(lavaTankControllerPos);
+		Selection flywheel = util.select().fromTo(flywheelPos, flywheelCorner);
+		Selection rotating = util.select().fromTo(1, 2, 1, 1, 2, 4);
+		Selection shaft = util.select().fromTo(1, 1, 1, 1, 2, 3);
 
-		Vec3 burnerSide = util.vector().blockSurface(burnerPos, Direction.WEST);
-		Vec3 boilerSide = util.vector().blockSurface(boilerPos, Direction.WEST);
-		Vec3 engineSide = util.vector().blockSurface(enginePos, Direction.SOUTH);
-		Vec3 flywheelSide = util.vector().blockSurface(flywheelPos, Direction.SOUTH);
+		ItemStack planks = new ItemStack(Items.SPRUCE_PLANKS, 64);
 
 		scene.world().showSection(util.select().layer(0), Direction.UP);
 		scene.idle(5);
 
-		scene.world().showSection(burner, Direction.DOWN);
+		ElementLink<WorldSectionElement> boilerScaffoldingLink = scene.world().showIndependentSection(boilerScaffolding, Direction.DOWN);
 		scene.idle(5);
 		scene.world().showSection(boiler, Direction.DOWN);
-		scene.idle(5);
-		scene.world().showSection(engine, Direction.DOWN);
-		scene.idle(5);
-		scene.world().showSection(flywheel, Direction.DOWN);
-		scene.idle(10);
 
-		scene.overlay().showText(80)
+		scene.idle(10);
+		scene.overlay().showText(70)
 				.pointAt(util.vector().centerOf(boilerPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("A steam boiler with its burner, a steam engine and a steam flywheel form one steam power unit");
-		scene.idle(90);
-
-		scene.overlay().showText(70)
-				.pointAt(burnerSide)
-				.colored(PonderPalette.RED)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("The burner must sit directly below the boiler, otherwise the boiler gets no heat at all");
+				.text("想要利用蒸汽动力源, 先搭建一个锅炉以生产蒸汽");
 		scene.idle(80);
 
-		scene.overlay().showText(70)
-				.pointAt(burnerSide)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("Feed solid fuel such as coal and the heat gradually rises");
-		scene.idle(20);
-		setHeat(scene, burner, 100.0D, 400);
-		puff(scene, util.vector().centerOf(burnerPos), 10, 0.2f, random);
-		scene.idle(50);
-
-		scene.overlay().showText(60)
-				.pointAt(boilerSide)
-				.colored(PonderPalette.GREEN)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("The higher the heat, the faster the boiler produces steam");
-		scene.idle(70);
-
-		scene.overlay().showText(70)
-				.pointAt(burnerSide)
-				.colored(PonderPalette.BLUE)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("A fluid burner can replace the solid burner, with fuel piped in from the side");
-		scene.idle(20);
-		scene.world().setBlock(burnerPos, SlBlocks.BRONZE_FLUID_BURNER.getDefaultState()
-				.setValue(AbstractBurnerBlock.FACING, Direction.SOUTH), true);
-		setHeat(scene, burner, 100.0D, 400);
-		puff(scene, util.vector().centerOf(burnerPos), 10, 0.2f, random);
-		scene.idle(60);
-
-		scene.world().showSection(tank, Direction.DOWN);
-		scene.idle(5);
-		scene.world().showSection(pipes, Direction.NORTH);
-		scene.idle(15);
-
-		scene.overlay().showText(70)
-				.pointAt(boilerSide)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("Pipe water into the boiler; once heated it turns into steam");
-		scene.idle(20);
-		scene.world().modifyBlockEntityNBT(boiler, AbstractBoilerBlockEntity.class, (nbt) -> {
-			nbt.put("InputTank", new FluidStack(Fluids.WATER, 4000)
-					.writeToNBT(new CompoundTag()));
+		scene.world().showSection(waterTank, Direction.WEST);
+		scene.world().modifyBlockEntityNBT(waterTankForNbt, FluidTankBlockEntity.class, (nbt) -> {
+			FluidTank tank = new FluidTank(96000);
+			tank.setFluid(new FluidStack(Fluids.WATER, 96000));
+			nbt.put("TankContent", tank.writeToNBT(new CompoundTag()));
 		});
-		puff(scene, util.vector().topOf(boilerPos), 10, 0.15f, random);
+		scene.idle(5);
+
+		scene.world().modifyBlockEntityNBT(boilerForNbt, SteamBoilerBlockEntity.class, (nbt) -> {
+			FluidTank tank = new FluidTank(10000);
+			tank.setFluid(new FluidStack(Fluids.WATER, 10000));
+			nbt.put("InputTank", tank.writeToNBT(new CompoundTag()));
+		});
+		scene.world().modifyBlockEntityNBT(waterPipeForNbt, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
+		});
+		scene.world().showSection(waterPipe, Direction.NORTH);
+		scene.idle(10);
+
+		scene.overlay().showText(50)
+				.pointAt(util.vector().centerOf(boilerPos))
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("向锅炉里通入水");
+		scene.idle(60);
+
+		scene.world().hideIndependentSection(boilerScaffoldingLink, Direction.EAST);
+		scene.idle(10);
+		scene.overlay().showOutline(PonderPalette.GREEN, new Object(), boilerScaffolding, 80);
+		scene.idle(10);
+		scene.overlay().showText(70)
+				.pointAt(util.vector().centerOf(boilerScaffoldingPos))
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("再在锅炉下方布置热源");
+		scene.idle(80);
+
+		ElementLink<WorldSectionElement> solidBurner = scene.world().showIndependentSection(solidBurnerSelection, Direction.DOWN);
+		scene.idle(5);
+		scene.world().moveSection(solidBurner, util.vector().of(0, 0, 3), 20);
+		scene.idle(15);
+		scene.overlay().showText(50)
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("热源可以是固体燃烧室...");
+
+		scene.idle(10);
+		for (int i = 0; i < 3; i++) {
+			scene.world().createItemOnBelt(beltHead, Direction.DOWN, planks);
+			scene.idle(15);
+			scene.world().removeItemsFromBelt(beltTail);
+
+			if (i == 0) {
+				scene.world().modifyBlock(solidBurnerPos, (state) -> state.setValue(AbstractBurnerBlock.LIT, true), false);
+			}
+		}
+		scene.idle(5);
+		scene.world().hideIndependentSection(solidBurner, Direction.EAST);
+		scene.idle(10);
+
+		scene.world().modifyBlockEntityNBT(lavaPump, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
+		});
+		ElementLink<WorldSectionElement> liquidBurner = scene.world().showIndependentSection(liquidBurnerSelection, Direction.DOWN);
+		scene.idle(5);
+		scene.world().modifyBlockEntityNBT(lavaTankController, FluidTankBlockEntity.class, (nbt) -> {
+			FluidTank tank = new FluidTank(64000);
+			tank.setFluid(new FluidStack(Fluids.LAVA, 64000));
+			nbt.put("TankContent", tank.writeToNBT(new CompoundTag()));
+		});
+		scene.idle(5);
+		scene.world().modifyBlock(liquidBurnerPos, (state) -> state.setValue(AbstractBurnerBlock.LIT, true), false);
+		scene.idle(5);
+		scene.world().moveSection(liquidBurner, util.vector().of(0, 0, 2), 20);
+		scene.idle(15);
+		scene.overlay().showText(50)
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("...也可以是流体燃烧室");
 		scene.idle(60);
 
 		scene.overlay().showText(70)
-				.pointAt(engineSide)
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("Place the steam engine against the boiler and it draws steam from the back");
-		scene.idle(80);
+				.text("既有热源又有水时, 锅炉便能产出蒸汽");
+		scene.idle(40);
+		for (int i = 0; i < 8; i++) {
+			scene.effects().emitParticles(
+					util.vector().blockSurface(boilerPos, Direction.NORTH),
+					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(), VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)),
+					1, 1
+			);
+			scene.effects().emitParticles(
+					util.vector().blockSurface(boilerPos, Direction.WEST),
+					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(), VecHelper.offsetRandomly(Vec3.ZERO, random, 0.1f)),
+					1, 1
+			);
+		}
+		scene.idle(40);
+
+		scene.world().modifyBlockEntityNBT(rotating, KineticBlockEntity.class, (nbt) -> {
+			nbt.putFloat("Speed", -16.0F);
+		});
+		scene.world().showSection(flywheel, Direction.EAST);
+		scene.idle(5);
+		scene.world().showSection(shaft, Direction.SOUTH);
+		scene.idle(10);
 
 		scene.overlay().showText(70)
-				.pointAt(util.vector().blockSurface(flywheelPos, Direction.NORTH))
-				.colored(PonderPalette.RED)
+				.pointAt(util.vector().centerOf(flywheelPos))
 				.placeNearTarget()
 				.attachKeyFrame()
-				.text("The engine itself outputs no power: leave one block in front of it and place the steam flywheel there");
+				.text("放上引擎与飞轮, 便能输出应力");
 		scene.idle(80);
-
-		scene.world().showSection(output, Direction.EAST);
-		scene.idle(10);
-		scene.world().setKineticSpeed(output, 32);
-		scene.effects().rotationSpeedIndicator(wheelCogwheelPos);
-		scene.idle(20);
-
-		scene.overlay().showText(70)
-				.pointAt(util.vector().blockSurface(wheelShaftPos, Direction.UP))
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("The flywheel then feeds the stress produced by the engine into the kinetic network");
-		scene.idle(80);
-
-		scene.overlay().showText(60)
-				.pointAt(flywheelSide)
-				.colored(PonderPalette.BLUE)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("A wrench changes the flywheel facing so power can be taken from either side");
-		scene.idle(70);
-
-		scene.overlay().showText(60)
-				.pointAt(engineSide)
-				.colored(PonderPalette.RED)
-				.placeNearTarget()
-				.attachKeyFrame()
-				.text("Once steam runs out the engine stops and the flywheel stops outputting");
-		scene.idle(10);
-		setHeat(scene, burner, 0.0D, 0);
-		scene.world().setKineticSpeed(output, 0);
-		scene.idle(50);
 
 		scene.markAsFinished();
-	}
+		scene.idle(200);
 
-	private static void setHeat(CreateSceneBuilder scene, Selection burner, double heat, int burnTime) {
-		scene.world().modifyBlockEntityNBT(burner, AbstractBurnerBlockEntity.class, nbt -> {
-			nbt.putDouble("Heat", heat);
-			nbt.putInt("BurnTime", burnTime);
-		});
-	}
+		scene.overlay().showText(70)
+				.pointAt(util.vector().centerOf(boilerPos))
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("值得注意的是, 在使用锅炉时有三位工程师不幸被烫伤, 他们分别是...");
+		scene.idle(80);
 
-	private static void puff(CreateSceneBuilder scene, Vec3 at, int amount, float spread, RandomSource random) {
-		for (int i = 0; i < amount; i++) {
-			scene.effects().emitParticles(at,
-					scene.effects().simpleParticleEmitter(SlParticles.STEAM.get(),
-							VecHelper.offsetRandomly(Vec3.ZERO, random, spread)), 1, 1);
-		}
+		scene.overlay().showText(70)
+				.pointAt(util.vector().centerOf(boilerPos))
+				.placeNearTarget()
+				.attachKeyFrame()
+				.text("...所以我们改进了锅炉, 不会烫到你! ");
+		scene.idle(80);
 	}
 }

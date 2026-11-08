@@ -76,7 +76,11 @@ public class SlPonderScene {
 	}
 
 	private static void solarBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		helper.forComponents(SlBlocks.BRONZE_SOLAR_BOILER.asItem())
+		helper.forComponents(
+						SlBlocks.BRONZE_SOLAR_BOILER.asItem(),
+						SlBlocks.BRONZE_STEAM_FLYWHEEL.asItem(),
+						SlBlocks.BRONZE_STEAM_ENGINE.asItem()
+				)
 				.addStoryBoard(
 						"solar_boiler",
 						SolarBoilerScene::usage,

@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
- * 太阳能锅炉 Ponder 场景.
+ * 太阳能锅炉 Ponder 场景: 太阳能锅炉 / 蒸汽飞轮 / 飞轮引擎 共用.
  * <p>
  * 结构文件: {@code assets/steam_letters/ponder/solar_boiler.nbt}
  */
