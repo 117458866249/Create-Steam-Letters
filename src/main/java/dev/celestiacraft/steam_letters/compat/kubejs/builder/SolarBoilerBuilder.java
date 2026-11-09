@@ -1,5 +1,6 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
+import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.boiler.SolarBoilerBlockEntity;
 import dev.celestiacraft.steam_letters.tags.SlBlockTags;
@@ -34,10 +35,8 @@ public class SolarBoilerBuilder extends BoilerDeviceBuilder<SolarBoilerBlock, So
 
 	@Override
 	protected SolarBoilerBlock createBlock(BlockBehaviour.Properties properties) {
-		return new SolarBoilerBlock(properties, (builder) -> {
-			builder.capacity(capacityOr(() -> SolarBoilerBlockEntity.DEFAULT_CAPACITY))
-					.production(productionOr(() -> SolarBoilerBlockEntity.DEFAULT_PRODUCTION));
-		}, () -> blockEntityType);
+		SteamEngineSpec spec = new SteamEngineSpec(capacityOr(() -> SolarBoilerBlockEntity.DEFAULT_CAPACITY), productionOr(() -> SolarBoilerBlockEntity.DEFAULT_PRODUCTION), () -> 0.0D);
+		return new SolarBoilerBlock(properties, spec, () -> blockEntityType);
 	}
 
 	@Override

@@ -47,6 +47,7 @@ public class SlTranKeys {
 			TOOLTIP_STEAM_ENGINE_SUPERHEATED_HEADER,
 			TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS,
 			GOGGLE_STEAM_BURNER,
+			GOGGLE_STEAM_BURNER_HEAT,
 			GOGGLE_STEAM_BURNER_TEMPERATURE,
 			GOGGLE_STEAM_BURNER_FUEL_TIME,
 			GOGGLE_STEAM_BURNER_EFFICIENCY,
@@ -153,6 +154,7 @@ public class SlTranKeys {
 		TOOLTIP_STEAM_ENGINE_SUPERHEATED_EFFECTS = "tooltip.steam_engine.superheated_effects";
 
 		GOGGLE_STEAM_BURNER = "gui.goggles.steam_burner";
+		GOGGLE_STEAM_BURNER_HEAT = "gui.goggles.steam_burner.heat";
 		GOGGLE_STEAM_BURNER_TEMPERATURE = "gui.goggles.steam_burner.temperature";
 		GOGGLE_STEAM_BURNER_FUEL_TIME = "gui.goggles.steam_burner.fuel_time";
 		GOGGLE_STEAM_BURNER_EFFICIENCY = "gui.goggles.steam_burner.efficiency";

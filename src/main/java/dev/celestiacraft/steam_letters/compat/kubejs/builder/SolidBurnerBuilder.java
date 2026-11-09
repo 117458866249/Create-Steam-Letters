@@ -1,8 +1,10 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
+import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.SolidBurnerBlockEntity;
+import dev.celestiacraft.steam_letters.config.common.SteamBurnerConfig;
 import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.core.BlockPos;
@@ -31,11 +33,12 @@ public class SolidBurnerBuilder extends BurnerDeviceBuilder<SolidBurnerBlock, So
 
 	@Override
 	protected SolidBurnerBlock createBlock(BlockBehaviour.Properties properties) {
-		return new SolidBurnerBlock(properties, (builder) -> {
-			builder.maxHeat(maxHeatOr(() -> {
-				return AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT;
-			}));
-		}, () -> blockEntityType);
+		SteamEngineSpec spec = new SteamEngineSpec(() -> 0, () -> 0.0D, maxHeatOr(() -> {
+			return AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT;
+		}), temperatureOr(() -> {
+			return SteamBurnerConfig.MAX_TEMPERATURE.get();
+		}));
+		return new SolidBurnerBlock(properties, spec, () -> blockEntityType);
 	}
 
 	@Override

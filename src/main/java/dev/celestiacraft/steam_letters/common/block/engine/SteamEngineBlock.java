@@ -28,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<SteamEngineBlockEntity>, IWrenchable {
@@ -39,14 +38,14 @@ public class SteamEngineBlock extends HorizontalDirectionalBlock implements IBE<
 
 	private final Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType;
 
-	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer) {
-		this(properties.noOcclusion(), configurer, null);
+	public SteamEngineBlock(Properties properties, SteamEngineDriveSpec driveSpec) {
+		this(properties.noOcclusion(), driveSpec, null);
 	}
 
-	public SteamEngineBlock(Properties properties, Consumer<SteamEngineDriveSpec.Builder> configurer, Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType) {
+	public SteamEngineBlock(Properties properties, SteamEngineDriveSpec driveSpec, Supplier<BlockEntityType<? extends SteamEngineBlockEntity>> customBlockEntityType) {
 		super(properties);
 		this.customBlockEntityType = customBlockEntityType;
-		driveSpec = SteamEngineDriveSpec.of(configurer);
+		this.driveSpec = driveSpec;
 		registerDefaultState(defaultBlockState()
 				.setValue(FACING, Direction.NORTH)
 				.setValue(LIT, false));

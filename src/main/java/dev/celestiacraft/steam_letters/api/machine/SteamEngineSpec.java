@@ -1,8 +1,8 @@
 package dev.celestiacraft.steam_letters.api.machine;
 
-import dev.latvian.mods.rhino.util.RemapForJS;
+import dev.celestiacraft.steam_letters.config.common.SteamBurnerConfig;
+import lombok.AllArgsConstructor;
 
-import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
@@ -14,16 +14,24 @@ import java.util.function.IntSupplier;
  * KubeJS 等外部注册方则直接闭包成常量.
  * <p>
  * 数值为 0 表示该设备不使用这项参数 (例如固体燃烧室没有流体罐).
+ * 参数的写入由注册侧的 Builder 负责, 本类只承载已经确定下来的取值方式.
  */
+@AllArgsConstructor
 public class SteamEngineSpec {
 	private final IntSupplier capacity;
 	private final DoubleSupplier production;
 	private final DoubleSupplier maxHeat;
+	private final DoubleSupplier maxTemperature;
 
-	private SteamEngineSpec(IntSupplier capacity, DoubleSupplier production, DoubleSupplier maxHeat) {
-		this.capacity = capacity;
-		this.production = production;
-		this.maxHeat = maxHeat;
+	/**
+	 * 温度上限未指定时取配置项 {@code steam_burner.max_temperature}.
+	 */
+	public SteamEngineSpec(IntSupplier capacity, DoubleSupplier production, DoubleSupplier maxHeat) {
+		this(capacity, production, maxHeat, () -> SteamBurnerConfig.MAX_TEMPERATURE.get());
+	}
+
+	public SteamEngineSpec(int capacity, double production, double maxHeat) {
+		this(() -> capacity, () -> production, () -> maxHeat);
 	}
 
 	/**
@@ -47,53 +55,10 @@ public class SteamEngineSpec {
 		return Math.max(0.0D, maxHeat.getAsDouble());
 	}
 
-	public static Builder builder() {
-		return new Builder();
-	}
-
-	public static SteamEngineSpec of(Consumer<Builder> configurer) {
-		Builder builder = builder();
-		configurer.accept(builder);
-		return builder.build();
-	}
-
-	public static class Builder {
-		private IntSupplier capacity = () -> 0;
-		private DoubleSupplier production = () -> 0.0D;
-		private DoubleSupplier maxHeat = () -> 0.0D;
-
-		@RemapForJS("capacitySupplier")
-		public Builder capacity(IntSupplier value) {
-			capacity = value;
-			return this;
-		}
-
-		public Builder capacity(int value) {
-			return capacity(() -> value);
-		}
-
-		@RemapForJS("productionSupplier")
-		public Builder production(DoubleSupplier value) {
-			production = value;
-			return this;
-		}
-
-		public Builder production(double value) {
-			return production(() -> value);
-		}
-
-		@RemapForJS("maxHeatSupplier")
-		public Builder maxHeat(DoubleSupplier value) {
-			maxHeat = value;
-			return this;
-		}
-
-		public Builder maxHeat(double value) {
-			return maxHeat(() -> value);
-		}
-
-		public SteamEngineSpec build() {
-			return new SteamEngineSpec(capacity, production, maxHeat);
-		}
+	/**
+	 * @return 温度上限, 0 表示该设备不记录温度
+	 */
+	public double getMaxTemperature() {
+		return Math.max(0.0D, maxTemperature.getAsDouble());
 	}
 }

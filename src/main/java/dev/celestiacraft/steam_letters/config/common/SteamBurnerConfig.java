@@ -28,6 +28,12 @@ public class SteamBurnerConfig extends ConfigModule {
 			COOLDOWN_SECONDS,
 			SUPERHEATED_HEATUP_MULTIPLIER;
 
+	public static ForgeConfigSpec.IntValue
+			MAX_TEMPERATURE;
+
+	public static ForgeConfigSpec.BooleanValue
+			SHOW_TEMPERATURE;
+
 	public SteamBurnerConfig(ForgeConfigSpec.Builder builder) {
 		super(builder, "steam_burner");
 	}
@@ -46,5 +52,13 @@ public class SteamBurnerConfig extends ConfigModule {
 				.comment("Heat gain multiplier applied while the burning fuel is marked as superheated.",
 						"It only applies below max heat; above max heat the normal speed is used.")
 				.defineInRange("superheated_heatup_multiplier", 4.0D, 1.0D, 100.0D);
+		MAX_TEMPERATURE = builder.translation(key("max_temperature"))
+				.comment("Maximum temperature a burner reaches while burning fuel, "
+						+ "used by burners whose spec does not set one.",
+						"Temperature is displayed only; it takes no part in any calculation.")
+				.defineInRange("max_temperature", 10000, 0, 1000000);
+		SHOW_TEMPERATURE = builder.translation(key("show_temperature"))
+				.comment("Whether the goggles overlay shows the temperature line of burners.")
+				.define("show_temperature", false);
 	}
 }

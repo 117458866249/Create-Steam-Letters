@@ -3,7 +3,7 @@ package dev.celestiacraft.steam_letters.common.block.flywheel;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import dev.celestiacraft.steam_letters.api.SlApis;
-import dev.celestiacraft.steam_letters.common.register.SlBlockEntities;
+import dev.celestiacraft.steam_letters.api.machine.SteamFlywheelSpec;
 import lombok.Getter;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
@@ -26,27 +26,21 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import dev.celestiacraft.steam_letters.client.models.SlBlockStateGen;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
 public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<SteamFlywheelBlockEntity> {
 	public static final EnumProperty<ConnectionState> CONNECTION = EnumProperty.create("connection", ConnectionState.class);
 
-	private final Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType;
+	private final SteamFlywheelSpec spec;
 	@Getter
 	private final ResourceLocation material;
 
 	public SteamFlywheelBlock(Properties properties) {
-		this(properties, null, SlApis.loadResource("bronze"));
+		this(properties, new SteamFlywheelSpec(SlApis.loadResource("bronze"), null));
 	}
 
-	public SteamFlywheelBlock(Properties properties, Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType) {
-		this(properties, customBlockEntityType, SlApis.loadResource("bronze"));
-	}
-
-	public SteamFlywheelBlock(Properties properties, Supplier<BlockEntityType<? extends SteamFlywheelBlockEntity>> customBlockEntityType, ResourceLocation material) {
+	public SteamFlywheelBlock(Properties properties, SteamFlywheelSpec spec) {
 		super(properties.noOcclusion());
-		this.customBlockEntityType = customBlockEntityType;
-		this.material = material;
+		this.spec = spec;
+		this.material = spec.getMaterial();
 		registerDefaultState(defaultBlockState()
 				.setValue(CONNECTION, ConnectionState.NONE));
 	}
@@ -132,7 +126,7 @@ public class SteamFlywheelBlock extends HorizontalKineticBlock implements IBE<St
 
 	@Override
 	public BlockEntityType<? extends SteamFlywheelBlockEntity> getBlockEntityType() {
-		return customBlockEntityType != null ? customBlockEntityType.get() : SlBlockEntities.STEAM_FLYWHEEL.get();
+		return spec.getBlockEntityType();
 	}
 
 	public static NonNullBiConsumer<DataGenContext<Block, SteamFlywheelBlock>, RegistrateBlockstateProvider> genBlockState(String material) {

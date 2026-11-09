@@ -129,12 +129,9 @@ public class SlBlocks {
 				.lang("Steam Saw")
 				.register();
 
-		BRONZE_BOILER = SlApis.REGISTRATE.block("bronze_boiler", (properties) -> {
-					return new SteamBoilerBlock(properties, (builder) -> {
-						builder.capacity(SteamBoilerBlockEntity.DEFAULT_CAPACITY)
-								.production(SteamBoilerBlockEntity.DEFAULT_PRODUCTION);
-					});
-				})
+		BRONZE_BOILER = SlApis.REGISTRATE.boiler("bronze_boiler", SteamBoilerBlock::new)
+				.capacity(SteamBoilerBlockEntity.DEFAULT_CAPACITY)
+				.production(SteamBoilerBlockEntity.DEFAULT_PRODUCTION)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/boiler/bronze"))
 				.build()
@@ -150,12 +147,9 @@ public class SlBlocks {
 				.lang("Bronze Boiler")
 				.register();
 
-		BRONZE_SOLAR_BOILER = SlApis.REGISTRATE.block("bronze_solar_boiler", (properties) -> {
-					return new SolarBoilerBlock(properties, (builder) -> {
-						builder.capacity(SolarBoilerBlockEntity.DEFAULT_CAPACITY)
-								.production(SolarBoilerBlockEntity.DEFAULT_PRODUCTION);
-					});
-				})
+		BRONZE_SOLAR_BOILER = SlApis.REGISTRATE.solarBoiler("bronze_solar_boiler", SolarBoilerBlock::new)
+				.capacity(SolarBoilerBlockEntity.DEFAULT_CAPACITY)
+				.production(SolarBoilerBlockEntity.DEFAULT_PRODUCTION)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solar_boiler/bronze"))
 				.build()
@@ -170,11 +164,8 @@ public class SlBlocks {
 				.lang("Bronze Solar Boiler")
 				.register();
 
-		BRONZE_SOLID_BURNER = SlApis.REGISTRATE.block("bronze_solid_burner", (properties) -> {
-					return new SolidBurnerBlock(properties, (builder) -> {
-						builder.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT);
-					});
-				})
+		BRONZE_SOLID_BURNER = SlApis.REGISTRATE.burner("bronze_solid_burner", SolidBurnerBlock::new)
+				.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/solid_burner/bronze"))
 				.build()
@@ -189,12 +180,9 @@ public class SlBlocks {
 				.lang("Bronze Solid Burner")
 				.register();
 
-		BRONZE_FLUID_BURNER = SlApis.REGISTRATE.block("bronze_fluid_burner", (properties) -> {
-					return new FluidBurnerBlock(properties, (builder) -> {
-						builder.capacity(FluidBurnerBlockEntity.DEFAULT_CAPACITY)
-								.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT);
-					});
-				})
+		BRONZE_FLUID_BURNER = SlApis.REGISTRATE.burner("bronze_fluid_burner", FluidBurnerBlock::new)
+				.capacity(FluidBurnerBlockEntity.DEFAULT_CAPACITY)
+				.maxHeat(AbstractBurnerBlockEntity.DEFAULT_MAX_HEAT)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/fluid_burner/bronze"))
 				.build()
@@ -209,7 +197,7 @@ public class SlBlocks {
 				.lang("Bronze Fluid Burner")
 				.register();
 
-		BRONZE_STEAM_FLYWHEEL = SlApis.REGISTRATE.block("bronze_steam_flywheel", SteamFlywheelBlock::new)
+		BRONZE_STEAM_FLYWHEEL = SlApis.REGISTRATE.steamFlywheel("bronze_steam_flywheel", SteamFlywheelBlock::new)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/flywheel/bronze_item"))
 				.build()
@@ -224,14 +212,11 @@ public class SlBlocks {
 				.lang("Bronze Steam Flywheel")
 				.register();
 
-		BRONZE_STEAM_ENGINE = SlApis.REGISTRATE.block("bronze_steam_engine", (properties) -> {
-					return new SteamEngineBlock(properties, (builder) -> {
-						builder.strength(SteamEngineBlockEntity.DEFAULT_STRENGTH)
-								.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
-								.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
-								.capacity(SteamEngineBlockEntity.DEFAULT_STORAGE);
-					});
-				})
+		BRONZE_STEAM_ENGINE = SlApis.REGISTRATE.steamEngine("bronze_steam_engine", SteamEngineBlock::new)
+				.strength(SteamEngineBlockEntity.DEFAULT_STRENGTH)
+				.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
+				.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
+				.capacity(SteamEngineBlockEntity.DEFAULT_STORAGE)
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/engine/bronze_item"))
 				.build()

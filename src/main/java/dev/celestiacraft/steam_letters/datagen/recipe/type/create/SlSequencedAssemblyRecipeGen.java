@@ -19,11 +19,11 @@ public class SlSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
 					.transitionTo(SlItems.INCOMPLETE_STEAM_MECHANISM)
 					.loops(2)
 					.addOutput(SlItems.STEAM_MECHANISM, 120)
-					.addStep(DeployerApplicationRecipe::new, (step) -> {
-						return step.require(AllBlocks.COGWHEEL);
+					.addStep(DeployerApplicationRecipe::new, (recipe) -> {
+						return recipe.require(AllBlocks.COGWHEEL);
 					})
-					.addStep(FillingRecipe::new, (step) -> {
-						return step.require(SlFluidTags.STEAM, 500);
+					.addStep(FillingRecipe::new, (recipe) -> {
+						return recipe.require(SlFluidTags.STEAM, 500);
 					});
 		});
 
@@ -32,11 +32,11 @@ public class SlSequencedAssemblyRecipeGen extends SequencedAssemblyRecipeGen {
 					.transitionTo(SlItems.INCOMPLETE_STEAM_MECHANISM)
 					.loops(2)
 					.addOutput(SlItems.STEAM_MECHANISM, 120)
-					.addStep(DeployerApplicationRecipe::new, (step) -> {
-						return step.require(AllBlocks.COGWHEEL);
+					.addStep(DeployerApplicationRecipe::new, (recipe) -> {
+						return recipe.require(AllBlocks.COGWHEEL);
 					})
-					.addStep(FillingRecipe::new, (step) -> {
-						return step.require(SlFluidTags.SUPERHEATED_STEAM, 125);
+					.addStep(FillingRecipe::new, (recipe) -> {
+						return recipe.require(SlFluidTags.SUPERHEATED_STEAM, 125);
 					});
 		});
 	}

@@ -26,20 +26,19 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SolarBoilerBlock extends Block implements IBE<SolarBoilerBlockEntity>, ISteamEngineBlock {
 	private final SteamEngineSpec spec;
 	private final Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType;
 
-	public SolarBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer) {
-		this(properties, configurer, null);
+	public SolarBoilerBlock(Properties properties, SteamEngineSpec spec) {
+		this(properties, spec, null);
 	}
 
-	public SolarBoilerBlock(Properties properties, Consumer<SteamEngineSpec.Builder> configurer, Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType) {
+	public SolarBoilerBlock(Properties properties, SteamEngineSpec spec, Supplier<BlockEntityType<? extends SolarBoilerBlockEntity>> customBlockEntityType) {
 		super(properties.noOcclusion());
-		spec = SteamEngineSpec.of(configurer);
+		this.spec = spec;
 		this.customBlockEntityType = customBlockEntityType;
 	}
 

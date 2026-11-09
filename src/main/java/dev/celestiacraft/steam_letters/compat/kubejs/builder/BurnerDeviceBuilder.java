@@ -13,6 +13,7 @@ import java.util.function.DoubleSupplier;
 
 public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity, SELF extends DeviceBuilder<B, E, SELF>> extends DeviceBuilder<B, E, SELF> {
 	protected Double maxHeat;
+	protected Double temperature;
 
 	protected BurnerDeviceBuilder(ResourceLocation id) {
 		super(id);
@@ -26,6 +27,16 @@ public abstract class BurnerDeviceBuilder<B extends Block, E extends BlockEntity
 
 	protected DoubleSupplier maxHeatOr(DoubleSupplier fallback) {
 		return maxHeat == null ? fallback : maxHeat::doubleValue;
+	}
+
+	@Info("Maximum temperature")
+	public SELF temperature(double value) {
+		temperature = value;
+		return self();
+	}
+
+	protected DoubleSupplier temperatureOr(DoubleSupplier fallback) {
+		return temperature == null ? fallback : temperature::doubleValue;
 	}
 
 	@Override

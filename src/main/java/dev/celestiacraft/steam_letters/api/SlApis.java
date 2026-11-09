@@ -3,11 +3,11 @@ package dev.celestiacraft.steam_letters.api;
 import com.jesz.createdieselgenerators.CreateDieselGenerators;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.celestiacraft.steam_letters.CreateLettersSteam;
+import dev.celestiacraft.steam_letters.api.register.SlRegistrate;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
@@ -17,7 +17,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 public class SlApis {
-	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(CreateLettersSteam.MODID)
+	public static final SlRegistrate REGISTRATE = SlRegistrate.create(CreateLettersSteam.MODID)
 			.setTooltipModifierFactory((item) -> {
 				return new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
 						.andThen(TooltipModifier.mapNull(KineticStats.create(item)));

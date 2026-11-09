@@ -1,6 +1,8 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
 import com.google.gson.JsonObject;
+import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
+import dev.celestiacraft.steam_letters.api.machine.SteamFlywheelSpec;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
@@ -87,12 +89,19 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 		 * 脚本没写的参数保持 SteamEngineDriveSpec.builder() 的默认值(0),
 		 * SteamEngineBlockEntity 在世界里运行时回退到该设备类的默认常量.
 		 */
-		return new SteamEngineBlock(properties, (builder) -> {
+		return new SteamEngineBlock(properties, driveSpec(), () -> blockEntityType);
+	}
+
+	/**
+	 * 汇总脚本给出的引擎参数, 未写的项保持 Builder 的默认值.
+	 */
+	private SteamEngineDriveSpec driveSpec() {
+		return SteamEngineDriveSpec.of((builder) -> {
 			builder.strength(strength)
 					.speed(speed)
 					.consumption(consumption)
 					.capacity(capacityOr(() -> 0));
-		}, () -> blockEntityType);
+		});
 	}
 
 	@Override
@@ -191,7 +200,7 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 
 		@Override
 		protected SteamFlywheelBlock createBlock(BlockBehaviour.Properties properties) {
-			return new SteamFlywheelBlock(properties, () -> blockEntityType, material);
+			return new SteamFlywheelBlock(properties, new SteamFlywheelSpec(material, () -> blockEntityType));
 		}
 
 		@Override
