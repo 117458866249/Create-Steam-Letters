@@ -1,5 +1,6 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,6 +11,7 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.api.item.SteamBlockItem;
 import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
+import dev.latvian.mods.kubejs.generator.DataJsonGenerator;
 import dev.latvian.mods.kubejs.registry.BuilderBase;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.typings.Info;
@@ -203,6 +205,41 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 	@Override
 	public void generateLang(LangEventJS event) {
 		event.add(id.toLanguageKey("block"), displayName(id.getPath()));
+	}
+
+	@Override
+	public void generateDataJsons(DataJsonGenerator generator) {
+		generator.json(newID("loot_tables/blocks/", ""), createLootTable());
+	}
+
+	private JsonObject createLootTable() {
+		JsonObject item = new JsonObject();
+		item.addProperty("type", "minecraft:item");
+		item.addProperty("name", id.toString());
+
+		JsonArray entries = new JsonArray();
+		entries.add(item);
+
+		JsonObject survives = new JsonObject();
+		survives.addProperty("condition", "minecraft:survives_explosion");
+
+		JsonArray conditions = new JsonArray();
+		conditions.add(survives);
+
+		JsonObject pool = new JsonObject();
+		pool.addProperty("rolls", 1.0D);
+		pool.addProperty("bonus_rolls", 0.0D);
+		pool.add("conditions", conditions);
+		pool.add("entries", entries);
+
+		JsonArray pools = new JsonArray();
+		pools.add(pool);
+
+		JsonObject table = new JsonObject();
+		table.addProperty("type", "minecraft:block");
+		table.add("pools", pools);
+		table.addProperty("random_sequence", id.getNamespace() + ":blocks/" + id.getPath());
+		return table;
 	}
 
 	protected abstract String devicePath();
