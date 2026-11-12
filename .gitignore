@@ -14,3 +14,4 @@ build
 /.manual-compile
 /libs
 /clear
+.vscode/

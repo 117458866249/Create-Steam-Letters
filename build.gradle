@@ -30,6 +30,11 @@ java {
 	toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
+// Separate client-only runtime mods from dedicated-server runs.
+sourceSets {
+	client
+}
+
 minecraft {
 	mappings channel: mapping_channel, version: mapping_version
 	copyIdeResources = true
@@ -47,10 +52,12 @@ minecraft {
 		}
 
 		client {
+			source sourceSets.client
 			property 'forge.enabledGameTestNamespaces', mod_id
 		}
 
 		server {
+			workingDirectory project.file('run/server')
 			property 'forge.enabledGameTestNamespaces', mod_id
 			args '--nogui'
 		}
@@ -148,8 +155,8 @@ dependencies {
 	runtimeOnly fg.deobf("curse.maven:probejs-585406:5227399")
 
 	// Oculus & Embeddium
-	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
-	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
+	clientRuntimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
+	clientRuntimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
 
 	// Mantel & Tinkers' Construct
 	implementation fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-1.11.117")
