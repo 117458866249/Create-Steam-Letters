@@ -100,7 +100,8 @@ public class SteamEngineDeviceBuilder extends DeviceBuilder<SteamEngineBlock, St
 			builder.strength(strength)
 					.speed(speed)
 					.consumption(consumption)
-					.capacity(capacityOr(() -> 0));
+					.capacity(capacityOr(() -> 0))
+					.material(material);
 		});
 	}
 

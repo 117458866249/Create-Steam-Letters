@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -316,7 +317,37 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			}
 		}
 
+		if (!matchesMaterial(wheel)) {
+			return null;
+		}
+
 		return candidate.immutable();
+	}
+
+	/**
+	 * 引擎与飞轮的材质必须一致: 青铜引擎只认青铜飞轮, 钢引擎只认钢飞轮.
+	 * <p>
+	 * 引擎未声明材质时不设限制.
+	 *
+	 * @param wheel 正对位的飞轮
+	 * @return 材质是否匹配
+	 */
+	private boolean matchesMaterial(SteamFlywheelBlockEntity wheel) {
+		if (!(getBlockState().getBlock() instanceof SteamEngineBlock engine)) {
+			return true;
+		}
+
+		ResourceLocation required = engine.getDriveSpec().getMaterial();
+
+		if (required == null) {
+			return true;
+		}
+
+		if (!(wheel.getBlockState().getBlock() instanceof SteamFlywheelBlock flywheel)) {
+			return false;
+		}
+
+		return required.equals(flywheel.getMaterial());
 	}
 
 	@Nullable

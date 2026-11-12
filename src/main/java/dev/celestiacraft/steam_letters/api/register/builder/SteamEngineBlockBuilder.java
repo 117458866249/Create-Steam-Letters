@@ -6,6 +6,7 @@ import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineDriveSpec;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.DoubleSupplier;
@@ -87,6 +88,14 @@ public class SteamEngineBlockBuilder<T extends SteamEngineBlock, P> extends Bloc
 
 	public SteamEngineBlockBuilder<T, P> capacity(IntSupplier capacity) {
 		driveParts.capacity(capacity);
+		return this;
+	}
+
+	/**
+	 * 引擎的材质 id, 只有材质相同的飞轮才能与本引擎配对.
+	 */
+	public SteamEngineBlockBuilder<T, P> material(ResourceLocation material) {
+		driveParts.material(material);
 		return this;
 	}
 }

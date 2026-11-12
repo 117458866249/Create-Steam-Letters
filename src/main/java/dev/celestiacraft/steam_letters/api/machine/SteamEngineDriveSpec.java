@@ -1,5 +1,8 @@
 package dev.celestiacraft.steam_letters.api.machine;
 
+import lombok.Getter;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -9,12 +12,15 @@ public class SteamEngineDriveSpec {
 	private final DoubleSupplier speed;
 	private final DoubleSupplier consumption;
 	private final IntSupplier capacity;
+	@Getter
+	private final ResourceLocation material;
 
-	private SteamEngineDriveSpec(DoubleSupplier strength, DoubleSupplier speed, DoubleSupplier consumption, IntSupplier capacity) {
+	private SteamEngineDriveSpec(DoubleSupplier strength, DoubleSupplier speed, DoubleSupplier consumption, IntSupplier capacity, ResourceLocation material) {
 		this.strength = strength;
 		this.speed = speed;
 		this.consumption = consumption;
 		this.capacity = capacity;
+		this.material = material;
 	}
 
 	/**
@@ -63,6 +69,7 @@ public class SteamEngineDriveSpec {
 		private DoubleSupplier speed = () -> 0.0D;
 		private DoubleSupplier consumption = () -> 0.0D;
 		private IntSupplier capacity = () -> 0;
+		private ResourceLocation material;
 
 		public Builder strength(double value) {
 			return strength(() -> value);
@@ -100,8 +107,16 @@ public class SteamEngineDriveSpec {
 			return this;
 		}
 
+		/**
+		 * 引擎的材质 id, 需与飞轮的材质一致才能配对.
+		 */
+		public Builder material(ResourceLocation material) {
+			this.material = material;
+			return this;
+		}
+
 		public SteamEngineDriveSpec build() {
-			return new SteamEngineDriveSpec(strength, speed, consumption, capacity);
+			return new SteamEngineDriveSpec(strength, speed, consumption, capacity, material);
 		}
 	}
 }

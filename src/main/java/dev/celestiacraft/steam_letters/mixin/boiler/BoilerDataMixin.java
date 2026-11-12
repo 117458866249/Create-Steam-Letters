@@ -197,8 +197,10 @@ public class BoilerDataMixin implements SteamBoilerData {
 	}
 
 	/**
-	 * 在每个供应量采样点, 以与原版水供应相同的方式采样蒸汽输入速率
-	 * 如果在上一个采样窗口内没有输入蒸汽, 则降低蒸汽热量, 随后重置计数器
+	 * 在每个供应量采样点, 以与原版水供应相同的方式采样蒸汽输入速率.
+	 * <p>
+	 * 这里只统计速率, 不参与热源判定: 蒸汽热量由缓冲存量支撑, 供汽中断后靠存量继续产热,
+	 * 存量烧完才归零, 因此不能在采样窗口内没有输入时立刻把等级拉塌.
 	 *
 	 * @param entity
 	 * @param info
@@ -213,11 +215,6 @@ public class BoilerDataMixin implements SteamBoilerData {
 			remap = false
 	)
 	private void sl$sampleSteamSupply(FluidTankBlockEntity entity, CallbackInfo info) {
-		if (sl$steamGathered == 0 && sl$steamHeatLevel != 0) {
-			sl$steamHeatLevel = 0;
-			needsHeatLevelUpdate = true;
-		}
-
 		sl$steamSupplyOverTime[sl$steamSupplyIndex] = sl$steamGathered / (float) SAMPLE_RATE;
 		sl$steamSupply = Math.max(sl$steamSupply, sl$steamSupplyOverTime[sl$steamSupplyIndex]);
 		sl$steamSupplyIndex = (sl$steamSupplyIndex + 1) % sl$steamSupplyOverTime.length;
@@ -328,7 +325,30 @@ public class BoilerDataMixin implements SteamBoilerData {
 			sl$waterStored = sl$waterCapacity;
 		}
 
+		sl$updateSteamHeat();
 		sl$produceSteam(boilerSize);
+	}
+
+	/**
+	 * 蒸汽输入模式靠缓冲存量续命, 存量见底才退回自产汽模式.
+	 * <p>
+	 * 输入蒸汽直接存进缓冲, 由接在上面的蒸汽引擎与青铜蒸汽泵抽走, 因此中断供汽后锅炉
+	 * 仍能继续输出, 直到存量被抽空为止; 存量还在时等级不衰减.
+	 */
+	@Unique
+	private void sl$updateSteamHeat() {
+		if (sl$steamHeatLevel <= 0) {
+			return;
+		}
+
+		if (sl$steamBuffer > 0) {
+			return;
+		}
+
+		sl$steamBuffer = 0;
+		sl$steamBufferType = SL_STEAM_NONE;
+		sl$steamHeatLevel = 0;
+		needsHeatLevelUpdate = true;
 	}
 
 	/**
@@ -561,12 +581,37 @@ public class BoilerDataMixin implements SteamBoilerData {
 	}
 
 	@Override
-	public void sl$notifySteamInput(int level, int amount) {
-		if (level > sl$steamHeatLevel) {
+	public int sl$notifySteamInput(int level, int amount) {
+		if (level <= 0 || amount <= 0 || sl$steamCapacity <= 0) {
+			return 0;
+		}
+
+		int type = level >= (int) SL_MAX_LEVEL ? SL_STEAM_SUPERHEATED : SL_STEAM_NORMAL;
+
+		// 缓冲同一时刻只装一种蒸汽, 类型不符时先把它抽空或烧空再换
+		if (sl$steamBuffer > 0 && sl$steamBufferType != type) {
+			return 0;
+		}
+
+		int room = sl$steamCapacity - sl$steamBuffer;
+
+		if (room <= 0) {
+			return 0;
+		}
+
+		boolean wasEmpty = sl$steamBuffer <= 0;
+		int accepted = Math.min(amount, room);
+		sl$steamBuffer += accepted;
+		sl$steamBufferType = type;
+		sl$steamGathered += accepted;
+
+		// 缓冲刚为空时等级跟随这次灌入的蒸汽, 否则只许抬高
+		if (wasEmpty || level > sl$steamHeatLevel) {
 			sl$steamHeatLevel = level;
 			needsHeatLevelUpdate = true;
 		}
-		sl$steamGathered += amount;
+
+		return accepted;
 	}
 
 	@Override

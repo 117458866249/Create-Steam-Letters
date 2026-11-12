@@ -21,7 +21,9 @@ public class SteamFlywheelBlockBuilder<T extends SteamFlywheelBlock, P> extends 
 	protected SteamFlywheelBlockBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, SteamSpecParts parts, NonNullBiFunction<BlockBehaviour.Properties, SteamFlywheelSpec, T> factory) {
 		super(owner, parent, name, callback, (properties) -> {
 			return factory.apply(properties, parts.build());
-		}, () -> BlockBehaviour.Properties.of());
+		}, () -> {
+			return BlockBehaviour.Properties.of();
+		});
 		this.parts = parts;
 	}
 

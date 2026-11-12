@@ -11,10 +11,16 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public interface SteamBoilerData {
 	/**
+	 * 把外部灌入的蒸汽存进锅炉的蒸汽缓冲.
+	 * <p>
+	 * 蒸汽输入模式以缓冲里的蒸汽为热源, 等级由它支撑; 中断供汽后锅炉靠存量继续运行,
+	 * 抽空才退回自产汽模式.
+	 *
 	 * @param level  普通蒸汽为 9, 过热蒸汽为 18
-	 * @param amount 本次调用接受的蒸汽流体量(mB)
+	 * @param amount 本次送达的蒸汽流体量(mB)
+	 * @return 实际进入缓冲的量(mB), 缓冲满或与缓冲中的蒸汽类型冲突时为 0
 	 */
-	void sl$notifySteamInput(int level, int amount);
+	int sl$notifySteamInput(int level, int amount);
 
 	/**
 	 * 往锅炉的水罐里注水.

@@ -217,6 +217,7 @@ public class SlBlocks {
 				.speed(SteamEngineBlockEntity.DEFAULT_SPEED)
 				.consumption(SteamEngineBlockEntity.DEFAULT_CONSUMPTION)
 				.capacity(SteamEngineBlockEntity.DEFAULT_STORAGE)
+				.material(SlApis.loadResource("bronze"))
 				.item(SteamBlockItem::new)
 				.model(ItemModelGen.withModel("block/steam/engine/bronze_item"))
 				.build()

@@ -11,14 +11,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 锅炉输入处理器, 除了接受水(原版行为)外, 还接受 {@code forge:steam} / {@code forge:superheated_steam} 流体
  * <p>
- * 蒸汽的消耗方式与水完全相同: 每个通过 {@link #fill} 接受的 mB 都会计入锅炉的采样供应量
+ * 注进来的蒸汽直接存进锅炉的蒸汽缓冲, 不进 Create 的槽位; 过热蒸汽会把等级顶到 18, 普通蒸汽顶到 9.
  * <p>
- * 因此水供应所决定的等级上限(每级每 tick 为 {@code ceil(supply) / 10} mB)保持不变
+ * 等级由缓冲存量支撑: 只要缓冲里还有蒸汽, 供汽中断后锅炉仍按原等级继续运行, 抽空才退回自产汽模式,
+ * 因此管网间歇供汽不会让锅炉停机.
  * <p>
- * 过热蒸汽会额外将锅炉的等级提升至 18, 普通蒸汽则提升至 9
- * <p>
- * 输出侧接管锅炉自产的蒸汽池: {@link #drain} / {@link #getFluidInTank} 都指向
- * {@link BoilerData} 上的虚拟缓冲, 于是引擎直抽, 青铜蒸汽泵与管网取汽共享同一份蒸汽
+ * 输出侧 {@link #drain} / {@link #getFluidInTank} 都指向同一份缓冲, 于是引擎直抽, 青铜蒸汽泵与管网取汽
+ * 共享同一份蒸汽, 灌进来的蒸汽也能被原样抽走.
  */
 public class SteamBoilerFluidHandler extends BoilerData.BoilerFluidHandler {
 	private final BoilerData owner;
@@ -41,12 +40,20 @@ public class SteamBoilerFluidHandler extends BoilerData.BoilerFluidHandler {
 			return sl$fillWaterBuffer(steamBoiler, stack, action);
 		}
 
-		int filled = super.fill(stack, action);
+		// 蒸汽直接进蒸汽缓冲, 不写进 Create 的槽位:
+		// 槽位对外只暴露缓冲, 只有进缓冲的蒸汽才能被引擎与蒸汽泵继续抽走.
+		if (steamBoiler != null && isSteam(stack)) {
+			if (action.simulate()) {
+				int room = Math.max(0, steamBoiler.sl$getSteamCapacity() - steamBoiler.sl$peekSteam().getAmount());
 
-		if (filled > 0 && action.execute() && steamBoiler != null && isSteam(stack)) {
-			steamBoiler.sl$notifySteamInput(steamHeatLevel(stack), filled);
+				return Math.min(stack.getAmount(), room);
+			}
+
+			return steamBoiler.sl$notifySteamInput(steamHeatLevel(stack), stack.getAmount());
 		}
-		return filled;
+
+		// 既不是水也不是蒸汽的流体交给 Create 原本的槽位
+		return super.fill(stack, action);
 	}
 
 	/**
