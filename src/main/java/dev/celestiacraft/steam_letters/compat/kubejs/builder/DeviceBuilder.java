@@ -409,7 +409,8 @@ public abstract class DeviceBuilder<B extends Block, E extends BlockEntity, SELF
 			if (!builder.isEmpty()) {
 				builder.append(' ');
 			}
-			builder.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+			builder.append(Character.toUpperCase(part.charAt(0)))
+					.append(part.substring(1));
 		}
 		return builder.toString();
 	}
