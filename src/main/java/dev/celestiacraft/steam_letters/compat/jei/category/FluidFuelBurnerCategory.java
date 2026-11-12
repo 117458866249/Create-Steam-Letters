@@ -31,7 +31,6 @@ public class FluidFuelBurnerCategory extends BurnerFuelCategory<FluidFuelRecipe>
 		}
 
 		IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
-		// Keep every tag alternative (and its NBT) using the API shared by older JEI 15 releases.
 		slot.addIngredients(ForgeTypes.FLUID_STACK, fluids);
 		return slot;
 	}

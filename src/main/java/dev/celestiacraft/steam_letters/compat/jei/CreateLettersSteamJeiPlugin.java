@@ -23,6 +23,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -73,12 +74,12 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(@NotNull IRecipeRegistration registration) {
-		var connection = Minecraft.getInstance().getConnection();
+		ClientPacketListener connection = Minecraft.getInstance().getConnection();
 		if (connection == null) {
 			return;
 		}
 
-		// Use recipes synchronized to the client, including on dedicated servers.
+		// 使用同步到客户端的配方, 包括在专用服务器上
 		RecipeManager manager = connection.getRecipeManager();
 
 		List<SolidFuelRecipe> solid = new ArrayList<>(manager.getAllRecipesFor(SlRecipeTypes.SOLID_FUEL.get()));
