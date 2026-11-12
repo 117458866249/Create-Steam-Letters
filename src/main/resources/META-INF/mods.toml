@@ -26,3 +26,9 @@ mandatory = true
 versionRange = "[6.0.0,)"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies."${mod_id}"]]
+modId = "kubejs"
+mandatory = false
+versionRange = "[2001.6.5-build.26,)"
+ordering = "NONE"
+side = "BOTH"
