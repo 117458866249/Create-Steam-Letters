@@ -22,19 +22,18 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,12 +73,13 @@ public class CreateLettersSteamJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(@NotNull IRecipeRegistration registration) {
-		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-		if (server == null) {
+		var connection = Minecraft.getInstance().getConnection();
+		if (connection == null) {
 			return;
 		}
 
-		RecipeManager manager = server.getRecipeManager();
+		// Use recipes synchronized to the client, including on dedicated servers.
+		RecipeManager manager = connection.getRecipeManager();
 
 		List<SolidFuelRecipe> solid = new ArrayList<>(manager.getAllRecipesFor(SlRecipeTypes.SOLID_FUEL.get()));
 		solid.addAll(collectFurnaceFuels(solid));

@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.compat.jei.category;
 import dev.celestiacraft.steam_letters.common.recipe.type.FluidFuelRecipe;
 import dev.celestiacraft.steam_letters.tags.SlBlockTags;
 import dev.celestiacraft.steam_letters.utils.TagAnimatedBlock;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -29,9 +30,9 @@ public class FluidFuelBurnerCategory extends BurnerFuelCategory<FluidFuelRecipe>
 			return null;
 		}
 
-		FluidStack first = fluids.get(0);
 		IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
-		slot.addFluidStack(first.getFluid(), first.getAmount());
+		// Keep every tag alternative (and its NBT) using the API shared by older JEI 15 releases.
+		slot.addIngredients(ForgeTypes.FLUID_STACK, fluids);
 		return slot;
 	}
 
