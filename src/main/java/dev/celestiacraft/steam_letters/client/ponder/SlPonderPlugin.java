@@ -39,7 +39,7 @@ public class SlPonderPlugin implements PonderPlugin {
 
 	@Override
 	public void registerScenes(@NotNull PonderSceneRegistrationHelper<ResourceLocation> helper) {
-		SlPonderScene.register(helper(helper));
+		SlPonderScene.register(getItem(helper));
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class SlPonderPlugin implements PonderPlugin {
 		}
 	}
 
-	private PonderSceneRegistrationHelper<Item> helper(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+	private PonderSceneRegistrationHelper<Item> getItem(PonderSceneRegistrationHelper<ResourceLocation> helper) {
 		return helper.withKeyFunction(ForgeRegistries.ITEMS::getKey);
 	}
 
