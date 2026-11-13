@@ -1,5 +1,7 @@
 package dev.celestiacraft.steam_letters.compat.kubejs.builder;
 
+import com.google.gson.JsonObject;
+import dev.latvian.mods.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -22,5 +24,22 @@ public abstract class BoilerDeviceBuilder<B extends Block, E extends BlockEntity
 
 	protected DoubleSupplier productionOr(DoubleSupplier fallback) {
 		return production == null ? fallback : production::doubleValue;
+	}
+
+	@Override
+	protected void generateBlockModels(AssetJsonGenerator generator) {
+		String path = baseModel();
+
+		JsonObject textures = new JsonObject();
+		textures.addProperty("particle", textureId(path, "side"));
+		textures.addProperty("bottom", textureId(path, "top"));
+		textures.addProperty("top", textureId(path, "top"));
+		textures.addProperty("side", textureId(path, "side"));
+
+		JsonObject root = new JsonObject();
+		root.addProperty("parent", "minecraft:block/cube_bottom_top");
+		root.add("textures", textures);
+
+		generator.json(modelLocation(path), root);
 	}
 }
