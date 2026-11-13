@@ -25,7 +25,6 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 
 	public static void addRecipes(Consumer<FinishedRecipe> consumer) {
 		addBronzeBasin(consumer);
-		addBronzeDepot(consumer);
 		addBurner(consumer);
 		addBoiler(consumer);
 		addMaterial(consumer);
@@ -278,33 +277,5 @@ public class SlCraftingRecipeGen extends SlRecipeProvider {
 				.define('B', AllBlocks.BASIN)
 				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
 				.save(consumer, save(SHAPED + "bronze/basin/plate_update"));
-	}
-
-	private static void addBronzeDepot(Consumer<FinishedRecipe> consumer) {
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SlBlocks.BRONZE_DEPOT)
-				.requires(SlItemTags.BRONZE_INGOT)
-				.requires(SlBlocks.BRONZE_CASING)
-				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
-				.save(consumer, save(SHAPELESS + "bronze/depot/ingot"));
-
-		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SlBlocks.BRONZE_DEPOT)
-				.requires(SlItemTags.BRONZE_PLATES)
-				.requires(SlBlocks.BRONZE_CASING)
-				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
-				.save(consumer, save(SHAPELESS + "bronze/depot/plate"));
-
-		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_DEPOT)
-				.pattern("ABA")
-				.define('A', SlItemTags.BRONZE_INGOT)
-				.define('B', AllBlocks.DEPOT)
-				.unlockedBy("bronze", has(SlItemTags.BRONZE_INGOT))
-				.save(consumer, save(SHAPED + "bronze/depot/ingot_update"));
-
-		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SlBlocks.BRONZE_DEPOT)
-				.pattern("ABA")
-				.define('A', SlItemTags.BRONZE_PLATES)
-				.define('B', AllBlocks.DEPOT)
-				.unlockedBy("bronze", has(SlItemTags.BRONZE_PLATES))
-				.save(consumer, save(SHAPED + "bronze/depot/plate_update"));
 	}
 }
