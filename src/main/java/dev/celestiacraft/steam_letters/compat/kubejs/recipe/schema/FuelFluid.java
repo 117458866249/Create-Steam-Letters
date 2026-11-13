@@ -1,8 +1,9 @@
-package dev.celestiacraft.steam_letters.compat.kubejs.schema;
+package dev.celestiacraft.steam_letters.compat.kubejs.recipe.schema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
+import dev.latvian.mods.rhino.util.HideFromJS;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ public class FuelFluid {
 		this.tag = tag;
 	}
 
+	@HideFromJS
 	public static @NotNull FuelFluid of(@Nullable Object from) {
 		if (from instanceof FuelFluid fuel) {
 			return fuel;

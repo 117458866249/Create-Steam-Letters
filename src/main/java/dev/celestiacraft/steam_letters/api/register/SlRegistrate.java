@@ -1,5 +1,8 @@
 package dev.celestiacraft.steam_letters.api.register;
 
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -9,6 +12,7 @@ import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
 import dev.celestiacraft.steam_letters.api.machine.SteamFlywheelSpec;
 import dev.celestiacraft.steam_letters.api.register.builder.BoilerBlockBuilder;
 import dev.celestiacraft.steam_letters.api.register.builder.BurnerBlockBuilder;
+import dev.celestiacraft.steam_letters.api.register.builder.RecipeTypeBuilder;
 import dev.celestiacraft.steam_letters.api.register.builder.SolarBoilerBlockBuilder;
 import dev.celestiacraft.steam_letters.api.register.builder.SteamEngineBlockBuilder;
 import dev.celestiacraft.steam_letters.api.register.builder.SteamFlywheelBlockBuilder;
@@ -17,13 +21,20 @@ import dev.celestiacraft.steam_letters.common.block.boiler.SteamBoilerBlock;
 import dev.celestiacraft.steam_letters.common.block.burner.AbstractBurnerBlock;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.block.flywheel.SteamFlywheelBlock;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 本模组唯一使用的注册入口, 取代 {@link CreateRegistrate}.
@@ -36,8 +47,17 @@ import java.util.function.Function;
  * 所以这里自己调 {@code accept} 完成挂接.
  */
 public class SlRegistrate extends CreateRegistrate {
+	/**
+	 * 配方要占用两个注册表(类型与序列化器), Registrate 的 Builder 只服务单个注册表, 因此这两条由本类自己持有,
+	 * 在 {@link #registerEventListeners(IEventBus)} 里一并挂到总线上, 由 {@link #recipe(String, Supplier)} 使用.
+	 */
+	private final DeferredRegister<RecipeType<?>> recipeTypes;
+	private final DeferredRegister<RecipeSerializer<?>> recipeSerializers;
+
 	protected SlRegistrate(String modid) {
 		super(modid);
+		recipeTypes = DeferredRegister.create(Registries.RECIPE_TYPE, modid);
+		recipeSerializers = DeferredRegister.create(Registries.RECIPE_SERIALIZER, modid);
 	}
 
 	public static SlRegistrate create(String modid) {
@@ -53,6 +73,8 @@ public class SlRegistrate extends CreateRegistrate {
 	@Override
 	public @NotNull SlRegistrate registerEventListeners(IEventBus bus) {
 		super.registerEventListeners(bus);
+		recipeTypes.register(bus);
+		recipeSerializers.register(bus);
 		return this;
 	}
 
@@ -94,5 +116,23 @@ public class SlRegistrate extends CreateRegistrate {
 
 	public <T extends SteamFlywheelBlock> SteamFlywheelBlockBuilder<T, CreateRegistrate> steamFlywheel(String name, NonNullBiFunction<BlockBehaviour.Properties, SteamFlywheelSpec, T> factory) {
 		return steamFlywheel(self(), name, factory);
+	}
+
+	public <R extends Recipe<?>> RecipeTypeBuilder<R> recipe(String name, Supplier<RecipeSerializer<R>> serializer) {
+		return new RecipeTypeBuilder<>(this, name, serializer);
+	}
+
+	public <R extends ProcessingRecipe<?>> RecipeTypeBuilder fuelRecipe(String name, ProcessingRecipeBuilder.ProcessingRecipeFactory<R> factory) {
+		return recipe(name, () -> {
+			return new ProcessingRecipeSerializer<R>(factory);
+		});
+	}
+
+	public <R extends RecipeType<?>> RegistryObject<R> registerRecipeType(String name, Supplier<R> type) {
+		return recipeTypes.register(name, type);
+	}
+
+	public <R extends RecipeSerializer<?>> RegistryObject<R> registerRecipeSerializer(String name, Supplier<R> serializer) {
+		return recipeSerializers.register(name, serializer);
 	}
 }

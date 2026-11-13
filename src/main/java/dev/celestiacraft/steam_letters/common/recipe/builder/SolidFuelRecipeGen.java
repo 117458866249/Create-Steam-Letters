@@ -22,7 +22,7 @@ public abstract class SolidFuelRecipeGen extends ProcessingRecipeGen {
 
 	@Override
 	protected @NotNull IRecipeTypeInfo getRecipeType() {
-		return SlRecipeTypes.SOLID_FUEL_INFO;
+		return SlRecipeTypes.SOLID_FUEL;
 	}
 
 	protected GeneratedRecipe recipe(String name, @NotNull UnaryOperator<SolidFuelBuilder> transform) {

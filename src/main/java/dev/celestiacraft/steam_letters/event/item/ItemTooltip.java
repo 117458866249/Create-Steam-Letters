@@ -11,6 +11,7 @@ import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.common.block.advanced_spout.AdvancedSpoutBlockEntity;
 import dev.celestiacraft.steam_letters.common.block.engine.SteamEngineBlock;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
+import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.config.common.AdvancedSpoutConfig;
 import dev.celestiacraft.steam_letters.config.common.BronzeBasinConfig;
 import dev.celestiacraft.steam_letters.config.common.SolarBoilerConfig;
@@ -86,6 +87,9 @@ public class ItemTooltip {
 		}
 		if (stack.is(SlItemTags.BRONZE_STEAM_PUMP)) {
 			addSteamPumpTooltip(tooltip);
+		}
+		if (stack.is(SlBlocks.BRONZE_DEPOT.asItem())) {
+			addBronzeDepot(tooltip);
 		}
 	}
 
@@ -382,6 +386,10 @@ public class ItemTooltip {
 		line(tooltip, SlTranKeys.TOOLTIP_STEAM_PIPE_SUMMARY);
 		tooltip.add(Component.empty());
 		behaviour(tooltip, SlTranKeys.TOOLTIP_STEAM_PIPE_BEHAVIOUR);
+	}
+
+	private static void addBronzeDepot(List<Component> tooltip) {
+		tooltip.add(Component.translatable(SlTranKeys.WIP_HIDE_WARNING));
 	}
 
 	private static SteamEngineSpec engineSpec(Block block) {

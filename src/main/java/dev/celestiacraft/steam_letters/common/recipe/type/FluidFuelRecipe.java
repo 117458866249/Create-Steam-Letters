@@ -30,7 +30,7 @@ public class FluidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	private boolean superheated;
 
 	public FluidFuelRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-		super(SlRecipeTypes.FLUID_FUEL_INFO, params);
+		super(SlRecipeTypes.FLUID_FUEL.getInfo(), params);
 		superheated = consumeSuperheated();
 	}
 

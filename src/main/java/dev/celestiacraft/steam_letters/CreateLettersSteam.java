@@ -40,7 +40,7 @@ public class CreateLettersSteam {
 		SlBlockEntities.init();
 		SlFluids.init();
 		SlParticles.init(bus);
-		SlRecipeTypes.init(bus);
+		SlRecipeTypes.init();
 		SlCreativeTabs.init(bus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> {

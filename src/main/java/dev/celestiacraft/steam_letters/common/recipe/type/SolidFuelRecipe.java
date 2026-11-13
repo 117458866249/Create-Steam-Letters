@@ -22,7 +22,7 @@ public class SolidFuelRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 	private boolean superheated;
 
 	public SolidFuelRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-		super(SlRecipeTypes.SOLID_FUEL_INFO, params);
+		super(SlRecipeTypes.SOLID_FUEL.getInfo(), params);
 		superheated = consumeSuperheated();
 	}
 
