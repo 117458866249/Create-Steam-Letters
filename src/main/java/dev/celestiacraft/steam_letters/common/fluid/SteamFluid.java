@@ -41,7 +41,9 @@ public class SteamFluid extends FluidType {
 
 	@Override
 	public int getTemperature() {
-		return ModList.get().isLoaded("gtceu") ? 373 : 114514;
+		return ModList.get().isLoaded("gtceu")
+				? 373
+				: 114514;
 	}
 
 	@Override
