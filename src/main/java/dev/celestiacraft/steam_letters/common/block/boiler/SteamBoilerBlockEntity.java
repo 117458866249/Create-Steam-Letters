@@ -1,9 +1,7 @@
 package dev.celestiacraft.steam_letters.common.block.boiler;
 
-import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
@@ -13,6 +11,7 @@ import dev.celestiacraft.steam_letters.client.lang.SlLang;
 import dev.celestiacraft.steam_letters.config.common.SteamBoilerConfig;
 import dev.celestiacraft.steam_letters.config.common.SteamConfig;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,7 +39,7 @@ import java.util.Locale;
  * 结构成形与容量规则沿用原版的流体储罐, 但储罐分成两个槽: 槽 0 存水且只可注入,
  * 槽 1 存蒸汽且只可抽出. 结构下方一圈烈焰人燃烧室的热量决定等级, 等级决定每 tick 的产汽量.
  */
-public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHaveGoggleInformation {
+public class SteamBoilerBlockEntity extends FluidTankBlockEntity {
 	public static final int TANK_WATER = 0;
 	public static final int TANK_STEAM = 1;
 
@@ -68,6 +67,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	private static final int HEAT_SAMPLE_RATE = 5;
 	private static final float GAUGE_LERP = 0.25F;
 
+	@Getter
 	private final SmartFluidTank steamTank;
 	private final IFluidHandler boilerHandler;
 	private LazyOptional<IFluidHandler> boilerCapability = LazyOptional.empty();
@@ -75,8 +75,15 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	private boolean hasComponent;
 	private boolean superheated;
 	private double pending;
+	@Getter
 	private int superheatedBurners;
 	private int normalBurners;
+	/**
+	 * -- GETTER --
+	 *
+	 * @return 当前等级, 0 表示不产汽; 取值 0~18, 允许小数, 护目镜向下取整显示
+	 */
+	@Getter
 	private double boilerLevel;
 	private int sampledSize;
 	private float gauge;
@@ -210,10 +217,6 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		return tankInventory instanceof SmartFluidTank tank ? tank : null;
 	}
 
-	public SmartFluidTank getSteamTank() {
-		return steamTank;
-	}
-
 	public boolean hasComponent() {
 		return hasComponent;
 	}
@@ -222,17 +225,6 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		hasComponent = component;
 		setChanged();
 		sendData();
-	}
-
-	/**
-	 * @return 当前等级, 0 表示不产汽; 取值 0~18, 允许小数, 护目镜向下取整显示
-	 */
-	public double getBoilerLevel() {
-		return boilerLevel;
-	}
-
-	public int getSuperheatedBurners() {
-		return superheatedBurners;
 	}
 
 	public boolean isSuperheatedOutput() {
@@ -445,7 +437,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 					if (!(state.getBlock() instanceof BlazeBurnerBlock)) {
 						continue;
 					}
-					if (state.getValue(BlazeBurnerBlock.HEAT_LEVEL) == HeatLevel.SEETHING) {
+					if (state.getValue(BlazeBurnerBlock.HEAT_LEVEL) == BlazeBurnerBlock.HeatLevel.SEETHING) {
 						hot++;
 					} else {
 						normal++;
