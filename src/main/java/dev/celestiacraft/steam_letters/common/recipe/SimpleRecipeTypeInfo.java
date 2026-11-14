@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  * <p>
  * 一个配方要同时占用 RECIPE_TYPE 与 RECIPE_SERIALIZER 两个注册表, Registrate 的 RegistryEntry 只能承载其中一个,
  * 所以把两个 RegistryObject 收进同一个句柄, 由 {@link dev.celestiacraft.steam_letters.api.register.builder.RecipeTypeBuilder}
- * 产出. 本类本身就是 {@link IRecipeTypeInfo}, 可直接交给 ProcessingRecipe 的构造, 也可直接交给 Create 的 datagen 生成器.
+ * 产出. 本类本身就是 {@link IRecipeTypeInfo}, 可直接交给 ProcessingRecipe 的构造, 也可直接交给原版的 datagen 生成器.
  *
  * @param <R> 该类型下的配方实现
  */

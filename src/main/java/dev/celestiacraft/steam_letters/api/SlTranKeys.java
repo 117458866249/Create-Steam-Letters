@@ -96,7 +96,6 @@ public class SlTranKeys {
 			GOGGLE_STEAM_BOILER_STEAM,
 			GOGGLE_STEAM_BOILER_LEVEL,
 			GOGGLE_STEAM_BOILER_SIZE,
-			GOGGLE_STEAM_BOILER_BURNERS,
 			GOGGLE_STEAM_BOILER_HEAT,
 			GOGGLE_STEAM_BOILER_EFFICIENCY,
 			GOGGLE_STEAM_BOILER_SUPERHEATED,
@@ -226,7 +225,6 @@ public class SlTranKeys {
 		GOGGLE_STEAM_BOILER_STEAM = "gui.goggles.steam_boiler.steam";
 		GOGGLE_STEAM_BOILER_LEVEL = "gui.goggles.steam_boiler.level";
 		GOGGLE_STEAM_BOILER_SIZE = "gui.goggles.steam_boiler.size";
-		GOGGLE_STEAM_BOILER_BURNERS = "gui.goggles.steam_boiler.burners";
 		GOGGLE_STEAM_BOILER_HEAT = "gui.goggles.steam_boiler.heat";
 		GOGGLE_STEAM_BOILER_EFFICIENCY = "gui.goggles.steam_boiler.efficiency";
 		GOGGLE_STEAM_BOILER_SUPERHEATED = "gui.goggles.steam_boiler.superheated";

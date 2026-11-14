@@ -3,6 +3,7 @@ package dev.celestiacraft.steam_letters.common.fluid;
 import com.tterrag.registrate.builders.FluidBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fml.ModList;
 import org.joml.Vector3f;
 
 import java.util.function.Supplier;
@@ -20,8 +21,7 @@ public class SteamFluid extends FluidType {
 				.viscosity(1)
 				.canPushEntity(false)
 				.canConvertToSource(false)
-				.canDrown(true)
-				.temperature(114514));
+				.canDrown(true));
 		this.stillTexture = stillTexture;
 		this.flowingTexture = flowingTexture;
 		this.tintColor = tintColor;
@@ -37,6 +37,11 @@ public class SteamFluid extends FluidType {
 			fluidType.fogDistance = fogDistance;
 			return fluidType;
 		};
+	}
+
+	@Override
+	public int getTemperature() {
+		return ModList.get().isLoaded("gtceu") ? 373 : 114514;
 	}
 
 	@Override
