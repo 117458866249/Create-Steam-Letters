@@ -78,7 +78,7 @@ public class BigBoilerScene {
 				.placeNearTarget()
 				.attachKeyFrame()
 				.colored(PonderPalette.RED)
-				.text("注意: 它的热源必须是处于超级燃烧形态的烈焰人燃烧室");
+				.text("注意: 它的热源里至少有一个是处于超级燃烧形态的烈焰人燃烧室");
 		scene.idle(5);
 		scene.world().showSection(burnerI, Direction.NORTH);
 		scene.idle(5);
