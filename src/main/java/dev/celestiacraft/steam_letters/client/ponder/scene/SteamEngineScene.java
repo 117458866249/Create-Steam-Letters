@@ -95,7 +95,7 @@ public class SteamEngineScene {
 		scene.world().modifyBlockEntityNBT(boilerForNbt, SteamBoilerBlockEntity.class, (nbt) -> {
 			FluidTank tank = new FluidTank(10000);
 			tank.setFluid(new FluidStack(Fluids.WATER, 10000));
-			nbt.put("InputTank", tank.writeToNBT(new CompoundTag()));
+			nbt.put("TankContent", tank.writeToNBT(new CompoundTag()));
 		});
 		scene.world().modifyBlockEntityNBT(waterPipeForNbt, KineticBlockEntity.class, (nbt) -> {
 			nbt.putFloat("Speed", -16.0F);
