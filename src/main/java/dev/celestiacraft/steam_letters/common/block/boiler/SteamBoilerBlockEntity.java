@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 /**
  * 多方块锅炉储罐的方块实体.
@@ -681,19 +680,5 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 
 	private static String formatNumber(double value) {
 		return String.format(Locale.ROOT, "%.1f", value);
-	}
-
-	/**
-	 * 槽 0 的水罐: 只接受水.
-	 */
-	private static class WaterTank extends SmartFluidTank {
-		private WaterTank(int capacity, Consumer<FluidStack> callback) {
-			super(capacity, callback);
-		}
-
-		@Override
-		public boolean isFluidValid(FluidStack stack) {
-			return BoilerFluidTank.isWater(stack);
-		}
 	}
 }
