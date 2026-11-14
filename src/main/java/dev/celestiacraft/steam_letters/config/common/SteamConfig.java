@@ -5,6 +5,7 @@ import dev.celestiacraft.steam_letters.config.api.ConfigModule;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -67,6 +68,18 @@ public class SteamConfig extends ConfigModule {
 	 */
 	public static Fluid getOutputSuperheatedSteamFluid() {
 		return resolveFluid(OUTPUT_SUPERHEATED_STEAM_FLUID, "superheated_steam");
+	}
+
+	/**
+	 * 按产出类型取一份指定量的蒸汽, 配置无效时返回空栈.
+	 */
+	public static FluidStack getOutputSteam(int amount, boolean superheated) {
+		Fluid fluid = superheated ? getOutputSuperheatedSteamFluid() : getOutputSteamFluid();
+		if (fluid == null) {
+			return FluidStack.EMPTY;
+		}
+
+		return new FluidStack(fluid, amount);
 	}
 
 	/**

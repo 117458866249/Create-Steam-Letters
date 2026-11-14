@@ -92,7 +92,8 @@ public class SlPonderScene {
 	}
 
 	private static void bigBoiler(@NotNull PonderSceneRegistrationHelper<Item> helper) {
-		SlPonderPlugin.addPonderForBlocks(helper, (block) -> block instanceof SteamBoilerBlock,
-				"big_boiler", BigBoilerScene::usage, AllCreatePonderTags.FLUIDS, SlPonderTags.SL);
+		SlPonderPlugin.addPonderForBlocks(helper, (block) -> {
+			return block instanceof SteamBoilerBlock;
+		}, "big_boiler", BigBoilerScene::usage, AllCreatePonderTags.FLUIDS, SlPonderTags.SL);
 	}
 }

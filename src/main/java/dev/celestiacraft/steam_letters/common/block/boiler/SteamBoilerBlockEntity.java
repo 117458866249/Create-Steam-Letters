@@ -8,7 +8,9 @@ import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import dev.celestiacraft.steam_letters.api.SlTranKeys;
 import dev.celestiacraft.steam_letters.api.machine.ISteamEngineBlock;
 import dev.celestiacraft.steam_letters.api.machine.SteamEngineSpec;
+import dev.celestiacraft.steam_letters.api.machine.heat.IHeatSource;
 import dev.celestiacraft.steam_letters.client.lang.SlLang;
+import dev.celestiacraft.steam_letters.config.common.SteamBoilerConfig;
 import dev.celestiacraft.steam_letters.config.common.SteamConfig;
 import dev.celestiacraft.steam_letters.tags.SlFluidTags;
 import net.minecraft.ChatFormatting;
@@ -16,6 +18,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,7 +38,7 @@ import java.util.function.Consumer;
 /**
  * 多方块锅炉储罐的方块实体.
  * <p>
- * 结构成形与容量规则沿用 Create 的流体储罐, 但储罐分成两个槽: 槽 0 存水且只可注入,
+ * 结构成形与容量规则沿用原版的流体储罐, 但储罐分成两个槽: 槽 0 存水且只可注入,
  * 槽 1 存蒸汽且只可抽出. 结构下方一圈烈焰人燃烧室的热量决定等级, 等级决定每 tick 的产汽量.
  */
 public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHaveGoggleInformation {
@@ -52,14 +56,18 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	private static final String NBT_PENDING = "Pending";
 	private static final String NBT_COMPONENT = "SteamComponent";
 	private static final String NBT_SUPERHEATED = "Superheated";
+	private static final String NBT_LEVEL = "BoilerLevel";
+	private static final String NBT_BURNERS = "Burners";
+	private static final String NBT_NORMAL_BURNERS = "NormalBurners";
 
 	/**
-	 * 等级上限, 与 Create 锅炉一致; 每 4 个方块才允许 1 级, 因此满级需要 72 个方块.
+	 * 等级上限, 与原版锅炉一致; 每 4 个方块才允许 1 级, 因此满级需要 72 个方块.
 	 */
-	private static final double MAX_LEVEL = 18.0D;
+	public static final double MAX_LEVEL = 18.0D;
 	private static final double BLOCKS_PER_LEVEL = 4.0D;
-	private static final int MIN_WIDTH = 2;
+	public static final int MIN_WIDTH = 2;
 	private static final int HEAT_SAMPLE_RATE = 5;
+	private static final float GAUGE_LERP = 0.25F;
 
 	private final SmartFluidTank steamTank;
 	private final IFluidHandler boilerHandler;
@@ -71,6 +79,9 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	private int superheatedBurners;
 	private int normalBurners;
 	private double boilerLevel;
+	private int sampledSize;
+	private float gauge;
+	private float previousGauge;
 
 	public SteamBoilerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -80,7 +91,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	}
 
 	/**
-	 * 槽 0 的水罐: 只接受水, 容量由锅炉自身的方块参数决定, 与 Create 储罐的容量配置无关.
+	 * 槽 0 的水罐: 只接受水, 容量由锅炉自身的方块参数决定, 与原版储罐的容量配置无关.
 	 */
 	@Override
 	protected SmartFluidTank createInventory() {
@@ -90,10 +101,18 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	@Override
 	public void tick() {
 		super.tick();
-		if (level == null || level.isClientSide()) {
+		if (level == null) {
+			return;
+		}
+		if (level.isClientSide()) {
+			tickGauge();
 			return;
 		}
 		if (!isController()) {
+			return;
+		}
+		if (!isMultiBlock()) {
+			tickLegacyProduction();
 			return;
 		}
 		if (level.getGameTime() % HEAT_SAMPLE_RATE == 0) {
@@ -113,7 +132,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	}
 
 	/**
-	 * Create 的储罐在读档时会把容量按它自己的配置重算, 这里读完后立刻按锅炉容量修正并重读水罐,
+	 * 原版储罐在读档时会把容量按它自己的配置重算, 这里读完后立刻按锅炉容量修正并重读水罐,
 	 * 否则容量较大的锅炉存档在读取时会被截断.
 	 */
 	@Override
@@ -130,6 +149,9 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		hasComponent = compound.getBoolean(NBT_COMPONENT);
 		superheated = compound.getBoolean(NBT_SUPERHEATED);
 		pending = compound.getDouble(NBT_PENDING);
+		boilerLevel = compound.getDouble(NBT_LEVEL);
+		superheatedBurners = compound.getInt(NBT_BURNERS);
+		normalBurners = compound.getInt(NBT_NORMAL_BURNERS);
 	}
 
 	@Override
@@ -139,10 +161,13 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		compound.putBoolean(NBT_COMPONENT, hasComponent);
 		compound.putBoolean(NBT_SUPERHEATED, superheated);
 		compound.putDouble(NBT_PENDING, pending);
+		compound.putDouble(NBT_LEVEL, boilerLevel);
+		compound.putInt(NBT_BURNERS, superheatedBurners);
+		compound.putInt(NBT_NORMAL_BURNERS, normalBurners);
 	}
 
 	/**
-	 * Create 的锅炉体系只在贴着蒸汽引擎或蒸汽哨时激活, 本锅炉不参与那套等级,
+	 * 原版的锅炉体系只在贴着蒸汽引擎或蒸汽哨时激活, 本锅炉不参与那套等级,
 	 * 因此结构变化后只刷新自己的热量等级.
 	 */
 	@Override
@@ -201,7 +226,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	}
 
 	/**
-	 * @return 当前等级, 0 表示不产汽; 取值 0~18, 允许小数
+	 * @return 当前等级, 0 表示不产汽; 取值 0~18, 允许小数, 护目镜向下取整显示
 	 */
 	public double getBoilerLevel() {
 		return boilerLevel;
@@ -219,7 +244,15 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	 * @return 当前每 tick 的产汽量, 同时也是每 tick 的耗水量
 	 */
 	public double getProductionRate() {
-		return boilerLevel * spec().getProduction();
+		if (isMultiBlock()) {
+			return boilerLevel * spec().getProduction();
+		}
+
+		double production = spec().getProduction() * getLegacyEfficiency();
+		if (superheated) {
+			production *= SteamBoilerConfig.getSuperheatedProductionMultiplier(getLegacyHeatPercent());
+		}
+		return production;
 	}
 
 	/**
@@ -231,6 +264,172 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 
 	private void onSteamChanged(FluidStack stack) {
 		setChanged();
+	}
+
+	/**
+	 * 宽度不到 2 的锅炉没有拼成结构, 沿用改造前的单块运行方式: 只看正下方一台热源,
+	 * 按热量百分比分档取效率, 过热燃料直接产出过热蒸汽.
+	 */
+	private boolean isMultiBlock() {
+		return width >= MIN_WIDTH;
+	}
+
+	/**
+	 * 仪表盘指针的取值: 0 表示空位, 1 表示满级, 仅客户端插值使用.
+	 */
+	public float getGaugeValue(float partialTicks) {
+		return Mth.lerp(partialTicks, previousGauge, gauge);
+	}
+
+	private float getGaugeTarget() {
+		if (!isMultiBlock()) {
+			return 0.0F;
+		}
+		return (float) Mth.clamp(boilerLevel / MAX_LEVEL, 0.0D, 1.0D);
+	}
+
+	private void tickGauge() {
+		previousGauge = gauge;
+		gauge += (getGaugeTarget() - gauge) * GAUGE_LERP;
+	}
+
+	@Nullable
+	private IHeatSource getHeatSource() {
+		if (level == null) {
+			return null;
+		}
+		BlockEntity below = level.getBlockEntity(worldPosition.below());
+		if (below instanceof IHeatSource source) {
+			return source;
+		}
+		return null;
+	}
+
+	/**
+	 * @return 正下方热源的热量百分比, 过热状态下会超过 100
+	 */
+	private double getLegacyHeatPercent() {
+		IHeatSource source = getHeatSource();
+		if (source == null) {
+			return 0.0D;
+		}
+
+		double maxHeat = source.getMaxHeat();
+		if (maxHeat <= 0.0D) {
+			return 0.0D;
+		}
+
+		return source.getHeat() / maxHeat * 100.0D;
+	}
+
+	private boolean isLegacySuperheated() {
+		IHeatSource source = getHeatSource();
+		return source != null && source.isSuperheated();
+	}
+
+	private double getLegacyEfficiency() {
+		IHeatSource source = getHeatSource();
+		if (source == null) {
+			return 0.0D;
+		}
+
+		return SteamBoilerConfig.getEfficiency(source.getHeatRatio() * 100.0D);
+	}
+
+	/**
+	 * 单块时的产汽路径, 与多块结构共用两个槽与同一个余额字段.
+	 */
+	private void tickLegacyProduction() {
+		double efficiency = getLegacyEfficiency();
+		double production = spec().getProduction();
+
+		boolean wantSuperheated = efficiency > 0.0D && production > 0.0D && isLegacySuperheated();
+		if (wantSuperheated != superheated) {
+			superheated = wantSuperheated;
+			pending = 0.0D;
+			setChanged();
+			sendData();
+		}
+
+		if (efficiency <= 0.0D || production <= 0.0D) {
+			pending = 0.0D;
+			return;
+		}
+
+		if (wantSuperheated) {
+			clearNormalSteamFromOutput();
+		}
+
+		double produced = production * efficiency;
+		if (wantSuperheated) {
+			// 过热蒸汽价值更高, 产率按热量落在过热区间里的位置打折
+			produced *= SteamBoilerConfig.getSuperheatedProductionMultiplier(getLegacyHeatPercent());
+		}
+		pending += produced;
+
+		int requested = (int) Math.floor(pending);
+		if (requested <= 0) {
+			return;
+		}
+
+		FluidStack target = getOutputSteam(requested);
+		if (target.isEmpty()) {
+			pending = 0.0D;
+			return;
+		}
+
+		int drained = tankInventory.drain(requested, IFluidHandler.FluidAction.SIMULATE).getAmount();
+		int accepted = steamTank.fill(target, IFluidHandler.FluidAction.SIMULATE);
+		int producible = Math.min(drained, accepted);
+		if (producible <= 0) {
+			if (outputHoldsOtherSteam(wantSuperheated)) {
+				// 蒸汽槽压着另一种蒸汽时既不进也不出, 这一 tick 的水照常烧掉
+				tankInventory.drain(drained, IFluidHandler.FluidAction.EXECUTE);
+				pending = 0.0D;
+				return;
+			}
+			pending = Math.min(pending, produced);
+			return;
+		}
+
+		tankInventory.drain(producible, IFluidHandler.FluidAction.EXECUTE);
+		steamTank.fill(new FluidStack(target.getFluid(), producible), IFluidHandler.FluidAction.EXECUTE);
+		pending -= producible;
+	}
+
+	/**
+	 * @return 蒸汽槽里是否正压着与本次产出不同的另一种蒸汽
+	 */
+	private boolean outputHoldsOtherSteam(boolean superheatedProduction) {
+		FluidStack stored = steamTank.getFluid();
+		if (stored.isEmpty()) {
+			return false;
+		}
+
+		FluidStack expected = SteamConfig.getOutputSteam(stored.getAmount(), superheatedProduction);
+		return !expected.isEmpty() && stored.getFluid() != expected.getFluid();
+	}
+
+	/**
+	 * 转入过热产出前清掉蒸汽槽里的普通蒸汽, 销毁还是就地转换由配置决定.
+	 */
+	private void clearNormalSteamFromOutput() {
+		FluidStack stored = steamTank.getFluid();
+		if (stored.isEmpty()) {
+			return;
+		}
+
+		FluidStack superheatedSteam = SteamConfig.getOutputSteam(stored.getAmount(), true);
+		if (superheatedSteam.isEmpty() || stored.getFluid() == superheatedSteam.getFluid()) {
+			return;
+		}
+
+		if (SteamConfig.DO_OVERHEATED_STEAM_REPLACE.get()) {
+			steamTank.setFluid(superheatedSteam);
+			setChanged();
+			return;
+		}
+		steamTank.drain(stored.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	/**
@@ -256,14 +455,17 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 			}
 		}
 
-		if (hot == superheatedBurners && normal == normalBurners) {
+		int size = getTotalTankSize();
+		if (hot == superheatedBurners && normal == normalBurners && size == sampledSize) {
 			return;
 		}
 
 		superheatedBurners = hot;
 		normalBurners = normal;
+		sampledSize = size;
 		boilerLevel = calculateLevel(hot, normal);
 		setChanged();
+		sendData();
 	}
 
 	/**
@@ -298,6 +500,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 			superheated = wantSuperheated;
 			pending = 0.0D;
 			setChanged();
+			sendData();
 		}
 
 		double produced = getProductionRate();
@@ -357,14 +560,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 	 * 按当前是否过热取配置里的输出流体, 配置未指定该流体时返回空栈, 调用方据此停机.
 	 */
 	private FluidStack getOutputSteam(int amount) {
-		net.minecraft.world.level.material.Fluid fluid = superheated
-				? SteamConfig.getOutputSuperheatedSteamFluid()
-				: SteamConfig.getOutputSteamFluid();
-		if (fluid == null) {
-			return FluidStack.EMPTY;
-		}
-
-		return new FluidStack(fluid, amount);
+		return SteamConfig.getOutputSteam(amount, superheated);
 	}
 
 	private static void discardOverflow(FluidTank tank) {
@@ -375,7 +571,7 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		tank.drain(overflow, IFluidHandler.FluidAction.EXECUTE);
 	}
 
-	private static boolean isSteamStack(FluidStack stack) {
+	public static boolean isSteamStack(FluidStack stack) {
 		if (stack.isEmpty()) {
 			return false;
 		}
@@ -407,15 +603,17 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 			return true;
 		}
 
+		if (!boiler.isMultiBlock()) {
+			appendLegacyTooltip(tooltip, boiler);
+			return true;
+		}
+
 		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_SIZE,
 				Component.literal(boiler.width + " x " + boiler.width + " x " + boiler.height)
 						.withStyle(ChatFormatting.AQUA));
 		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_LEVEL,
-				Component.literal(formatNumber(boiler.boilerLevel) + " / " + (int) MAX_LEVEL)
+				Component.literal((int) Math.floor(boiler.boilerLevel) + " / " + (int) MAX_LEVEL)
 						.withStyle(boiler.boilerLevel > 0.0D ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
-		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_BURNERS,
-				Component.literal(boiler.superheatedBurners + " / " + (boiler.width * boiler.width))
-						.withStyle(boiler.superheatedBurners > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
 		goggleLine(tooltip, SlTranKeys.GOGGLE_BOILER_STEAM_OUTPUT_RATE,
 				Component.literal(formatNumber(boiler.getProductionRate()) + " mB/t")
 						.withStyle(boiler.getProductionRate() > 0.0D ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
@@ -432,6 +630,45 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 						.withStyle(boiler.hasComponent ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
 
 		return true;
+	}
+
+	/**
+	 * 单块锅炉的护目镜信息与改造前一致: 一台热源, 热量分档效率, 过热由热源自身判定.
+	 */
+	private static void appendLegacyTooltip(List<Component> tooltip, SteamBoilerBlockEntity boiler) {
+		IHeatSource source = boiler.getHeatSource();
+		if (source == null) {
+			SlLang.translate(SlTranKeys.GOGGLE_STEAM_BOILER_NO_BURNER)
+					.style(ChatFormatting.RED)
+					.forGoggles(tooltip, 1);
+		}
+
+		double efficiency = boiler.getLegacyEfficiency();
+		double superheatedBonus = boiler.isLegacySuperheated()
+				? SteamBoilerConfig.getSuperheatedProductionMultiplier(boiler.getLegacyHeatPercent())
+				: 1.0D;
+		double production = boiler.spec().getProduction() * efficiency * superheatedBonus;
+
+		goggleLine(tooltip, SlTranKeys.GOGGLE_BOILER_STEAM_OUTPUT_RATE,
+				Component.literal(formatNumber(production) + " mB/t")
+						.withStyle(production > 0.0D ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
+		goggleLine(tooltip, SlTranKeys.GOGGLE_BOILER_WATER_STORED,
+				Component.literal(boiler.tankInventory.getFluidAmount() + " / " + boiler.tankInventory.getCapacity() + " mB")
+						.withStyle(ChatFormatting.AQUA));
+		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_STEAM,
+				Component.literal(boiler.steamTank.getFluidAmount() + " / " + boiler.steamTank.getCapacity() + " mB")
+						.withStyle(ChatFormatting.AQUA));
+		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_HEAT,
+				Component.literal(Math.round(boiler.getLegacyHeatPercent()) + "%")
+						.withStyle(boiler.getLegacyHeatPercent() > 0.0D ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
+		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_EFFICIENCY,
+				Component.literal(Math.round(efficiency * 100.0D) + "%")
+						.withStyle(efficiency > 0.0D ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
+		goggleLine(tooltip, SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED,
+				SlLang.translateDirect(boiler.isLegacySuperheated()
+								? SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED_YES
+								: SlTranKeys.GOGGLE_STEAM_BOILER_SUPERHEATED_NO)
+						.withStyle(boiler.isLegacySuperheated() ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
 	}
 
 	private static void goggleLine(List<Component> tooltip, String langKey, Component value) {
@@ -457,20 +694,6 @@ public class SteamBoilerBlockEntity extends FluidTankBlockEntity implements IHav
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
 			return BoilerFluidTank.isWater(stack);
-		}
-	}
-
-	/**
-	 * 槽 1 的蒸汽罐: 只接受蒸汽与过热蒸汽.
-	 */
-	private static class SteamTank extends SmartFluidTank {
-		private SteamTank(int capacity, Consumer<FluidStack> callback) {
-			super(capacity, callback);
-		}
-
-		@Override
-		public boolean isFluidValid(FluidStack stack) {
-			return isSteamStack(stack);
 		}
 	}
 }
