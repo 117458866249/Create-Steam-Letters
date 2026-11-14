@@ -6,6 +6,7 @@ import dev.celestiacraft.steam_letters.api.SlApis;
 import dev.celestiacraft.steam_letters.client.models.ItemModelGen;
 import dev.celestiacraft.steam_letters.common.item.SteamContainerItem;
 import dev.celestiacraft.steam_letters.common.item.SteamMechanismItem;
+import dev.celestiacraft.steam_letters.common.item.SuperHeatedSteamComponentItem;
 import dev.celestiacraft.steam_letters.tags.SlItemTags;
 import net.minecraft.world.item.Item;
 
@@ -15,6 +16,7 @@ public class SlItems {
 	public static final ItemEntry<SteamContainerItem> EMPTY_STEAM_CONTAINER;
 	public static final ItemEntry<SteamContainerItem> SEALED_STEAM_CONTAINER;
 	public static final ItemEntry<Item> BRONZE_WHISK;
+	public static final ItemEntry<SuperHeatedSteamComponentItem> SH_STEAM_COMPONENT;
 
 	static {
 		STEAM_MECHANISM = SlApis.REGISTRATE.item("steam_mechanism", SteamMechanismItem::new)
@@ -46,6 +48,11 @@ public class SlItems {
 		BRONZE_WHISK = SlApis.REGISTRATE.item("bronze_whisk", Item::new)
 				.model(ItemModelGen.generated("item/bronze_whisk"))
 				.lang("Bronze Whisk")
+				.register();
+
+		SH_STEAM_COMPONENT = SlApis.REGISTRATE.item("sh_steam_component", SuperHeatedSteamComponentItem::new)
+				.model(ItemModelGen.generated("item/sh_steam_component"))
+				.lang("Superheated Steam Component")
 				.register();
 	}
 

@@ -29,6 +29,9 @@ public class SlBlockPartialModel {
 			STEAM_MIXER_POLE,
 			STEAM_MIXER_COGWHEEL;
 
+	public static final PartialModel
+			STEAM_BOILER_COMPONENT;
+
 	public static final String UPPER_ROTATING_CONNECTOR = "upper_rotating_connector";
 	public static final String LOWER_ROTATING_CONNECTOR = "lower_rotating_connector";
 	public static final String UPPER_SLIDING_CONNECTOR = "upper_sliding_connector";
@@ -57,6 +60,8 @@ public class SlBlockPartialModel {
 		SPOUT_TOP = addPartial("advanced_spout/top");
 		SPOUT_MIDDLE = addPartial("advanced_spout/middle");
 		SPOUT_BOTTOM = addPartial("advanced_spout/bottom");
+
+		STEAM_BOILER_COMPONENT = addPartial("steam/sh_steam_component");
 	}
 
 	private static final Map<String, PartialModel> FLYWHEEL_PARTS = new HashMap<>();
