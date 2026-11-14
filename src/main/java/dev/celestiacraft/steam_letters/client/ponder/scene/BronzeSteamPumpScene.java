@@ -1,10 +1,8 @@
 package dev.celestiacraft.steam_letters.client.ponder.scene;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
-import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
-import dev.celestiacraft.steam_letters.common.register.SlBlocks;
 import dev.celestiacraft.steam_letters.common.register.SlFluids;
 import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.WorldSectionElement;
@@ -19,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 青铜蒸汽泵 Ponder 场景.
@@ -58,13 +57,13 @@ public class BronzeSteamPumpScene {
 
 		scene.idle(10);
 		scene.overlay().showText(70)
-				.pointAt(util.vector().of(4D, 2.5D, 3.5D))
+				.pointAt(util.vector().of(4.0D, 2.5D, 3.5D))
 				.placeNearTarget()
 				.attachKeyFrame()
 				.text("平常使用蒸汽引擎时, 将飞轮引擎和锅炉放在一起会降低效率");
 		scene.idle(80);
 		scene.overlay().showText(70)
-				.pointAt(util.vector().of(4D, 2.5D, 3.5D))
+				.pointAt(util.vector().of(4.0D, 2.5D, 3.5D))
 				.placeNearTarget()
 				.attachKeyFrame()
 				.text("在这里额外放置一个动力泵又太麻烦");
@@ -76,7 +75,7 @@ public class BronzeSteamPumpScene {
 				.text("这时就该青铜蒸汽泵出场了! ");
 		scene.idle(50);
 
-		ArrayList<BlockPos> temp = new ArrayList<>();
+		List<BlockPos> temp = new ArrayList<>();
 
 		for (int x = 7; x <= 9; x++) {
 			for (int y = 1; y <= 3; y++) {
@@ -97,8 +96,12 @@ public class BronzeSteamPumpScene {
 		for (int i = 0; i < 12; i++) {
 			int i1 = i;
 			temp.stream()
-					.filter((pos) -> 9 - pos.getX() + pos.getY() - 1 + 9 - pos.getZ() == i1)
-					.forEach((pos) -> scene.world().showSection(util.select().position(pos), Direction.DOWN));
+					.filter((pos) -> {
+						return 9 - pos.getX() + pos.getY() - 1 + 9 - pos.getZ() == i1;
+					})
+					.forEach((pos) -> {
+						scene.world().showSection(util.select().position(pos), Direction.DOWN);
+					});
 			scene.idle(2);
 		}
 
@@ -154,14 +157,14 @@ public class BronzeSteamPumpScene {
 
 		scene.idle(30);
 		scene.overlay().showText(40)
-				.pointAt(util.vector().of(4D, 2.5D, 3.5D))
+				.pointAt(util.vector().of(4.0D, 2.5D, 3.5D))
 				.placeNearTarget()
 				.attachKeyFrame()
 				.text("回到最开始的问题");
 		scene.idle(50);
 
 		scene.overlay().showText(70)
-				.pointAt(util.vector().of(4D, 2.5D, 3.5D))
+				.pointAt(util.vector().of(4.0D, 2.5D, 3.5D))
 				.placeNearTarget()
 				.attachKeyFrame()
 				.text("在锅炉与飞轮引擎之间放置青铜蒸汽泵即可恢复正常效率");
